@@ -1,9 +1,10 @@
-=============================================================
-          Pocket guide for The Minecraft MMORPG
-                  wynncraft.com
-      -------------------------------------------
+========================================================================================
+
+                                         Pocket guide for The Minecraft MMORPG
+                                          wynncraft.com -||- play.wynncraft.com
 
 Author: Paladin1997
+
 Start of the development: 08.11.2024 
 
 
