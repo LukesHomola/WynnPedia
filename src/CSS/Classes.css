@@ -1,0 +1,43 @@
+.flex {
+  display: flex;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gap-05 {
+  display: flex;
+  gap: 0.5rem;
+}
+.gap-1 {
+  display: flex;
+  gap: 1rem;
+}
+
+.pL-05 {
+  padding-left: 0.5rem;
+}
+.pL-1-5 {
+  padding-left: 1.5rem;
+}
+
+.width-90 {
+  max-width: 90%;
+}
+
+.force-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.test-bg {
+  background-color: orange;
+}
+.test-bg2 {
+  background-color: rgb(132, 219, 18);
+}
