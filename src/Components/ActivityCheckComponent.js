@@ -6,13 +6,13 @@ const ActivityCheck = () => {
   const [playerData, setPlayerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [guildName, setGuildName] = useState("FlameKnights");
+  const [guildName, setGuildName] = useState("KongoBoys");
   const [guildData, setGuildData] = useState(null);
   const [purgeTimeValue, setPurgeTimeValue] = useState(10);
   const [membersData, setMembersData] = useState({});
 
   /* FETCHING PLAYER DATA */
-  useEffect(() => {
+  /*   useEffect(() => {
     const fetchPlayerData = async () => {
       try {
         setLoading(true);
@@ -27,7 +27,7 @@ const ActivityCheck = () => {
         }
 
         const data = await response.json();
-        console.log("API Response:", data); // Debugging the API response
+        console.log("API Response:", data); 
 
         if (data?.username) {
           setPlayerData(data);
@@ -43,9 +43,9 @@ const ActivityCheck = () => {
     };
 
     if (playerName) {
-      fetchPlayerData(); // Only fetch if there's a valid playerName
+      fetchPlayerData(); 
     }
-  }, [playerName]);
+  }, [playerName]); */
 
   /* FETCHING GUILD DATA */
   useEffect(() => {
@@ -137,43 +137,68 @@ const ActivityCheck = () => {
 
   return (
     <div className="activity_checker_container">
-      <h1>Guild Activity Check</h1>
-      <label>
-        Guild name:{" "}
-        <input
-          type="text"
-          min="0"
-          value={guildName}
-          onChange={handleGuildInputChange}
-        />
-      </label>
-      <label>
-        Purge Time (days):{" "}
-        <input
-          type="number"
-          value={purgeTimeValue}
-          min="0"
-          onChange={(e) => setPurgeTimeValue(parseInt(e.target.value, 10))}
-        />
-      </label>
+      <br></br>
+      <div className="activity_checker_title_container">
+        <section className="activity_checker_title_container_left">
+          <h1>ACTIVITY CHECKER</h1>
+          <h3 className="force-regular">
+            Check guild's players activity.
+          </h3>{" "}
+          <br></br>
+          <hr className="width-50"></hr>
+          <br></br>
+          <p>Simply search for guild name and how many days of inactivity.</p>
+        </section>
+        <section className="activity_checker_title_container_right">
+          <p>Control panel</p>
+          <br></br>
+          <label className="flex-col">
+            Guild name:
+            <input
+              style={{ maxWidth: "20%" }}
+              type="text"
+              placeholder="Guild name"
+              min="0"
+              value={guildName}
+              onChange={handleGuildInputChange}
+            />
+            <br></br>
+          </label>
+          <label className="flex-col ">
+            Purge Time (days):
+            <input
+              style={{ maxWidth: "20%" }}
+              type="number"
+              value={purgeTimeValue}
+              min="0"
+              onChange={(e) => setPurgeTimeValue(parseInt(e.target.value, 10))}
+            />
+          </label>
+        </section>
+      </div>
 
-      {loading && <p>Loading guild data...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <br></br>
 
-      {guildData && (
-        <div>
-          <h2>Members of {guildData.name}</h2>
-          <ul>
-            {[
-              "owner",
-              "chief",
-              "strategist",
-              "captain",
-              "recruiter",
-              "recruit",
-            ].flatMap((role) => {
-              return Object.entries(guildData.members[role] || {}).map(
-                ([username, member]) => {
+      {guildData && !loading ? (
+        <div className="activity_checker_container_table_container">
+          <h2 className="force-medium">
+            {" "}
+            <strong>{guildData.name}</strong>'s members:
+          </h2>
+          <table className="activity_checker_container_table">
+            <tbody>
+              {[
+                "owner",
+                "chief",
+                "strategist",
+                "captain",
+                "recruiter",
+                "recruit",
+              ]
+                .flatMap((role) => {
+                  return Object.entries(guildData.members[role] || {});
+                })
+                .reduce((rows, [username, member], index) => {
                   const memberData = membersData[username];
                   const lastJoinDate = memberData ? memberData.lastJoin : null;
                   const daysSince = lastJoinDate
@@ -182,23 +207,56 @@ const ActivityCheck = () => {
                   const isInactive =
                     daysSince !== null && daysSince > purgeTimeValue;
 
-                  return (
-                    <li
+                  // Create a new row every 4 players
+                  if (index % 4 === 0) {
+                    rows.push([]);
+                  }
+
+                  const currentRow = rows[rows.length - 1];
+
+                  currentRow.push(
+                    <td
                       key={member.uuid}
-                      style={{ color: isInactive ? "red" : "inherit" }}
+                      style={{
+                        color: isInactive
+                          ? "var(--color-primary-500)"
+                          : "inherit",
+                      }}
                     >
-                      <strong>{username}</strong> - Last Join:{" "}
+                      <strong>{username}</strong>
+                      <br />
+                      Last Join:{" "}
                       {lastJoinDate
                         ? new Date(lastJoinDate).toLocaleString()
-                        : "Data not available"}{" "}
-                      ({daysSince !== null ? daysSince + " days ago" : "N/A"})
-                    </li>
+                        : "Data not available"}
+                      <br />(
+                      {daysSince !== null ? daysSince + " days ago" : "N/A"})
+                    </td>
                   );
-                }
-              );
-            })}
-          </ul>
+
+                  return rows;
+                }, [])
+                .map((row, rowIndex) => (
+                  <tr
+                    key={rowIndex}
+                    className="activity_checker_container_cells"
+                  >
+                    {row.map((cell, cellIndex) => (
+                      <td
+                        className="activity_checker_container_cells_data"
+                        key={cellIndex}
+                        style={{ padding: "10px", border: "1px solid gray" }}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
+      ) : (
+        error && <p style={{ color: "red" }}>{error}</p>
       )}
     </div>
   );

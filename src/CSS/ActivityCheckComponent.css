@@ -1,3 +1,48 @@
-.activity_checker_container input {
-  background-color: black;
+.activity_checker_container {
+  background: url("../Assests_components//svg/Sprinkle.svg");
 }
+/* title section */
+.activity_checker_title_container {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 30px;
+  grid-row-gap: 0px;
+  padding: 1rem;
+  background-color: var(--color-bg-09);
+}
+.activity_checker_title_container_left {
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-primary-09);
+}
+
+.activity_checker_title_container_right {
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-primary-09);
+}
+.container_right_inner {
+}
+
+.activity_checker_container_table_container {
+  padding: 2rem 1rem;
+}
+
+.activity_checker_container_table {
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+
+/* * {
+  outline: 1px solid orange;
+}
+ */

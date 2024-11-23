@@ -36,9 +36,16 @@
 .width-90 {
   max-width: 90%;
 }
+.width-50 {
+  max-width: 50%;
+}
 
 .force-regular {
   font-weight: var(--font-weight-regular);
+}
+
+.force-medium {
+  font-weight: var(--font-weight-medium);
 }
 
 .test-bg {
