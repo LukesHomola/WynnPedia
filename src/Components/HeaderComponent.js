@@ -7,6 +7,7 @@ import { faQuestion, faGear } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/HeaderComponent.css";
 import avatarBar from "../Assests_components/Profile_head_placeholder.png";
+import logo from "../Assests_components/logo.png";
 
 const Header = () => {
   const { playerName, setPlayerName } = useContext(PlayerContext);
@@ -19,11 +20,13 @@ const Header = () => {
   return (
     <header className="nav">
       <div className="profile_topbar_container">
-        <img src={avatarBar} alt="Avatar" id="topbar_avatar" />
-        <div className="nav_btns_profile_search_section pL-1-5">
-          <label>
-            <>Profile</>
-          </label>
+        <div className="logo_topbar_container flex flex-center pR-05">
+          <img src={logo} className="logo" style={{ maxWidth: "4rem" }}></img>
+        </div>
+        <section></section>
+
+        <div className="nav_btns_profile_search_section">
+          <img src={avatarBar} alt="Avatar" id="topbar_avatar" />
           <input
             className="nav_btns_profile_search_section_input"
             type="text"
@@ -34,14 +37,13 @@ const Header = () => {
           />
         </div>
       </div>
-
       <nav className="nav_right_container">
         <section className="nav_btns_section">
-          <Link to="/">
-            <h5>HOME</h5>
+          <Link to="/" className="link">
+            <h5 className="link_hover">Profile</h5>
           </Link>{" "}
-          <Link to="/activity-check">
-            <h5>Tools</h5>
+          <Link to="/activity-check" className="link">
+            <h5 className="link_hover">Tools</h5>
           </Link>{" "}
           <h5>Stats</h5>
           <h5>Leaderboard</h5>

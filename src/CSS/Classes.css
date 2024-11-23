@@ -26,6 +26,12 @@
 .pL-1-5 {
   padding-left: 1.5rem;
 }
+.pR-05 {
+  padding-right: 0.5rem;
+}
+.pR-1-5 {
+  padding-right: 1.5rem;
+}
 
 .width-90 {
   max-width: 90%;
