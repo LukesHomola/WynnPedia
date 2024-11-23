@@ -11,6 +11,7 @@ import logo from "../Assests_components/logo.png";
 
 const Header = () => {
   const { playerName, setPlayerName } = useContext(PlayerContext);
+
   const handleInputChange = (e) => {
     const newPlayerName = e.target.value;
     setPlayerName(newPlayerName); // Update playerName in context
@@ -20,7 +21,7 @@ const Header = () => {
   return (
     <header className="nav">
       <div className="profile_topbar_container">
-        <div className="logo_topbar_container flex flex-center pR-05">
+        <div className="logo_topbar_container flex flex-center pR-1-5">
           <img src={logo} className="logo" style={{ maxWidth: "4rem" }}></img>
         </div>
         <section></section>

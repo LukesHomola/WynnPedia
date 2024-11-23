@@ -1,27 +1,56 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// Create a context
 export const PlayerContext = createContext();
 
-// Define the provider component
 export const PlayerProvider = ({ children }) => {
-  const [playerName, setPlayerName] = useState("");
+  // Initialize playerName from local storage if available
+  const [playerName, setPlayerName] = useState(() => {
+    return localStorage.getItem("playerName") || ""; // Load from local storage
+  });
+  const [playerData, setPlayerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Load playerName from localStorage on mount
-  useEffect(() => {
-    const savedPlayerName = localStorage.getItem("playerName");
-    if (savedPlayerName) {
-      setPlayerName(savedPlayerName);
+  const fetchPlayerData = async (name) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `https://api.wynncraft.com/v3/player/${name}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("API Response:", data);
+
+      if (data?.username) {
+        setPlayerData(data);
+      } else {
+        setError("Player data not found.");
+      }
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      setError(err.message || "Error fetching player data.");
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
-  // Save playerName to localStorage whenever it changes
+  // useEffect to fetch player data whenever playerName changes
   useEffect(() => {
-    localStorage.setItem("playerName", playerName);
+    if (playerName) {
+      fetchPlayerData(playerName);
+    }
   }, [playerName]);
 
   return (
-    <PlayerContext.Provider value={{ playerName, setPlayerName }}>
+    <PlayerContext.Provider
+      value={{ playerName, setPlayerName, playerData, loading, error }}
+    >
       {children}
     </PlayerContext.Provider>
   );

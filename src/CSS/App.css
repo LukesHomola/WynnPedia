@@ -57,7 +57,7 @@ input {
   --color-bg-900: #141212; /* Dark background */
   --color-bg-800: #0a0909; /* Light background */
   --color-bg-700: #100e0e; /* Accent background color */
-  --color-bg-600: #0e0d0d; /* Muted background */
+  --color-bg-600: #161515; /* Muted background */
   --color-bg-500: #333131;
 
   /* Primary Variants */
@@ -111,8 +111,8 @@ input {
   /* Font Sizes */
   --font-size-h1: 1.9rem; /* 36px */
   --font-size-h2: 1.75rem; /* 30px */
-  --font-size-h3: 1.3rem; /* 26px */
-  --font-size-h4: 1.2rem; /* 22px */
+  --font-size-h3: 1.5rem; /* 26px */
+  --font-size-h4: 1.4rem; /* 22px */
   --font-size-h5: 1.1rem; /* 18px */
   --font-size-h6: 1rem; /* 16px */
   --font-size-p: 0.875rem; /* 14px */

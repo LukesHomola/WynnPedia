@@ -60,7 +60,7 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  background-color: var(--color-bg-700);
+  border-left: 3px solid var(--color-primary-900);
 }
 
 .nav_btns_profile_search_section_input {
@@ -68,11 +68,13 @@
   padding: 0.5rem;
   outline: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: 3px;
+  border-bottom: 0.5px solid black;
+  border-right: 0.5px solid black;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  background-color: var(--color-bg-500);
+  background-color: var(--color-bg-600);
 }
 
 .nav_socials_section {

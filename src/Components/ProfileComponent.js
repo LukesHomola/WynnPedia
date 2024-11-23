@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+
+import { PlayerContext } from "../PlayerContext.js"; // Access context
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {} from "@fortawesome/free-brands-svg-icons";
@@ -13,6 +15,10 @@ import profileAvatarHead from "../Assests_components/Profile_head_placeholder.pn
 import profileAvatarBody from "../Assests_components/Profile_body_placeholder.png";
 
 const Profile = () => {
+  const { playerData, loading, error, playerName } = useContext(PlayerContext); // Access playerName from context
+
+  console.log("TEST: ", playerData);
+
   return (
     <div className="profile_component">
       <div className="profile_grid_container">
@@ -25,17 +31,37 @@ const Profile = () => {
               ></img>
             </section>
 
-            <section className="flex-col gap-05 ">
+            <section className="flex-col gap-05">
               <span className="flex gap-05">
-                <h2>RANK</h2>
-                <h2>NICKNAME</h2>
+                <h2>{(playerData?.supportRank || "RANK").toUpperCase()}</h2>
+                <h2>{playerData?.username || "PLAYER"}</h2>
               </span>
               <section>
-                <h5 className="force-regular">ONLINE STATUS</h5>
-                <h5 className="force-regular">GUILD STATUS</h5>
+                <h3 className="force-regular">
+                  {playerData?.online ? (
+                    <h5 className="force-regular" style={{ color: "lime" }}>
+                      Online on {playerData.server}
+                    </h5>
+                  ) : (
+                    <h5 className="force-regular" style={{ color: "gray" }}>
+                      Offline
+                    </h5>
+                  )}
+                </h3>
+                <h3 className="force-regular">
+                  {playerData?.guild?.name ? (
+                    <h5 className="force-regular">
+                      {playerData.guild?.rankStars} {playerData.guild?.rank} of
+                      the {playerData.guild?.name}
+                    </h5>
+                  ) : (
+                    <h5 className="force-regular">No guild registered.</h5>
+                  )}
+                </h3>
               </section>
             </section>
           </div>
+
           <div className="profile_grid_inner_container_bottom">
             <section className="flex-col">
               <img
@@ -54,8 +80,6 @@ const Profile = () => {
                 </h3>
               </section>
               <br></br>
-              {/*               <hr style={{ width: "500px", margin: "0 auto" }}></hr>
-               */}{" "}
               <br></br>
               <br></br>
             </section>
@@ -64,23 +88,32 @@ const Profile = () => {
               <br></br>
               <span className="flex gap-05">
                 <h4 className="force-regular">First join:</h4>
-                <h4>XXX</h4>
+                <h4>
+                  {playerData?.firstJoin
+                    ? new Date(playerData.firstJoin).toLocaleString()
+                    : "N/A"}
+                </h4>
               </span>
               <span className="flex gap-05">
                 <h4 className="force-regular">Total levels:</h4>
-                <h4>XXX</h4>
+                <h4>{playerData?.globalData?.totalLevel || "N/A"}</h4>
               </span>
               <span className="flex gap-05">
                 <h4 className="force-regular">Total playtime:</h4>
-                <h4>XXX</h4>
+                <h4>
+                  {playerData?.playtime
+                    ? `${playerData.playtime} hours`
+                    : "N/A"}
+                </h4>
               </span>
               <span className="flex gap-05">
                 <h4 className="force-regular">Total mobs killed:</h4>
-                <h4>XXX</h4>
+                <h4>{playerData?.globalData?.killedMobs || "N/A"}</h4>
               </span>
             </section>
           </div>
         </section>
+
         <section className="profile_grid_right">
           <div className="stats_grid_top">
             <h3>Your rankings</h3>

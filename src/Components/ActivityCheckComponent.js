@@ -2,10 +2,9 @@ import React, { useEffect, useState, useContext } from "react";
 import { PlayerContext } from "../PlayerContext.js"; // Access context
 
 const ActivityCheck = () => {
-  const { playerName, setPlayerName } = useContext(PlayerContext); // Get playerName from context
-  const [playerData, setPlayerData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { playerName, setPlayerName, playerData } = useContext(PlayerContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [guildName, setGuildName] = useState("");
   const [guildData, setGuildData] = useState(null);
   const [purgeTimeValue, setPurgeTimeValue] = useState(10);
@@ -23,42 +22,6 @@ const ActivityCheck = () => {
 
     return () => clearTimeout(handler); // Cleanup
   }, [guildName]);
-
-  /* FETCHING PLAYER DATA */
-  /*   useEffect(() => {
-    const fetchPlayerData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response = await fetch(
-          `https://api.wynncraft.com/v3/player/${playerName}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("API Response:", data); 
-
-        if (data?.username) {
-          setPlayerData(data);
-        } else {
-          setError("Player data not found.");
-        }
-      } catch (err) {
-        console.error("Fetch Error:", err);
-        setError(err.message || "Error fetching player data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (playerName) {
-      fetchPlayerData(); 
-    }
-  }, [playerName]); */
 
   /* FETCHING GUILD DATA */
   useEffect(() => {

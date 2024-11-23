@@ -40,7 +40,13 @@
 
 .grid_container_top_avatar {
   margin: 0 auto;
-  max-width: 7rem;
+  max-width: 5rem;
+}
+
+@media only screen and (min-width: 1800px) {
+  .grid_container_top_avatar {
+    max-width: 7rem;
+  }
 }
 
 .profile_grid_inner_container_bottom {
