@@ -6,10 +6,23 @@ const ActivityCheck = () => {
   const [playerData, setPlayerData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [guildName, setGuildName] = useState("KongoBoys");
+  const [guildName, setGuildName] = useState("");
   const [guildData, setGuildData] = useState(null);
   const [purgeTimeValue, setPurgeTimeValue] = useState(10);
   const [membersData, setMembersData] = useState({});
+  const [inactivePlayersCount, setInactivePlayersCount] = useState(0);
+  const [totalMembersCount, setTotalMembersCount] = useState(0); // New state for total members
+
+  const [debouncedGuildName, setDebouncedGuildName] = useState();
+
+  /* Debounce Logic for Guild Name */
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedGuildName(guildName.trim());
+    }, 500); // Delay of 500ms
+
+    return () => clearTimeout(handler); // Cleanup
+  }, [guildName]);
 
   /* FETCHING PLAYER DATA */
   /*   useEffect(() => {
@@ -50,12 +63,14 @@ const ActivityCheck = () => {
   /* FETCHING GUILD DATA */
   useEffect(() => {
     const fetchGuildData = async () => {
+      if (!debouncedGuildName) return;
+
       try {
         setLoading(true);
         setError(null);
 
         const response = await fetch(
-          `https://api.wynncraft.com/v3/guild/${guildName}`
+          `https://api.wynncraft.com/v3/guild/${debouncedGuildName}`
         );
 
         if (!response.ok) {
@@ -75,15 +90,19 @@ const ActivityCheck = () => {
         setLoading(false);
       }
     };
-
-    if (guildName) {
-      fetchGuildData(); // Only fetch if there's a valid playerName
+    // Only fetch if there's a valid playerName
+    if (debouncedGuildName) {
+      fetchGuildData();
     }
-  }, [guildName]);
+  }, [debouncedGuildName]);
 
   // Fetching member data for each member
   useEffect(() => {
+    if (!guildData) return;
+
     const fetchMemberData = async (username) => {
+      if (membersData[username]) return; // <-- Skip fetch if already cached
+
       try {
         const response = await fetch(
           `https://api.wynncraft.com/v3/player/${username}`
@@ -105,6 +124,9 @@ const ActivityCheck = () => {
     };
 
     if (guildData) {
+      // Set total members count from guildData
+      setTotalMembersCount(guildData.members.total || 0); // Set total members count
+
       const memberUserNames = [
         ...Object.keys(guildData.members.owner || {}),
         ...Object.keys(guildData.members.chief || {}),
@@ -118,7 +140,31 @@ const ActivityCheck = () => {
         fetchMemberData(username); // Fetch data for each member
       });
     }
-  }, [guildData]);
+  }, [guildData, membersData, purgeTimeValue]);
+
+  // Function to count inactive players
+  const countInactivePlayers = () => {
+    let inactiveCount = 0; // Counter for inactive players
+
+    Object.keys(membersData).forEach((username) => {
+      const memberData = membersData[username];
+      const lastJoinDate = memberData ? memberData.lastJoin : null;
+      const daysSince = lastJoinDate ? daysSinceLastJoin(lastJoinDate) : null;
+
+      if (daysSince !== null && daysSince > purgeTimeValue) {
+        inactiveCount++; // Increment the counter for inactive players
+      }
+    });
+
+    setInactivePlayersCount(inactiveCount); // Update the state with the count
+  };
+
+  // useEffect to count inactive players whenever membersData changes
+  useEffect(() => {
+    if (Object.keys(membersData).length > 0) {
+      countInactivePlayers(); // Call the function to count inactive players
+    }
+  }, [membersData]);
 
   // Helper function to calculate the days since the last join
   const daysSinceLastJoin = (lastJoin) => {
@@ -149,32 +195,43 @@ const ActivityCheck = () => {
           <br></br>
           <p>Simply search for guild name and how many days of inactivity.</p>
         </section>
-        <section className="activity_checker_title_container_right">
-          <p>Control panel</p>
-          <br></br>
-          <label className="flex-col">
-            Guild name:
-            <input
-              style={{ maxWidth: "20%" }}
-              type="text"
-              placeholder="Guild name"
-              min="0"
-              value={guildName}
-              onChange={handleGuildInputChange}
-            />
+        <div className="activity_checker_title_container_right">
+          <section>
+            <p>Control panel</p>
             <br></br>
-          </label>
-          <label className="flex-col ">
-            Purge Time (days):
-            <input
-              style={{ maxWidth: "20%" }}
-              type="number"
-              value={purgeTimeValue}
-              min="0"
-              onChange={(e) => setPurgeTimeValue(parseInt(e.target.value, 10))}
-            />
-          </label>
-        </section>
+            <label className="flex-col">
+              Guild name:
+              <input
+                style={{ maxWidth: "30%" }}
+                type="text"
+                placeholder="Guild name"
+                min="0"
+                value={guildName}
+                onChange={handleGuildInputChange}
+              />
+              <br></br>
+            </label>
+            <label className="flex-col ">
+              Purge Time (days):
+              <input
+                style={{ maxWidth: "30%" }}
+                type="number"
+                value={purgeTimeValue}
+                min="0"
+                onChange={(e) =>
+                  setPurgeTimeValue(parseInt(e.target.value, 10))
+                }
+              />
+            </label>
+          </section>
+          <section>
+            <p>
+              Number of inactive players:{" "}
+              <strong>{inactivePlayersCount}</strong> / {totalMembersCount}
+            </p>
+            {/* Display the count */}
+          </section>
+        </div>
       </div>
 
       <br></br>
@@ -200,6 +257,7 @@ const ActivityCheck = () => {
                 })
                 .reduce((rows, [username, member], index) => {
                   const memberData = membersData[username];
+
                   const lastJoinDate = memberData ? memberData.lastJoin : null;
                   const daysSince = lastJoinDate
                     ? daysSinceLastJoin(lastJoinDate)
