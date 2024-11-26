@@ -8,6 +8,8 @@ export const PlayerProvider = ({ children }) => {
     return localStorage.getItem("playerName") || ""; // Load from local storage
   });
   const [playerData, setPlayerData] = useState(null);
+  const [extendedPlayerData, setExtendedPlayerData] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -40,16 +42,53 @@ export const PlayerProvider = ({ children }) => {
     }
   };
 
+  const fetchExtendedPlayerData = async (name) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `https://api.wynncraft.com/v3/player/${name}?fullResult`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("API Response 2:", data);
+
+      if (data?.username) {
+        setExtendedPlayerData(data);
+      } else {
+        setError("Player data not found.");
+      }
+    } catch (err) {
+      console.error("Fetch Error:", err);
+      setError(err.message || "Error fetching player data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // useEffect to fetch player data whenever playerName changes
   useEffect(() => {
     if (playerName) {
       fetchPlayerData(playerName);
+      fetchExtendedPlayerData(playerName);
     }
   }, [playerName]);
 
   return (
     <PlayerContext.Provider
-      value={{ playerName, setPlayerName, playerData, loading, error }}
+      value={{
+        playerName,
+        setPlayerName,
+        playerData,
+        extendedPlayerData,
+        loading,
+        error,
+      }}
     >
       {children}
     </PlayerContext.Provider>

@@ -266,7 +266,6 @@ const ActivityCheck = () => {
                       <td
                         className="activity_checker_container_cells_data"
                         key={cellIndex}
-                        style={{ padding: "10px", border: "1px solid gray" }}
                       >
                         {cell}
                       </td>
