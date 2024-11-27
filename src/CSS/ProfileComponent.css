@@ -136,6 +136,72 @@
 .character_item_img {
   max-width: 5rem;
 }
+.ranking_item_img {
+  max-width: 3rem;
+}
+
+.rankings_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.ranking_item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+.ranking_item:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+}
+
+.professions_expand_btn {
+  font-size: 2rem;
+  padding: 0.5rem;
+  background-color: 0;
+  color: red;
+}
+
+.professions_expand_btn {
+  transition: transform 0.3s ease-in-out;
+}
+
+.professions_expand_btn.rotated {
+  transform: rotate(180deg);
+}
+
+progress {
+  background-color: #333; /* Background color for the progress bar */
+  border-radius: 5px;
+  height: 0.5rem !important;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #333; /* Background of the bar */
+  border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+  background-color: var(
+    --color-secondary-900
+  ); /* Foreground color of the progress value */
+  border-radius: 5px;
+}
+
+progress::-moz-progress-bar {
+  background-color: var(--color-secondary-900); /* Color for Firefox */
+  border-radius: 5px;
+}
 
 /* * {
   outline: 1px solid orange;

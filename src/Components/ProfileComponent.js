@@ -8,6 +8,7 @@ import {
   faCircleArrowLeft,
   faCircleArrowRight,
   faUser,
+  faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/ProfileComponent.css";
@@ -19,6 +20,18 @@ import shaman from "../Assests_components/classes/shaman.webp";
 import assassin from "../Assests_components/classes/assassin.webp";
 import warrior from "../Assests_components/classes/warrior.webp";
 
+// Import the images for each profession
+import scribing from "../Assests_components/professions/Scribing.webp";
+import cooking from "../Assests_components/professions/Cooking.webp";
+import woodcutting from "../Assests_components/professions/Woodcutting.webp";
+import farming from "../Assests_components/professions/Farming.webp";
+import mining from "../Assests_components/professions/Mining.webp";
+import alchemism from "../Assests_components/professions/Alchemism.webp";
+import jeweling from "../Assests_components/professions/Jeweling.webp";
+import weaponsmithing from "../Assests_components/professions/Weaponsmithing.webp";
+import armouring from "../Assests_components/professions/Armouring.webp";
+import tailoring from "../Assests_components/professions/Tailoring.webp";
+
 const characterImages = {
   MAGE: mage, // Assuming you have imported the mage image at the top
   SHAMAN: shaman, // Assuming you have imported the shaman image at the top
@@ -26,12 +39,47 @@ const characterImages = {
   ASSASSIN: assassin, // Assuming you have imported the assassin image at the top
   WARRIOR: warrior, // Assuming you have imported the warrior image at the top
 };
+const professionImages = {
+  Scribing: scribing,
+  Cooking: cooking,
+  Woodcutting: woodcutting,
+  Farming: farming,
+  Mining: mining,
+  Alchemism: alchemism,
+  Jeweling: jeweling,
+  Weaponsmithing: weaponsmithing,
+  Armouring: armouring,
+  Tailoring: tailoring,
+};
+
+const professions = [
+  "scribing",
+  "cooking",
+  "woodcutting",
+  "farming",
+  "mining",
+  "alchemism",
+  "jeweling",
+  "weaponsmithing",
+  "armouring",
+  "tailoring",
+];
 
 const Profile = () => {
   const { playerData, extendedPlayerData, loading, error, playerName } =
     useContext(PlayerContext); // Access playerName from context
 
-  console.log("TEST REQ: ", extendedPlayerData);
+  const [isProfessionsVisible, setIsProfessionsVisible] = useState(false);
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleRotation = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  const toggleProfessionsVisibility = () => {
+    setIsProfessionsVisible(!isProfessionsVisible); // Toggle the visibility state
+  };
 
   const timeAgo = (utcDateString) => {
     const lastJoinDate = new Date(utcDateString);
@@ -223,9 +271,10 @@ const Profile = () => {
                         />
                         <section>
                           <h3>{character.type}</h3>
-                          <p>Combat Level: {character.level}</p>
-                          <p>Total Level: {character.totalLevel}</p>
-                          <p>XP: {character.xp}</p>
+                          <p>Combat level: {character.level}</p>
+                          <p>Total level: {character.totalLevel}</p>
+                          <p>Time played: {character.playtime} hours</p>
+                          <progress value={character.xpPercent} max={100} />
                         </section>
                       </div>
                     );
@@ -236,6 +285,65 @@ const Profile = () => {
           </div>
           <div className="stats_grid_bottom">
             <h5>Your rankings</h5>
+            <br></br>
+            <section className="flex-center space-between p-02-05 color-bg-09">
+              <h5>Your professions</h5>
+              <FontAwesomeIcon
+                icon={faCaretUp}
+                onClick={() => {
+                  toggleRotation(), toggleProfessionsVisibility();
+                }}
+                className={`professions_expand_btn ${
+                  isExpanded ? "rotated" : ""
+                }`}
+              />
+            </section>
+
+            <br></br>
+            {isProfessionsVisible && playerData && extendedPlayerData && (
+              <div className="rankings_container">
+                {Object.entries(extendedPlayerData.ranking)
+                  .filter(([rankingId]) =>
+                    professions.some((profession) =>
+                      rankingId.startsWith(profession.toLowerCase())
+                    )
+                  )
+                  .map(([rankingId, rankingValue]) => {
+                    const formattedRankingId = rankingId
+                      .replace(/Level$/, "")
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                      .replace(/^./, (str) => str.toUpperCase());
+
+                    const profession =
+                      formattedRankingId.charAt(0).toUpperCase() +
+                      formattedRankingId.slice(1).toLowerCase();
+
+                    console.log(
+                      "Loading image for profession:",
+                      profession,
+                      "Image source:",
+                      professionImages[profession]
+                    ); // Debugging line
+
+                    return (
+                      <div key={rankingId} className="ranking_item">
+                        <img
+                          className="ranking_item_img"
+                          src={
+                            professionImages[profession] ||
+                            "https://via.placeholder.com/150"
+                          } // Fallback to a placeholder image
+                          alt={profession}
+                        />
+                        <h5>
+                          {formattedRankingId}: <strong>#{rankingValue}</strong>
+                        </h5>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
           </div>
         </section>
       </div>

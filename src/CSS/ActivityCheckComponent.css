@@ -45,6 +45,9 @@
   background-color: var(--color-bg-09);
 }
 
+.activity_checker_container_cells {
+}
+
 .activity_checker_container_cells_data {
   padding: 0.1rem;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,

@@ -10,6 +10,9 @@
   align-items: center;
   justify-content: center;
 }
+.space-between {
+  justify-content: space-between;
+}
 
 .gap-05 {
   display: flex;
@@ -19,7 +22,9 @@
   display: flex;
   gap: 1rem;
 }
-
+.p-02-05 {
+  padding: 0.2rem 0.5rem;
+}
 .pL-05 {
   padding-left: 0.5rem;
 }
@@ -46,6 +51,10 @@
 
 .force-medium {
   font-weight: var(--font-weight-medium);
+}
+
+.color-bg-09 {
+  background-color: var(--color-bg-09);
 }
 
 .test-bg {
