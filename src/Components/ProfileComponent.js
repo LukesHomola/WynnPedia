@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { CSSTransition } from "react-transition-group";
 
 import { PlayerContext } from "../PlayerContext.js"; // Access context
 
@@ -32,12 +33,35 @@ import weaponsmithing from "../Assests_components/professions/Weaponsmithing.web
 import armouring from "../Assests_components/professions/Armouring.webp";
 import tailoring from "../Assests_components/professions/Tailoring.webp";
 
+// Import the images for each total completion
+import wars_completion from "../Assests_components/content_completion/wars.webp";
+import global_total_completion from "../Assests_components/content_completion/global_total_completions.webp";
+import total_completion from "../Assests_components/content_completion/total_completions.webp";
+
+// Import the images for each total lvl
+import total from "../Assests_components/total_levels/total.webp";
+import profs from "../Assests_components/total_levels/profs.webp";
+import combat from "../Assests_components/total_levels/combat.webp";
+
+// Import the games for each raid
+import NoL from "../Assests_components/raids/NoL.webp";
+import NotG from "../Assests_components/raids/NotG.webp";
+import TCC from "../Assests_components/raids/TCC.webp";
+import TNA from "../Assests_components/raids/TNA.webp";
+
+// Importing rank tags
+
+import vip from "../Assests_components/ranks_tags/vip.svg";
+import vip_plus from "../Assests_components/ranks_tags/vip_plus.svg";
+import hero from "../Assests_components/ranks_tags/hero.svg";
+import champ from "../Assests_components/ranks_tags/champ.svg";
+
 const characterImages = {
-  MAGE: mage, // Assuming you have imported the mage image at the top
-  SHAMAN: shaman, // Assuming you have imported the shaman image at the top
-  ARCHER: archer, // Assuming you have imported the archer image at the top
-  ASSASSIN: assassin, // Assuming you have imported the assassin image at the top
-  WARRIOR: warrior, // Assuming you have imported the warrior image at the top
+  MAGE: mage,
+  SHAMAN: shaman,
+  ARCHER: archer,
+  ASSASSIN: assassin,
+  WARRIOR: warrior,
 };
 const professionImages = {
   Scribing: scribing,
@@ -50,6 +74,22 @@ const professionImages = {
   Weaponsmithing: weaponsmithing,
   Armouring: armouring,
   Tailoring: tailoring,
+};
+
+const totalLevelsImages = {
+  totalSoloLevel: total,
+  professionsSoloLevel: total,
+  professionsGlobalLevel: profs,
+  totalGlobalLevel: profs,
+  combatGlobalLevel: combat,
+  combatSoloLevel: combat,
+};
+
+const rankImages = {
+  VIP: vip,
+  VIPPLUS: vip_plus,
+  HERO: hero,
+  CHAMPION: champ,
 };
 
 const professions = [
@@ -65,21 +105,62 @@ const professions = [
   "tailoring",
 ];
 
+const totalLevels = [
+  "totalSoloLevel",
+  "professionsSoloLevel",
+  "professionsGlobalLevel",
+  "totalGlobalLevel",
+  "combatGlobalLevel",
+  "combatSoloLevel",
+];
+
 const Profile = () => {
   const { playerData, extendedPlayerData, loading, error, playerName } =
     useContext(PlayerContext); // Access playerName from context
 
   const [isProfessionsVisible, setIsProfessionsVisible] = useState(false);
+  const [isContentCompletionVisible, setIsContentCompletionVisible] =
+    useState(false);
+  const [isTotalLevelsVisible, setIsTotalLevelsVisible] = useState(false);
+  const [isRaidsStatVisible, setIsRaidsStatVisible] = useState(false);
 
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleRotation = () => {
-    setIsExpanded((prev) => !prev);
-  };
+  /*  */
+  const [isExpandedProfessions, setIsExpandedProfessions] = useState(false);
+  const [isExpandedContentCompletion, setIsExpandedContentCompletion] =
+    useState(false);
+  const [isExpandedTotalLevels, setIsExpandedTotalLevels] = useState(false);
+  const [isExpandedRaidsStats, setIsExpandedRaidsStats] = useState(false);
 
   const toggleProfessionsVisibility = () => {
     setIsProfessionsVisible(!isProfessionsVisible); // Toggle the visibility state
+    setIsExpandedProfessions((prev) => !prev);
   };
+  const toggleContentCompletionVisibility = () => {
+    setIsContentCompletionVisible(!isContentCompletionVisible); // Toggle the visibility state
+    setIsExpandedContentCompletion((prev) => !prev);
+  };
+  const toggleTotalLevelsVisibility = () => {
+    setIsTotalLevelsVisible(!isTotalLevelsVisible); // Toggle the visibility state
+    setIsExpandedTotalLevels((prev) => !prev);
+  };
+  const toggleRaidStatsVisibility = () => {
+    setIsRaidsStatVisible(!isRaidsStatVisible); // Toggle the visibility state
+    setIsExpandedRaidsStats((prev) => !prev);
+  };
+
+  /* FOR WORKING BACKGROUND */
+  const isBothVisible = isProfessionsVisible && isContentCompletionVisible;
+
+  const supportRank = playerData?.supportRank
+    ? playerData.supportRank.toLowerCase()
+    : null; // Default to null
+  const rankImage = supportRank ? rankImages[supportRank.toUpperCase()] : null; // Only call toUpperCase if supportRank is not null
+
+  console.log("Support Rank:", supportRank); // Debugging
+  console.log("Rank Image:", rankImage); // Debugging
+
+  // Determine the width based on the rank
+  const imgWidth = supportRank === "champion" ? "8rem" : "6rem";
 
   const timeAgo = (utcDateString) => {
     const lastJoinDate = new Date(utcDateString);
@@ -103,8 +184,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile_component">
-      <div className="profile_grid_container">
+    <div className={`profile_component ${isBothVisible ? "expanded" : ""}`}>
+      <div
+        className={`profile_grid_container ${isBothVisible ? "expanded" : ""}`}
+      >
         <section className="profile_grid_left">
           <div className="profile_grid_inner_container_top">
             <section className="flex">
@@ -116,7 +199,15 @@ const Profile = () => {
 
             <section className="flex-col ">
               <span className="flex gap-05">
-                <h2>{(playerData?.supportRank || "RANK").toUpperCase()}</h2>
+                {rankImage ? (
+                  <img
+                    src={rankImage}
+                    alt={supportRank}
+                    style={{ width: imgWidth }}
+                  />
+                ) : (
+                  <h2>No Rank</h2> // Fallback message when rank is null
+                )}
                 <h2>{playerData?.username || "PLAYER"}</h2>
               </span>
               <section>
@@ -254,7 +345,7 @@ const Profile = () => {
 
         <section className="profile_grid_right">
           <div className="stats_grid_top">
-            <h5>Your characters</h5>
+            <h5>Characters</h5>
             <br></br>
             {playerData && extendedPlayerData.characters && (
               <div className="characters_container">
@@ -284,66 +375,259 @@ const Profile = () => {
             )}{" "}
           </div>
           <div className="stats_grid_bottom">
-            <h5>Your rankings</h5>
+            <h5>Rankings</h5>
             <br></br>
-            <section className="flex-center space-between p-02-05 color-bg-09">
-              <h5>Your professions</h5>
+            {/* Profs. ranking section */}
+            <section
+              className="flex-center space-between p-02-05 color-bg-09 stats_ranking_hover"
+              onClick={toggleProfessionsVisibility}
+            >
+              <h5>Professions</h5>
               <FontAwesomeIcon
                 icon={faCaretUp}
                 onClick={() => {
-                  toggleRotation(), toggleProfessionsVisibility();
+                  toggleProfessionsVisibility();
                 }}
-                className={`professions_expand_btn ${
-                  isExpanded ? "rotated" : ""
+                className={`ranking_item_btn ${
+                  isExpandedProfessions ? "rotated" : ""
                 }`}
               />
             </section>
-
             <br></br>
-            {isProfessionsVisible && playerData && extendedPlayerData && (
-              <div className="rankings_container">
-                {Object.entries(extendedPlayerData.ranking)
-                  .filter(([rankingId]) =>
-                    professions.some((profession) =>
-                      rankingId.startsWith(profession.toLowerCase())
-                    )
-                  )
-                  .map(([rankingId, rankingValue]) => {
-                    const formattedRankingId = rankingId
-                      .replace(/Level$/, "")
-                      .replace(/([A-Z])/g, " $1")
-                      .trim()
-                      .replace(/^./, (str) => str.toUpperCase());
+            <CSSTransition
+              in={isProfessionsVisible}
+              timeout={300}
+              classNames="fade"
+              unmountOnExit
+            >
+              <div style={{ overflow: "hidden" }}>
+                {" "}
+                {isProfessionsVisible && playerData && extendedPlayerData && (
+                  <div className="rankings_container">
+                    {Object.entries(extendedPlayerData.ranking)
+                      .filter(([rankingId]) =>
+                        professions.some((profession) =>
+                          rankingId.startsWith(profession.toLowerCase())
+                        )
+                      )
+                      .map(([rankingId, rankingValue]) => {
+                        const formattedRankingId = rankingId
+                          .replace(/Level$/, "")
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                          .replace(/^./, (str) => str.toUpperCase());
 
-                    const profession =
-                      formattedRankingId.charAt(0).toUpperCase() +
-                      formattedRankingId.slice(1).toLowerCase();
+                        const profession =
+                          formattedRankingId.charAt(0).toUpperCase() +
+                          formattedRankingId.slice(1).toLowerCase();
 
-                    console.log(
-                      "Loading image for profession:",
-                      profession,
-                      "Image source:",
-                      professionImages[profession]
-                    ); // Debugging line
+                        return (
+                          <div key={rankingId} className="ranking_item">
+                            <img
+                              className="ranking_item_img"
+                              src={
+                                professionImages[profession] ||
+                                "https://via.placeholder.com/150"
+                              } // Fallback to a placeholder image
+                              alt={profession}
+                            />
+                            <h5>
+                              {formattedRankingId}:{" "}
+                              <strong>#{rankingValue}</strong>
+                            </h5>
+                          </div>
+                        );
+                      })}{" "}
+                  </div>
+                )}{" "}
+                <br></br>
+              </div>
+            </CSSTransition>
 
-                    return (
-                      <div key={rankingId} className="ranking_item">
+            {/* Content completion ranking section */}
+            <section
+              className="flex-center space-between p-02-05 color-bg-09 stats_ranking_hover"
+              onClick={toggleContentCompletionVisibility}
+            >
+              <h5>Content completion</h5>
+              <FontAwesomeIcon
+                icon={faCaretUp}
+                onClick={() => {
+                  toggleContentCompletionVisibility();
+                }}
+                className={`ranking_item_btn ${
+                  isExpandedContentCompletion ? "rotated" : ""
+                }`}
+              />
+            </section>
+            <br></br>
+            <CSSTransition
+              in={isContentCompletionVisible}
+              timeout={300}
+              classNames="fade"
+              unmountOnExit
+            >
+              <div style={{ overflow: "hidden" }}>
+                {" "}
+                {isContentCompletionVisible &&
+                  playerData &&
+                  extendedPlayerData && (
+                    <div className="rankings_container_small">
+                      <div className="ranking_item">
                         <img
                           className="ranking_item_img"
-                          src={
-                            professionImages[profession] ||
-                            "https://via.placeholder.com/150"
-                          } // Fallback to a placeholder image
-                          alt={profession}
+                          src={wars_completion}
                         />
-                        <h5>
-                          {formattedRankingId}: <strong>#{rankingValue}</strong>
-                        </h5>
+                        Wars completed:
+                        <strong>
+                          {" "}
+                          #{extendedPlayerData?.ranking?.warsCompletion}
+                        </strong>
                       </div>
-                    );
-                  })}
+                      <div className="ranking_item">
+                        <img
+                          className="ranking_item_img"
+                          src={global_total_completion}
+                        />
+                        Global total completion:
+                        <strong>
+                          {" "}
+                          #{extendedPlayerData?.ranking?.globalPlayerContent}
+                        </strong>
+                      </div>{" "}
+                      <div className="ranking_item">
+                        <img
+                          className="ranking_item_img"
+                          src={total_completion}
+                        />
+                        Total completion:
+                        <strong>
+                          {" "}
+                          #{extendedPlayerData?.ranking?.playerContent}
+                        </strong>
+                      </div>
+                    </div>
+                  )}{" "}
+                <br></br>
               </div>
-            )}
+            </CSSTransition>
+            {/* Total levels section */}
+            <section
+              className="flex-center space-between p-02-05 color-bg-09 stats_ranking_hover"
+              onClick={toggleTotalLevelsVisibility}
+            >
+              <h5>Total levels</h5>
+              <FontAwesomeIcon
+                icon={faCaretUp}
+                onClick={() => {
+                  toggleTotalLevelsVisibility();
+                }}
+                className={`ranking_item_btn ${
+                  isTotalLevelsVisible ? "rotated" : ""
+                }`}
+              />
+            </section>
+            <br></br>
+            <CSSTransition
+              in={isTotalLevelsVisible}
+              timeout={300}
+              classNames="fade"
+              unmountOnExit
+            >
+              <div style={{ overflow: "hidden" }}>
+                {isTotalLevelsVisible && playerData && extendedPlayerData && (
+                  <div className="rankings_container">
+                    {Object.entries(extendedPlayerData.ranking)
+                      .filter(([key]) => totalLevels.includes(key))
+                      .map(([key, value]) => (
+                        <div key={key} className="ranking_item">
+                          <img
+                            className="ranking_item_img"
+                            src={
+                              totalLevelsImages[key] ||
+                              "https://via.placeholder.com/150"
+                            }
+                            alt={key}
+                          />
+                          <h5>
+                            {key.charAt(0).toUpperCase() +
+                              key
+                                .slice(1)
+                                .replace(/([A-Z])/g, " $1")
+                                .trim()}
+                            : <strong>#{value}</strong>
+                          </h5>
+                        </div>
+                      ))}
+                  </div>
+                )}{" "}
+                <br></br>
+              </div>
+            </CSSTransition>
+            {/* Content raids ranking section */}
+            <section
+              className="flex-center space-between p-02-05 color-bg-09 stats_ranking_hover"
+              onClick={toggleRaidStatsVisibility}
+            >
+              <h5>Content completion</h5>
+              <FontAwesomeIcon
+                icon={faCaretUp}
+                onClick={() => {
+                  toggleRaidStatsVisibility();
+                }}
+                className={`ranking_item_btn ${
+                  isExpandedContentCompletion ? "rotated" : ""
+                }`}
+              />
+            </section>
+            <br></br>
+            <CSSTransition
+              in={isRaidsStatVisible}
+              timeout={300}
+              classNames="fade"
+              unmountOnExit
+            >
+              <div style={{ overflow: "hidden" }}>
+                {" "}
+                {isRaidsStatVisible && playerData && extendedPlayerData && (
+                  <div className="rankings_container_small">
+                    <div className="ranking_item">
+                      <img className="ranking_item_img" src={NoL} />
+                      NoL Raids completed:
+                      <strong>
+                        {" "}
+                        #{extendedPlayerData?.ranking?.orphionCompletion}
+                      </strong>
+                    </div>
+                    <div className="ranking_item">
+                      <img className="ranking_item_img" src={NotG} />
+                      NotG Raids completed:
+                      <strong>
+                        {" "}
+                        #{extendedPlayerData?.ranking?.grootslangCompletion}
+                      </strong>
+                    </div>{" "}
+                    <div className="ranking_item">
+                      <img className="ranking_item_img" src={TCC} />
+                      TCC Raids completed:
+                      <strong>
+                        {" "}
+                        #{extendedPlayerData?.ranking?.colossusCompletion}
+                      </strong>
+                    </div>
+                    <div className="ranking_item">
+                      <img className="ranking_item_img" src={TNA} />
+                      TNA Raid Raids completed:
+                      <strong>
+                        {" "}
+                        #{extendedPlayerData?.ranking?.namelessCompletion}
+                      </strong>
+                    </div>
+                  </div>
+                )}{" "}
+                <br></br>
+              </div>
+            </CSSTransition>
           </div>
         </section>
       </div>
