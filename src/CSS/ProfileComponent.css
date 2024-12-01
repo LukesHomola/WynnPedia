@@ -215,7 +215,74 @@ progress::-moz-progress-bar {
   border-radius: 5px;
 }
 
+/* Character info section */
+
+.character_detail_container {
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80svw;
+  height: 80svh;
+  padding: 1rem 0;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg);
+}
+
+.character_detail_topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
+    rgba(0, 0, 0, 0.05) 0px 5px 10px;
+  background-color: #0a0909;
+  border-bottom: 8px solid var(--color-primary-900);
+}
+.character_detail_topbar_class_info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  /*   background-color: var(--color-bg-05); */
+}
+
+.character_detail_close_btn {
+  padding: 1rem 0.5rem;
+
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  background-color: var(--color-primary-900);
+}
+.character_detail_close_btn:hover {
+  cursor: pointer;
+}
+
+.character_detail_body {
+  display: grid;
+  height: 80svh;
+  grid-template-rows: repeat(auto-fill, minmax(200px, auto));
+  grid-template-rows: repeat(auto-fill, minmax(100px, auto));
+  padding: 1rem;
+  background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
+}
+.character_detail_body_item_content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 0.5fr 1fr;
+  border: 1px solid gray;
+}
+
 /* * {
   outline: 1px solid orange;
-}
- */
+} */

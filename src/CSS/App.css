@@ -38,6 +38,13 @@ input {
   border-right: 0.5px solid gray;
 }
 
+button {
+  background: 0;
+  border: 0;
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h3);
+  font-weight: var(--font-weight-medium);
+}
 /* ===================================================
    Application coloring
    =================================================== */
@@ -52,6 +59,7 @@ input {
 
   /* COLORS WITH OPACITY */
   --color-bg-09: rgb(20, 18, 18, 0.7);
+  --color-bg-05: rgb(20, 18, 18, 0.5);
   --color-primary-09: rgb(83, 9, 9, 0.9);
   --color-secondary-09: rgb(43, 112, 121, 0.9);
 

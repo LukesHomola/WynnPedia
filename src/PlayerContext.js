@@ -27,7 +27,6 @@ export const PlayerProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      console.log("API Response:", data);
 
       if (data?.username) {
         setPlayerData(data);
@@ -56,7 +55,6 @@ export const PlayerProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      console.log("API Response 2:", data);
 
       if (data?.username) {
         setExtendedPlayerData(data);

@@ -10,6 +10,7 @@ import {
   faCircleArrowRight,
   faUser,
   faCaretUp,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/ProfileComponent.css";
@@ -114,6 +115,115 @@ const totalLevels = [
   "combatSoloLevel",
 ];
 
+const CharacterInfo = ({
+  character,
+  setIsCharacterInfoVisible,
+  rankImage,
+  supportRank,
+  imgWidth,
+  playerData,
+  timeAgo,
+  isChatacterInfoVisible,
+  selectedCharacter,
+}) => {
+  return (
+    <CSSTransition
+      in={isChatacterInfoVisible}
+      timeout={300}
+      classNames="fade"
+      unmountOnExit
+    >
+      <div className="hidden">
+        {" "}
+        {isChatacterInfoVisible && character && (
+          <div className="character_detail_container">
+            <section className="character_detail_topbar">
+              <section className="flex-col gap-05">
+                <section className="flex gap-05">
+                  {rankImage ? (
+                    <img
+                      src={rankImage}
+                      alt={supportRank}
+                      style={{ width: imgWidth }}
+                    />
+                  ) : (
+                    <h2>No Rank</h2> // Fallback message when rank is null
+                  )}
+                  <h2>{playerData?.username || "PLAYER"}</h2>{" "}
+                </section>
+                <h3 className="force-regular">
+                  {playerData?.online ? (
+                    <h5 className="force-regular" style={{ color: "lime" }}>
+                      Online on {playerData.server}
+                    </h5>
+                  ) : (
+                    <h5 className="force-regular" style={{ color: "gray" }}>
+                      {playerData?.lastJoin
+                        ? timeAgo(playerData.lastJoin)
+                        : "Never joined"}
+                    </h5>
+                  )}
+                </h3>
+                <h3 className="force-regular">
+                  {playerData?.guild?.name ? (
+                    <h5 className="force-regular">
+                      {playerData.guild?.rankStars} {playerData.guild?.rank} of
+                      the {playerData.guild?.name}
+                    </h5>
+                  ) : (
+                    <h5 className="force-regular">No guild registered.</h5>
+                  )}
+                </h3>
+              </section>
+              <section className="character_detail_topbar_class_info">
+                <img
+                  className="character_item_img"
+                  src={characterImages[character.type]}
+                  alt={character.type}
+                />
+                <section className="flex-col ">
+                  {character.reskin ? (
+                    <h3>{character.reskin}</h3>
+                  ) : (
+                    <h2>{character.type}</h2>
+                  )}
+                  <p>Combat level: {character.level}</p>
+                  <p>Total level: {character.letota}</p>
+                </section>
+              </section>
+              <section>
+                <button
+                  className="character_detail_close_btn"
+                  onClick={() => {
+                    setIsCharacterInfoVisible(false);
+                  }}
+                >
+                  CLOSE MENU{" "}
+                </button>
+              </section>
+            </section>
+            <section className="character_detail_body">
+              <div className="character_detail_body_item">
+                <h2>Informations</h2>
+                <section className="character_detail_body_item_content">
+                  <section>
+                    <h3 className="force-regular">General</h3>
+                    <br></br>
+                    <p>Total level: {character.totalLevel}</p>
+                    <p>Level: {character.level}</p>
+                  </section>
+                  <h3>TEST</h3>
+                  <h3>TEST</h3>
+                </section>
+              </div>
+            </section>
+          </div>
+        )}
+      </div>
+    </CSSTransition>
+  );
+};
+
 const Profile = () => {
   const { playerData, extendedPlayerData, loading, error, playerName } =
     useContext(PlayerContext); // Access playerName from context
@@ -130,6 +240,9 @@ const Profile = () => {
     useState(false);
   const [isExpandedTotalLevels, setIsExpandedTotalLevels] = useState(false);
   const [isExpandedRaidsStats, setIsExpandedRaidsStats] = useState(false);
+  /* Character info card  */
+  const [isChatacterInfoVisible, setIsCharacterInfoVisible] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   const toggleProfessionsVisibility = () => {
     setIsProfessionsVisible(!isProfessionsVisible); // Toggle the visibility state
@@ -147,6 +260,8 @@ const Profile = () => {
     setIsRaidsStatVisible(!isRaidsStatVisible); // Toggle the visibility state
     setIsExpandedRaidsStats((prev) => !prev);
   };
+
+  // Characters closer info section
 
   /* FOR WORKING BACKGROUND */
   const isBothVisible = isProfessionsVisible && isContentCompletionVisible;
@@ -184,9 +299,24 @@ const Profile = () => {
   };
 
   return (
-    <div className={`profile_component ${isBothVisible ? "expanded" : ""}`}>
+    <div className={`profile_component ${isBothVisible ? "expanded" : ""} `}>
+      {" "}
+      {isChatacterInfoVisible && selectedCharacter && (
+        <CharacterInfo
+          character={selectedCharacter}
+          isChatacterInfoVisible={isChatacterInfoVisible}
+          setIsCharacterInfoVisible={setIsCharacterInfoVisible}
+          rankImage={rankImage}
+          supportRank={supportRank}
+          imgWidth={imgWidth}
+          playerData={playerData}
+          timeAgo={timeAgo}
+        />
+      )}
       <div
-        className={`profile_grid_container ${isBothVisible ? "expanded" : ""}`}
+        className={`profile_grid_container ${isBothVisible ? "expanded" : ""} ${
+          isChatacterInfoVisible ? "blur" : ""
+        }`}
       >
         <section className="profile_grid_left">
           <div className="profile_grid_inner_container_top">
@@ -354,14 +484,25 @@ const Profile = () => {
                     const character =
                       extendedPlayerData.characters[characterId];
                     return (
-                      <div key={characterId} className="characters_item">
+                      <div
+                        key={characterId}
+                        className="characters_item"
+                        onClick={() => {
+                          setSelectedCharacter(character); // Update selected character
+                          setIsCharacterInfoVisible(true); // Optionally show character info
+                        }}
+                      >
                         <img
                           className="character_item_img"
                           src={characterImages[character.type]}
                           alt={character.type}
                         />
                         <section>
-                          <h3>{character.type}</h3>
+                          {character.reskin ? (
+                            <h3>{character.reskin}</h3>
+                          ) : (
+                            <h2>{character.type}</h2>
+                          )}{" "}
                           <p>Combat level: {character.level}</p>
                           <p>Total level: {character.totalLevel}</p>
                           <p>Time played: {character.playtime} hours</p>

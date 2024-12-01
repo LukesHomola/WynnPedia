@@ -45,6 +45,11 @@
   max-width: 50%;
 }
 
+.blur {
+  filter: blur(5px); /* Adjust the blur value as needed */
+  transition: filter 0.3s ease; /* Smooth transition */
+}
+
 .force-regular {
   font-weight: var(--font-weight-regular);
 }
