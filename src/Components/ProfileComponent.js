@@ -506,7 +506,7 @@ const Profile = () => {
           <div className="profile_grid_inner_container_top">
             <section className="flex">
               <img
-                src={profileAvatarHead}
+                src={`https://crafatar.com/renders/head/${playerData?.uuid}`}
                 className="grid_container_top_avatar"
               ></img>
             </section>
@@ -555,29 +555,9 @@ const Profile = () => {
           <div className="profile_grid_inner_container_bottom">
             <section className="flex-col">
               <img
-                src={profileAvatarBody}
-                className="grid_container_bottom_avatar"
+                src={`https://crafatar.com/renders/body/${playerData?.uuid}`}
+                className="grid_container_bottom_avatar "
               ></img>
-              <section className="flex-center gap-1">
-                <h3>
-                  <FontAwesomeIcon
-                    icon={faCircleArrowLeft}
-                    className="avatar_showcase_control"
-                  />
-                </h3>
-                <h3>
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className="avatar_showcase_control"
-                  />
-                </h3>
-                <h3>
-                  <FontAwesomeIcon
-                    icon={faCircleArrowRight}
-                    className="avatar_showcase_control"
-                  />
-                </h3>
-              </section>
             </section>
             <section className="flex-col gap-05 grid_bottom_stats">
               <h5>Personal stats</h5>
