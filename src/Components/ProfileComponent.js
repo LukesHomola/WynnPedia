@@ -33,6 +33,8 @@ import jeweling from "../Assests_components/professions/Jeweling.webp";
 import weaponsmithing from "../Assests_components/professions/Weaponsmithing.webp";
 import armouring from "../Assests_components/professions/Armouring.webp";
 import tailoring from "../Assests_components/professions/Tailoring.webp";
+import fishing from "../Assests_components/professions/Fishing.webp";
+import woodworking from "../Assests_components/professions/Woodworking.webp";
 
 // Import the images for each total completion
 import wars_completion from "../Assests_components/content_completion/wars.webp";
@@ -83,6 +85,8 @@ const professionImages = {
   Weaponsmithing: weaponsmithing,
   Armouring: armouring,
   Tailoring: tailoring,
+  Fishing: fishing,
+  Woodworking: woodworking,
 };
 
 const totalLevelsImages = {
@@ -112,6 +116,8 @@ const professions = [
   "weaponsmithing",
   "armouring",
   "tailoring",
+  "fishing",
+  "woodworking",
 ];
 
 const totalLevels = [
@@ -345,6 +351,7 @@ const CharacterInfo = ({
                 </div>
               </div>
               {/*  */}
+              <br></br>
               <div className="character_detail_body_item_professions">
                 <h2 className="force-regular pL-1">Professions</h2>
                 {isProfessionsVisible && playerData && extendedPlayerData && (
@@ -355,6 +362,8 @@ const CharacterInfo = ({
                           professionKey.charAt(0).toUpperCase() +
                           professionKey.slice(1).toLowerCase(); // Format the profession name
                         const level = professionData.level; // Get the level from the profession data
+
+                        console.log("testing: ", formattedProfession);
 
                         return (
                           <div
@@ -369,12 +378,14 @@ const CharacterInfo = ({
                               }
                               alt={formattedProfession}
                             />
-                            <h5>
-                              {formattedProfession}:{" "}
-                              <strong>Level {level}</strong>{" "}
+                            <section className="flex-col">
+                              <h5>{formattedProfession}</h5>
+                              <h6>
+                                {" "}
+                                Level<strong> {level}</strong>{" "}
+                              </h6>{" "}
                               <progress value={level} max={100} />
-                              {/* Display the level */}
-                            </h5>
+                            </section>
                           </div>
                         );
                       }
@@ -437,9 +448,6 @@ const Profile = () => {
     ? playerData.supportRank.toLowerCase()
     : null; // Default to null
   const rankImage = supportRank ? rankImages[supportRank.toUpperCase()] : null; // Only call toUpperCase if supportRank is not null
-
-  console.log("Support Rank:", supportRank); // Debugging
-  console.log("Rank Image:", rankImage); // Debugging
 
   // Determine the width based on the rank
   const imgWidth = supportRank === "champion" ? "8rem" : "8rem";
@@ -739,6 +747,7 @@ const Profile = () => {
                           formattedRankingId.charAt(0).toUpperCase() +
                           formattedRankingId.slice(1).toLowerCase();
 
+                        console.log(profession);
                         return (
                           <div key={rankingId} className="ranking_item">
                             <img

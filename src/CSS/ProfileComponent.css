@@ -312,7 +312,12 @@ progress::-moz-progress-bar {
 }
 
 .character_detail_body_item_skills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2rem 0;
+  margin: 0 auto;
+  width: 80svw;
   background-color: var(--color-bg-800-07);
 }
 
@@ -320,7 +325,10 @@ progress::-moz-progress-bar {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr;
-  width: 50svw;
+  align-items: center;
+  justify-content: center;
+  grid-column-gap: 30px;
+  grid-row-gap: 10px;
   margin: 0 auto;
   border-radius: 5px;
   padding: 1rem;
@@ -332,14 +340,20 @@ progress::-moz-progress-bar {
   background-color: var(--color-bg-09);
 }
 .character_detail_body_item_skills_inner section {
-  width: fit-content;
 }
 
 .character_detail_body_item_professions {
+  max-width: 80svw;
+  align-items: center;
+  padding: 1rem 0;
+  background-color: var(--color-bg);
 }
+
 .character_detail_body_item_professions_inner {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
   padding: 1rem;
 }
 .character_detail_ranking_item {
@@ -349,10 +363,12 @@ progress::-moz-progress-bar {
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 2px;
+  border-left: 6.5px solid var(--color-secondary-900);
+  border-radius: 5px 0 0 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  background-color: var(--color-bg-09);
+  background-color: var(--color-bg-08);
 }
 .character_ranking_item_img {
   max-width: 5rem;
