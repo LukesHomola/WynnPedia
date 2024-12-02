@@ -60,6 +60,7 @@ button {
   /* COLORS WITH OPACITY */
   --color-bg-09: rgb(20, 18, 18, 0.7);
   --color-bg-05: rgb(20, 18, 18, 0.5);
+  --color-bg-800-07: rgb(10, 9, 9, 0.7);
   --color-primary-09: rgb(83, 9, 9, 0.9);
   --color-secondary-09: rgb(43, 112, 121, 0.9);
 

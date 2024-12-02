@@ -57,6 +57,14 @@ import vip_plus from "../Assests_components/ranks_tags/vip_plus.svg";
 import hero from "../Assests_components/ranks_tags/hero.svg";
 import champ from "../Assests_components/ranks_tags/champ.svg";
 
+// Importing skill books
+
+import strength from "../Assests_components/Skills/strength.svg";
+import dexterity from "../Assests_components/Skills/dexterity.svg";
+import intelligence from "../Assests_components/Skills/intelligence.svg";
+import defense from "../Assests_components/Skills/defense.svg";
+import agility from "../Assests_components/Skills/agility.svg";
+
 const characterImages = {
   MAGE: mage,
   SHAMAN: shaman,
@@ -125,6 +133,8 @@ const CharacterInfo = ({
   timeAgo,
   isChatacterInfoVisible,
   selectedCharacter,
+  isProfessionsVisible,
+  extendedPlayerData,
 }) => {
   return (
     <CSSTransition
@@ -147,7 +157,7 @@ const CharacterInfo = ({
                       style={{ width: imgWidth }}
                     />
                   ) : (
-                    <h2>No Rank</h2> // Fallback message when rank is null
+                    <h2></h2> // Fallback message when rank is null
                   )}
                   <h2>{playerData?.username || "PLAYER"}</h2>{" "}
                 </section>
@@ -188,7 +198,8 @@ const CharacterInfo = ({
                     <h2>{character.type}</h2>
                   )}
                   <p>Combat level: {character.level}</p>
-                  <p>Total level: {character.letota}</p>
+                  <p>Total level: {character.totalLevel}</p>
+                  <progress value={character.xpPercent} max={100} />
                 </section>
               </section>
               <section>
@@ -202,20 +213,176 @@ const CharacterInfo = ({
                 </button>
               </section>
             </section>
+            <br></br>
             <section className="character_detail_body">
+              {/*  */}
               <div className="character_detail_body_item">
-                <h2>Informations</h2>
+                <h2 className="force-regular">Informations</h2>
                 <section className="character_detail_body_item_content">
-                  <section>
-                    <h3 className="force-regular">General</h3>
+                  <section className="character_detail_body_item_content_inner">
+                    <span className="flex-start gap-05 pB-05">
+                      <img src={total} style={{ maxHeight: "3rem" }}></img>{" "}
+                      <h4 className="force-regular">General</h4>
+                      <h5 className="force-regular" style={{ color: "gray" }}>
+                        section
+                      </h5>
+                    </span>{" "}
+                    <hr
+                      style={{ margin: "0 auto", border: "1px solid gray" }}
+                    ></hr>
                     <br></br>
-                    <p>Total level: {character.totalLevel}</p>
-                    <p>Level: {character.level}</p>
+                    <h5>
+                      Total level: <strong>{character.totalLevel}</strong>{" "}
+                      levels
+                    </h5>
+                    <h5>
+                      Level: <strong>{character.level}</strong> levels
+                    </h5>
+                    <h5>
+                      Time player: <strong>{character.playtime}</strong> hours
+                    </h5>
+                    <h5>
+                      Logins: <strong>{character.logins}</strong>
+                    </h5>
+                    <h5>
+                      Deaths: <strong>{character.deaths}</strong>
+                    </h5>
                   </section>
-                  <h3>TEST</h3>
-                  <h3>TEST</h3>
+                  <section className="character_detail_body_item_content_inner">
+                    <span className="flex-start gap-05 pB-05">
+                      {" "}
+                      <img src={profs} style={{ maxHeight: "3rem" }}></img>{" "}
+                      <h4 className="force-regular">Achievments</h4>
+                      <h5 className="force-regular" style={{ color: "gray" }}>
+                        section
+                      </h5>
+                    </span>{" "}
+                    <hr
+                      style={{ margin: "0 auto", border: "1px solid gray" }}
+                    ></hr>
+                    <br></br>
+                    <h5>
+                      Discoveries: <strong>{character.discoveries}</strong>
+                    </h5>
+                    <h5>
+                      Mobs killed: <strong>{character.mobsKilled} </strong>mobs
+                    </h5>
+                    <h5>
+                      Chests opened: <strong>{character.chestsFound} </strong>
+                      chests
+                    </h5>
+                    <h5>
+                      Dungeons completed:{" "}
+                      <strong>{character.dungeons.total} </strong>dungeons
+                    </h5>
+                    <h5>
+                      Raids completed: <strong>{character.raids.total} </strong>
+                      raids
+                    </h5>
+                    <h5>
+                      Deaths: <strong>{character.deaths} </strong>deaths
+                    </h5>
+                  </section>{" "}
+                  <section className="character_detail_body_item_content_inner ">
+                    <span className="flex-start gap-05 pB-05">
+                      {" "}
+                      <img
+                        src={combat}
+                        style={{ maxHeight: "3rem" }}
+                      ></img>{" "}
+                      <h3 className="force-regular">PVP</h3>
+                      <h4 className="force-regular" style={{ color: "gray" }}>
+                        section
+                      </h4>
+                    </span>{" "}
+                    <hr
+                      style={{ margin: "0 auto", border: "1px solid gray" }}
+                    ></hr>
+                    <br></br>
+                    <h5>
+                      PVP kills: <strong>{character.pvp.kills}</strong>
+                    </h5>
+                    <h5>
+                      PVP deaths: <strong>{character.pvp.deaths}</strong>
+                    </h5>
+                  </section>{" "}
                 </section>
+              </div>{" "}
+              <br></br>
+              {/*  */}
+              <div className="character_detail_body_item_skills">
+                <div className="character_detail_body_item_skills_inner">
+                  <section className="flex-col flex-center">
+                    <h5>Strength</h5>
+                    <label>{character.skillPoints.strength || 0} points</label>
+                    <br></br>
+                    <img src={strength} style={{ maxWidth: "5rem" }}></img>
+                  </section>
+                  <section className="flex-col flex-center">
+                    <h5>Dexterity</h5>
+                    <label>{character.skillPoints.dexterity || 0} points</label>
+                    <br></br>
+                    <img src={dexterity} style={{ maxWidth: "5rem" }}></img>
+                  </section>{" "}
+                  <section className="flex-col flex-center">
+                    <h5>intelligence</h5>
+                    <label>{character.skillPoints.strength || 0} points</label>
+                    <br></br>
+                    <img src={intelligence} style={{ maxWidth: "5rem" }}></img>
+                  </section>
+                  <section className="flex-col flex-center">
+                    <h5>Defense</h5>
+                    <label>{character.skillPoints.defense || 0} points</label>
+                    <br></br>
+                    <img src={defense} style={{ maxWidth: "5rem" }}></img>
+                  </section>
+                  <section className="flex-col flex-center">
+                    <h5>Agility</h5>
+                    <label>{character.skillPoints.agility || 0} points</label>
+                    <br></br>
+                    <img src={agility} style={{ maxWidth: "5rem" }}></img>
+                  </section>
+                </div>
               </div>
+              {/*  */}
+              <div className="character_detail_body_item_professions">
+                <h2 className="force-regular pL-1">Professions</h2>
+                {isProfessionsVisible && playerData && extendedPlayerData && (
+                  <div className="character_detail_body_item_professions_inner">
+                    {Object.entries(character.professions).map(
+                      ([professionKey, professionData]) => {
+                        const formattedProfession =
+                          professionKey.charAt(0).toUpperCase() +
+                          professionKey.slice(1).toLowerCase(); // Format the profession name
+                        const level = professionData.level; // Get the level from the profession data
+
+                        return (
+                          <div
+                            key={professionKey}
+                            className="character_detail_ranking_item"
+                          >
+                            <img
+                              className="character_ranking_item_img"
+                              src={
+                                professionImages[formattedProfession] ||
+                                "https://via.placeholder.com/150" // Fallback to a placeholder image
+                              }
+                              alt={formattedProfession}
+                            />
+                            <h5>
+                              {formattedProfession}:{" "}
+                              <strong>Level {level}</strong>{" "}
+                              <progress value={level} max={100} />
+                              {/* Display the level */}
+                            </h5>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                )}
+              </div>
+              {/*  */}
             </section>
           </div>
         )}
@@ -275,7 +442,7 @@ const Profile = () => {
   console.log("Rank Image:", rankImage); // Debugging
 
   // Determine the width based on the rank
-  const imgWidth = supportRank === "champion" ? "8rem" : "6rem";
+  const imgWidth = supportRank === "champion" ? "8rem" : "8rem";
 
   const timeAgo = (utcDateString) => {
     const lastJoinDate = new Date(utcDateString);
@@ -298,6 +465,13 @@ const Profile = () => {
     }
   };
 
+  // Close character info on player data update
+  useEffect(() => {
+    if (playerData || extendedPlayerData) {
+      setIsCharacterInfoVisible(false);
+    }
+  }, [playerData, extendedPlayerData]);
+
   return (
     <div className={`profile_component ${isBothVisible ? "expanded" : ""} `}>
       {" "}
@@ -311,6 +485,8 @@ const Profile = () => {
           imgWidth={imgWidth}
           playerData={playerData}
           timeAgo={timeAgo}
+          isProfessionsVisible={isProfessionsVisible}
+          extendedPlayerData={extendedPlayerData}
         />
       )}
       <div
@@ -490,6 +666,7 @@ const Profile = () => {
                         onClick={() => {
                           setSelectedCharacter(character); // Update selected character
                           setIsCharacterInfoVisible(true); // Optionally show character info
+                          setIsProfessionsVisible(true);
                         }}
                       >
                         <img

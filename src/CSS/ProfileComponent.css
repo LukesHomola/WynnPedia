@@ -134,6 +134,8 @@
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 2px;
+  border-left: 6.5px solid var(--color-secondary-900);
+  border-radius: 5px 0 0 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -205,13 +207,13 @@ progress::-webkit-progress-bar {
 
 progress::-webkit-progress-value {
   background-color: var(
-    --color-secondary-900
+    --color-secondary-500
   ); /* Foreground color of the progress value */
   border-radius: 5px;
 }
 
 progress::-moz-progress-bar {
-  background-color: var(--color-secondary-900); /* Color for Firefox */
+  background-color: var(--color-secondary-500); /* Color for Firefox */
   border-radius: 5px;
 }
 
@@ -220,24 +222,39 @@ progress::-moz-progress-bar {
 .character_detail_container {
   z-index: 999;
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80svw;
-  height: 80svh;
-  padding: 1rem 0;
-  border-radius: 2px;
+  min-width: 80svw;
+  max-height: 90svh;
+  overflow-y: auto; /* Enable vertical scrolling */
+  border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--color-bg);
 }
 
+/* Hide scrollbar for WebKit browsers */
+.character_detail_container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+/* Hide scrollbar for Firefox */
+.character_detail_container {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* For Edge and Internet Explorer */
+.character_detail_container {
+  -ms-overflow-style: none; /* Hide scrollbar for Internet Explorer and Edge */
+}
+
 .character_detail_topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
     rgba(0, 0, 0, 0.05) 0px 5px 10px;
   background-color: #0a0909;
@@ -258,7 +275,6 @@ progress::-moz-progress-bar {
 
 .character_detail_close_btn {
   padding: 1rem 0.5rem;
-
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
     rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
@@ -270,17 +286,76 @@ progress::-moz-progress-bar {
 
 .character_detail_body {
   display: grid;
-  height: 80svh;
-  grid-template-rows: repeat(auto-fill, minmax(200px, auto));
-  grid-template-rows: repeat(auto-fill, minmax(100px, auto));
-  padding: 1rem;
+  grid-template-rows: repeat(auto-fill, minmax(250px, auto));
+  grid-row-gap: 20px;
   background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
 }
+.character_detail_body_item h2 {
+  padding-left: 1rem;
+}
+
 .character_detail_body_item_content {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 0.5fr 1fr;
-  border: 1px solid gray;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-column-gap: 50px;
+  grid-row-gap: 10px;
+  padding: 1rem;
+}
+.character_detail_body_item_content_inner {
+  padding: 1rem;
+  border-left: 6.5px solid var(--color-secondary-900);
+  border-radius: 5px 0 0 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+
+.character_detail_body_item_skills {
+  padding: 2rem 0;
+  background-color: var(--color-bg-800-07);
+}
+
+.character_detail_body_item_skills_inner {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 1fr;
+  width: 50svw;
+  margin: 0 auto;
+  border-radius: 5px;
+  padding: 1rem;
+  border-left: 6.5px solid var(--color-secondary-900);
+  border-radius: 5px 0 0 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+.character_detail_body_item_skills_inner section {
+  width: fit-content;
+}
+
+.character_detail_body_item_professions {
+}
+.character_detail_body_item_professions_inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  padding: 1rem;
+}
+.character_detail_ranking_item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+.character_ranking_item_img {
+  max-width: 5rem;
 }
 
 /* * {
