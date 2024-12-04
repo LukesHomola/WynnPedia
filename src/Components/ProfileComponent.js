@@ -11,6 +11,7 @@ import {
   faUser,
   faCaretUp,
   faCircleXmark,
+  faSkull,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/ProfileComponent.css";
@@ -66,6 +67,44 @@ import dexterity from "../Assests_components/Skills/dexterity.svg";
 import intelligence from "../Assests_components/Skills/intelligence.svg";
 import defense from "../Assests_components/Skills/defense.svg";
 import agility from "../Assests_components/Skills/agility.svg";
+
+// Importing regular dungeon images
+import decrepitSewers from "../Assests_components/dungs/Decrepit_Sewers.webp";
+import infestedPit from "../Assests_components/dungs/Infested_Pit.webp";
+import underworldCrypt from "../Assests_components/dungs/Underworld_Crypt.webp";
+import timelostSanctum from "../Assests_components/dungs/TImelost_Sanctum.webp";
+import lostSanctuary from "../Assests_components/dungs/Lost_Sanctuary.webp";
+import sandSweptTomb from "../Assests_components/dungs/Sand_Swept_Tomb.webp";
+import iceBarrows from "../Assests_components/dungs/Ice_Barrows.webp";
+import undergrowthRuins from "../Assests_components/dungs/Undergrowth_Ruins.webp";
+import galleonsGraveyard from "../Assests_components/dungs/Galleons_Graveyard.webp";
+import fallenFactory from "../Assests_components/dungs/Fallen_Factory.webp";
+import eldritchOutlook from "../Assests_components/dungs/Eldritch_Outlook.webp";
+
+// Creating an object to map raid names to their images
+const raidImages = {
+  "Nest of the Grootslangs": NotG,
+  "The Canyon Colossus": TCC,
+  "Orphion's Nexus of Light": NoL,
+  "The Nameless Anomaly": TNA,
+};
+
+// Creating an object to map dungeon names to their images
+const dungeonImages = {
+  "Decrepit Sewers": decrepitSewers,
+  "Infested Pit": infestedPit,
+  "Underworld Crypt": underworldCrypt,
+  "Timelost Sanctum": timelostSanctum,
+  "Lost Sanctuary": lostSanctuary,
+  "Sand-Swept Tomb": sandSweptTomb,
+  "Ice Barrows": iceBarrows,
+  "Undergrowth Ruins": undergrowthRuins,
+  "Galleon's Graveyard": galleonsGraveyard,
+  "Fallen Factory": fallenFactory,
+  "Eldritch Outlook": eldritchOutlook,
+};
+
+// Now you can use dungeonImages to access the images by dungeon name
 
 const characterImages = {
   MAGE: mage,
@@ -271,7 +310,8 @@ const CharacterInfo = ({
                       Discoveries: <strong>{character.discoveries}</strong>
                     </h5>
                     <h5>
-                      Mobs killed: <strong>{character.mobsKilled} </strong>mobs
+                      Mobs killed: <strong>{character.mobsKilled} </strong>
+                      mobs
                     </h5>
                     <h5>
                       Chests opened: <strong>{character.chestsFound} </strong>
@@ -351,7 +391,6 @@ const CharacterInfo = ({
                 </div>
               </div>
               {/*  */}
-              <br></br>
               <div className="character_detail_body_item_professions">
                 <h2 className="force-regular pL-1">Professions</h2>
                 {isProfessionsVisible && playerData && extendedPlayerData && (
@@ -393,10 +432,149 @@ const CharacterInfo = ({
                   </div>
                 )}
               </div>
+              <br></br>
               {/*  */}
+              <div className="character_detail_body_item_professions">
+                <h2 className="force-regular pL-1">Dungeons</h2>
+                <div className="character_detail_body_item_professions_inner">
+                  {Object.entries(character.dungeons.list).filter(
+                    ([dungeonKey]) => !dungeonKey.startsWith("Corrupted")
+                  ).length === 0 ? (
+                    <div className="error-message">
+                      <p>No dungeon data available</p>
+                    </div>
+                  ) : (
+                    Object.entries(character.dungeons.list)
+                      .filter(
+                        ([dungeonKey]) => !dungeonKey.startsWith("Corrupted")
+                      )
+                      .map(([dungeonKey, completions]) => {
+                        const formattedDungeon =
+                          dungeonKey.charAt(0).toUpperCase() +
+                          dungeonKey.slice(1).toLowerCase();
+
+                        // Filter out related corrupted dungeon entries
+                        const relatedCorruptedDungeons = Object.entries(
+                          character.dungeons.list
+                        ).filter(
+                          ([corruptedKey]) =>
+                            corruptedKey.startsWith("Corrupted") &&
+                            corruptedKey.includes(dungeonKey)
+                        );
+
+                        return (
+                          <div
+                            key={dungeonKey}
+                            className="character_detail_ranking_item"
+                          >
+                            <img
+                              className="character_ranking_item_img"
+                              src={
+                                dungeonImages[dungeonKey] ||
+                                "https://via.placeholder.com/150" // Fallback to a placeholder image
+                              }
+                              alt={formattedDungeon}
+                            />
+                            <section className="flex-col">
+                              <h5>{formattedDungeon}</h5>
+                              <br />
+                              <h6>
+                                Regular Completions:{" "}
+                                <strong>{completions}</strong>
+                              </h6>
+
+                              {/* Render corrupted dungeon completions */}
+                              {relatedCorruptedDungeons.map(
+                                ([corruptedKey, corruptedCompletions]) => {
+                                  const formattedCorruptedDungeon =
+                                    corruptedKey.charAt(0).toUpperCase() +
+                                    corruptedKey.slice(1).toLowerCase();
+
+                                  return (
+                                    <div
+                                      key={corruptedKey}
+                                      className="corrupted_dungeon_info"
+                                    >
+                                      <h6>
+                                        <FontAwesomeIcon icon={faSkull} />{" "}
+                                        Completions:{" "}
+                                        <strong>{corruptedCompletions}</strong>
+                                      </h6>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </section>
+                          </div>
+                        );
+                      })
+                  )}
+                </div>
+              </div>
+              <br></br>
+              {/*  */}
+              <div className="character_detail_body_item_professions">
+                <h2 className="force-regular pL-1">Raids</h2>
+                <div className="character_detail_body_item_professions_inner">
+                  {Object.entries(character.raids.list).length === 0 ? (
+                    <div className="error-message">
+                      <p>No dungeon data available</p>
+                    </div>
+                  ) : (
+                    Object.entries(character.raids.list).map(
+                      ([raidKey, completions]) => {
+                        const formattedRaid =
+                          raidKey.charAt(0).toUpperCase() +
+                          raidKey.slice(1).toLowerCase();
+                        return (
+                          <div
+                            key={raidKey}
+                            className="character_detail_ranking_item"
+                          >
+                            <img
+                              className="character_ranking_item_img"
+                              src={
+                                raidImages[raidKey] ||
+                                "https://via.placeholder.com/150" // Fallback to a placeholder image
+                              }
+                              alt={formattedRaid}
+                            />
+                            <section className="flex-col">
+                              <h5>{formattedRaid}</h5>
+                              <br />
+                              <h6>
+                                Regular Completions:{" "}
+                                <strong>{completions}</strong>
+                              </h6>
+                            </section>
+                          </div>
+                        );
+                      }
+                    )
+                  )}
+                </div>
+              </div>
+              <br></br>
+              {/*  */}
+              <div className="character_detail_body_item_quests">
+                <h2 className="force-regular pL-1">Quests completed</h2>
+                <div className="character_detail_body_item_professions_inner">
+                  {character.quests && character.quests.length > 0 ? (
+                    character.quests.map((quest, index) => (
+                      <div key={index} className="quest-item">
+                        <h5>{quest}</h5>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="error-message">
+                      <p>No quests available</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </section>
           </div>
-        )}
+        )}{" "}
       </div>
     </CSSTransition>
   );
@@ -876,7 +1054,7 @@ const Profile = () => {
               className="flex-center space-between p-02-05 color-bg-09 stats_ranking_hover"
               onClick={toggleRaidStatsVisibility}
             >
-              <h5>Content completion</h5>
+              <h5>Raids completion</h5>
               <FontAwesomeIcon
                 icon={faCaretUp}
                 onClick={() => {

@@ -222,10 +222,10 @@ progress::-moz-progress-bar {
 .character_detail_container {
   z-index: 999;
   position: absolute;
-  top: 60%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 80svw;
+  width: 90svw;
   max-height: 90svh;
   overflow-y: auto; /* Enable vertical scrolling */
   border-radius: 5px;
@@ -339,8 +339,6 @@ progress::-moz-progress-bar {
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--color-bg-09);
 }
-.character_detail_body_item_skills_inner section {
-}
 
 .character_detail_body_item_professions {
   max-width: 80svw;
@@ -351,8 +349,8 @@ progress::-moz-progress-bar {
 
 .character_detail_body_item_professions_inner {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-column-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-column-gap: 30px;
   grid-row-gap: 10px;
   padding: 1rem;
 }
