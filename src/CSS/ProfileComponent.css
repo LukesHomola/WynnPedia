@@ -225,7 +225,7 @@ progress::-moz-progress-bar {
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90svw;
+  max-width: 80svw;
   max-height: 90svh;
   overflow-y: auto; /* Enable vertical scrolling */
   border-radius: 5px;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import { PlayerContext } from "../PlayerContext.js"; // Access context
@@ -176,21 +176,43 @@ const CharacterInfo = ({
   imgWidth,
   playerData,
   timeAgo,
-  isChatacterInfoVisible,
+  isCharacterInfoVisible,
   selectedCharacter,
   isProfessionsVisible,
   extendedPlayerData,
 }) => {
+  /* Handeling closure if user will click outside of the box */
+  const characterInfoRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    // Check if the click is outside the character info
+    if (
+      characterInfoRef.current &&
+      !characterInfoRef.current.contains(event.target)
+    ) {
+      setIsCharacterInfoVisible(false);
+    }
+  };
+  useEffect(() => {
+    // Add event listener on mount
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Cleanup event listener on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <CSSTransition
-      in={isChatacterInfoVisible}
+      in={isCharacterInfoVisible}
       timeout={300}
       classNames="fade"
       unmountOnExit
     >
-      <div className="hidden">
+      <div className="hidden" ref={characterInfoRef}>
         {" "}
-        {isChatacterInfoVisible && character && (
+        {isCharacterInfoVisible && character && (
           <div className="character_detail_container">
             <section className="character_detail_topbar">
               <section className="flex-col gap-05">
@@ -580,7 +602,7 @@ const CharacterInfo = ({
   );
 };
 
-const Profile = () => {
+const Profile = ({ characters }) => {
   const { playerData, extendedPlayerData, loading, error, playerName } =
     useContext(PlayerContext); // Access playerName from context
 
@@ -597,8 +619,41 @@ const Profile = () => {
   const [isExpandedTotalLevels, setIsExpandedTotalLevels] = useState(false);
   const [isExpandedRaidsStats, setIsExpandedRaidsStats] = useState(false);
   /* Character info card  */
-  const [isChatacterInfoVisible, setIsCharacterInfoVisible] = useState(false);
+  const [isCharacterInfoVisible, setIsCharacterInfoVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  /*  */
+  const [selectedCharacterIndex, setSelectedCharacterIndex] = useState(0);
+
+  const handleKeyDown = (event) => {
+    if (isCharacterInfoVisible) {
+      if (event.key === "ArrowLeft") {
+        // Go to previous character
+        setSelectedCharacterIndex(
+          (prevIndex) => (prevIndex > 0 ? prevIndex - 1 : characters.length - 1) // Loop to last character
+        );
+      } else if (event.key === "ArrowRight") {
+        // Go to next character
+        setSelectedCharacterIndex(
+          (prevIndex) => (prevIndex < characters.length - 1 ? prevIndex + 1 : 0) // Loop to first character
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    // Add keydown event listener
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener on unmount
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCharacterInfoVisible]); // Re-run effect if visibility changes
+
+  const currentCharacter =
+    characters && characters.length > 0
+      ? characters[selectedCharacterIndex]
+      : null; // Get the current character safely
 
   const toggleProfessionsVisibility = () => {
     setIsProfessionsVisible(!isProfessionsVisible); // Toggle the visibility state
@@ -661,10 +716,10 @@ const Profile = () => {
   return (
     <div className={`profile_component ${isBothVisible ? "expanded" : ""} `}>
       {" "}
-      {isChatacterInfoVisible && selectedCharacter && (
+      {isCharacterInfoVisible && selectedCharacter && (
         <CharacterInfo
           character={selectedCharacter}
-          isChatacterInfoVisible={isChatacterInfoVisible}
+          isCharacterInfoVisible={isCharacterInfoVisible}
           setIsCharacterInfoVisible={setIsCharacterInfoVisible}
           rankImage={rankImage}
           supportRank={supportRank}
@@ -677,7 +732,7 @@ const Profile = () => {
       )}
       <div
         className={`profile_grid_container ${isBothVisible ? "expanded" : ""} ${
-          isChatacterInfoVisible ? "blur" : ""
+          isCharacterInfoVisible ? "blur" : ""
         }`}
       >
         <section className="profile_grid_left">
