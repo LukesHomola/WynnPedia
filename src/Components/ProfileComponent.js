@@ -935,7 +935,6 @@ const Profile = ({ characters, currentCharacter }) => {
                         onClick={() => {
                           setSelectedCharacter(character); // Update selected character
                           setIsCharacterInfoVisible(true); // Optionally show character info
-                          setIsProfessionsVisible(true);
                         }}
                       >
                         <img
