@@ -12,6 +12,7 @@ import {
   faCaretUp,
   faCircleXmark,
   faSkull,
+  faL,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/ProfileComponent.css";
@@ -203,6 +204,57 @@ const CharacterInfo = ({
     };
   }, []);
 
+  const [selectedCharacterIndex, setSelectedCharacterIndex] = useState(0);
+
+  const characters = Object.values(extendedPlayerData.characters); // Convert characters object to an array
+
+  // Function to handle keydown events
+  const handleKeyDown = (event) => {
+    if (event.key === "ArrowRight") {
+      // Move to the next character
+      setSelectedCharacterIndex(
+        (prevIndex) => (prevIndex + 1) % characters.length
+      );
+    } else if (event.key === "ArrowLeft") {
+      // Move to the previous character
+      setSelectedCharacterIndex(
+        (prevIndex) => (prevIndex - 1 + characters.length) % characters.length
+      );
+    }
+  };
+
+  // Log updated index and character
+  useEffect(() => {
+    console.log("Current Character Index:", selectedCharacterIndex);
+    console.log("Current Character:", characters[selectedCharacterIndex]);
+  }, [selectedCharacterIndex]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const currentCharacter = characters[selectedCharacterIndex];
+
+  // Handeler to close character details if ESC is pressed
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsCharacterInfoVisible(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <CSSTransition
       in={isCharacterInfoVisible}
@@ -212,7 +264,7 @@ const CharacterInfo = ({
     >
       <div className="hidden" ref={characterInfoRef}>
         {" "}
-        {isCharacterInfoVisible && character && (
+        {isCharacterInfoVisible && (
           <div className="character_detail_container">
             <section className="character_detail_topbar">
               <section className="flex-col gap-05">
@@ -255,18 +307,18 @@ const CharacterInfo = ({
               <section className="character_detail_topbar_class_info">
                 <img
                   className="character_item_img"
-                  src={characterImages[character.type]}
-                  alt={character.type}
+                  src={characterImages[currentCharacter.type]}
+                  alt={currentCharacter.type}
                 />
                 <section className="flex-col ">
-                  {character.reskin ? (
-                    <h3>{character.reskin}</h3>
+                  {currentCharacter.reskin ? (
+                    <h3>{currentCharacter.reskin}</h3>
                   ) : (
-                    <h2>{character.type}</h2>
+                    <h2>{currentCharacter.type}</h2>
                   )}
-                  <p>Combat level: {character.level}</p>
-                  <p>Total level: {character.totalLevel}</p>
-                  <progress value={character.xpPercent} max={100} />
+                  <p>Combat level: {currentCharacter.level}</p>
+                  <p>Total level: {currentCharacter.totalLevel}</p>
+                  <progress value={currentCharacter.xpPercent} max={100} />
                 </section>
               </section>
               <section>
@@ -299,20 +351,21 @@ const CharacterInfo = ({
                     ></hr>
                     <br></br>
                     <h5>
-                      Total level: <strong>{character.totalLevel}</strong>{" "}
-                      levels
+                      Total level:{" "}
+                      <strong>{currentCharacter.totalLevel}</strong> levels
                     </h5>
                     <h5>
-                      Level: <strong>{character.level}</strong> levels
+                      Level: <strong>{currentCharacter.level}</strong> levels
                     </h5>
                     <h5>
-                      Time player: <strong>{character.playtime}</strong> hours
+                      Time player: <strong>{currentCharacter.playtime}</strong>{" "}
+                      hours
                     </h5>
                     <h5>
-                      Logins: <strong>{character.logins}</strong>
+                      Logins: <strong>{currentCharacter.logins}</strong>
                     </h5>
                     <h5>
-                      Deaths: <strong>{character.deaths}</strong>
+                      Deaths: <strong>{currentCharacter.deaths}</strong>
                     </h5>
                   </section>
                   <section className="character_detail_body_item_content_inner">
@@ -329,26 +382,31 @@ const CharacterInfo = ({
                     ></hr>
                     <br></br>
                     <h5>
-                      Discoveries: <strong>{character.discoveries}</strong>
+                      Discoveries:{" "}
+                      <strong>{currentCharacter.discoveries}</strong>
                     </h5>
                     <h5>
-                      Mobs killed: <strong>{character.mobsKilled} </strong>
+                      Mobs killed:{" "}
+                      <strong>{currentCharacter.mobsKilled} </strong>
                       mobs
                     </h5>
                     <h5>
-                      Chests opened: <strong>{character.chestsFound} </strong>
+                      Chests opened:{" "}
+                      <strong>{currentCharacter.chestsFound} </strong>
                       chests
                     </h5>
                     <h5>
                       Dungeons completed:{" "}
-                      <strong>{character.dungeons.total} </strong>dungeons
+                      <strong>{currentCharacter.dungeons.total} </strong>
+                      dungeons
                     </h5>
                     <h5>
-                      Raids completed: <strong>{character.raids.total} </strong>
+                      Raids completed:{" "}
+                      <strong>{currentCharacter.raids.total} </strong>
                       raids
                     </h5>
                     <h5>
-                      Deaths: <strong>{character.deaths} </strong>deaths
+                      Deaths: <strong>{currentCharacter.deaths} </strong>deaths
                     </h5>
                   </section>{" "}
                   <section className="character_detail_body_item_content_inner ">
@@ -368,10 +426,10 @@ const CharacterInfo = ({
                     ></hr>
                     <br></br>
                     <h5>
-                      PVP kills: <strong>{character.pvp.kills}</strong>
+                      PVP kills: <strong>{currentCharacter.pvp.kills}</strong>
                     </h5>
                     <h5>
-                      PVP deaths: <strong>{character.pvp.deaths}</strong>
+                      PVP deaths: <strong>{currentCharacter.pvp.deaths}</strong>
                     </h5>
                   </section>{" "}
                 </section>
@@ -382,31 +440,41 @@ const CharacterInfo = ({
                 <div className="character_detail_body_item_skills_inner">
                   <section className="flex-col flex-center">
                     <h5>Strength</h5>
-                    <label>{character.skillPoints.strength || 0} points</label>
+                    <label>
+                      {currentCharacter.skillPoints.strength || 0} points
+                    </label>
                     <br></br>
                     <img src={strength} style={{ maxWidth: "5rem" }}></img>
                   </section>
                   <section className="flex-col flex-center">
                     <h5>Dexterity</h5>
-                    <label>{character.skillPoints.dexterity || 0} points</label>
+                    <label>
+                      {currentCharacter.skillPoints.dexterity || 0} points
+                    </label>
                     <br></br>
                     <img src={dexterity} style={{ maxWidth: "5rem" }}></img>
                   </section>{" "}
                   <section className="flex-col flex-center">
                     <h5>intelligence</h5>
-                    <label>{character.skillPoints.strength || 0} points</label>
+                    <label>
+                      {currentCharacter.skillPoints.strength || 0} points
+                    </label>
                     <br></br>
                     <img src={intelligence} style={{ maxWidth: "5rem" }}></img>
                   </section>
                   <section className="flex-col flex-center">
                     <h5>Defense</h5>
-                    <label>{character.skillPoints.defense || 0} points</label>
+                    <label>
+                      {currentCharacter.skillPoints.defense || 0} points
+                    </label>
                     <br></br>
                     <img src={defense} style={{ maxWidth: "5rem" }}></img>
                   </section>
                   <section className="flex-col flex-center">
                     <h5>Agility</h5>
-                    <label>{character.skillPoints.agility || 0} points</label>
+                    <label>
+                      {currentCharacter.skillPoints.agility || 0} points
+                    </label>
                     <br></br>
                     <img src={agility} style={{ maxWidth: "5rem" }}></img>
                   </section>
@@ -417,14 +485,12 @@ const CharacterInfo = ({
                 <h2 className="force-regular pL-1">Professions</h2>
                 {isProfessionsVisible && playerData && extendedPlayerData && (
                   <div className="character_detail_body_item_professions_inner">
-                    {Object.entries(character.professions).map(
+                    {Object.entries(currentCharacter.professions).map(
                       ([professionKey, professionData]) => {
                         const formattedProfession =
                           professionKey.charAt(0).toUpperCase() +
                           professionKey.slice(1).toLowerCase(); // Format the profession name
                         const level = professionData.level; // Get the level from the profession data
-
-                        console.log("testing: ", formattedProfession);
 
                         return (
                           <div
@@ -459,14 +525,14 @@ const CharacterInfo = ({
               <div className="character_detail_body_item_professions">
                 <h2 className="force-regular pL-1">Dungeons</h2>
                 <div className="character_detail_body_item_professions_inner">
-                  {Object.entries(character.dungeons.list).filter(
+                  {Object.entries(currentCharacter.dungeons.list).filter(
                     ([dungeonKey]) => !dungeonKey.startsWith("Corrupted")
                   ).length === 0 ? (
                     <div className="error-message">
                       <p>No dungeon data available</p>
                     </div>
                   ) : (
-                    Object.entries(character.dungeons.list)
+                    Object.entries(currentCharacter.dungeons.list)
                       .filter(
                         ([dungeonKey]) => !dungeonKey.startsWith("Corrupted")
                       )
@@ -538,12 +604,12 @@ const CharacterInfo = ({
               <div className="character_detail_body_item_professions">
                 <h2 className="force-regular pL-1">Raids</h2>
                 <div className="character_detail_body_item_professions_inner">
-                  {Object.entries(character.raids.list).length === 0 ? (
+                  {Object.entries(currentCharacter.raids.list).length === 0 ? (
                     <div className="error-message">
                       <p>No dungeon data available</p>
                     </div>
                   ) : (
-                    Object.entries(character.raids.list).map(
+                    Object.entries(currentCharacter.raids.list).map(
                       ([raidKey, completions]) => {
                         const formattedRaid =
                           raidKey.charAt(0).toUpperCase() +
@@ -581,8 +647,9 @@ const CharacterInfo = ({
               <div className="character_detail_body_item_quests">
                 <h2 className="force-regular pL-1">Quests completed</h2>
                 <div className="character_detail_body_item_professions_inner">
-                  {character.quests && character.quests.length > 0 ? (
-                    character.quests.map((quest, index) => (
+                  {currentCharacter.quests &&
+                  currentCharacter.quests.length > 0 ? (
+                    currentCharacter.quests.map((quest, index) => (
                       <div key={index} className="quest-item">
                         <h5>{quest}</h5>
                       </div>
@@ -602,7 +669,7 @@ const CharacterInfo = ({
   );
 };
 
-const Profile = ({ characters }) => {
+const Profile = ({ characters, currentCharacter }) => {
   const { playerData, extendedPlayerData, loading, error, playerName } =
     useContext(PlayerContext); // Access playerName from context
 
@@ -622,38 +689,6 @@ const Profile = ({ characters }) => {
   const [isCharacterInfoVisible, setIsCharacterInfoVisible] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   /*  */
-  const [selectedCharacterIndex, setSelectedCharacterIndex] = useState(0);
-
-  const handleKeyDown = (event) => {
-    if (isCharacterInfoVisible) {
-      if (event.key === "ArrowLeft") {
-        // Go to previous character
-        setSelectedCharacterIndex(
-          (prevIndex) => (prevIndex > 0 ? prevIndex - 1 : characters.length - 1) // Loop to last character
-        );
-      } else if (event.key === "ArrowRight") {
-        // Go to next character
-        setSelectedCharacterIndex(
-          (prevIndex) => (prevIndex < characters.length - 1 ? prevIndex + 1 : 0) // Loop to first character
-        );
-      }
-    }
-  };
-
-  useEffect(() => {
-    // Add keydown event listener
-    document.addEventListener("keydown", handleKeyDown);
-
-    // Cleanup event listener on unmount
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isCharacterInfoVisible]); // Re-run effect if visibility changes
-
-  const currentCharacter =
-    characters && characters.length > 0
-      ? characters[selectedCharacterIndex]
-      : null; // Get the current character safely
 
   const toggleProfessionsVisibility = () => {
     setIsProfessionsVisible(!isProfessionsVisible); // Toggle the visibility state
@@ -710,8 +745,14 @@ const Profile = ({ characters }) => {
   useEffect(() => {
     if (playerData || extendedPlayerData) {
       setIsCharacterInfoVisible(false);
+      setIsProfessionsVisible(false);
+      setIsContentCompletionVisible(false);
+      setIsTotalLevelsVisible(false);
+      setIsRaidsStatVisible(false);
     }
   }, [playerData, extendedPlayerData]);
+
+  /*  */
 
   return (
     <div className={`profile_component ${isBothVisible ? "expanded" : ""} `}>
@@ -786,12 +827,10 @@ const Profile = ({ characters }) => {
           </div>
 
           <div className="profile_grid_inner_container_bottom">
-            <section className="flex-col">
-              <img
-                src={`https://crafatar.com/renders/body/${playerData?.uuid}`}
-                className="grid_container_bottom_avatar "
-              ></img>
-            </section>
+            <img
+              src={`https://crafatar.com/renders/body/${playerData?.uuid}`}
+              className="grid_container_bottom_avatar "
+            ></img>
             <section className="flex-col gap-05 grid_bottom_stats">
               <h5>Personal stats</h5>
               <br></br>
@@ -834,6 +873,15 @@ const Profile = ({ characters }) => {
                 <h4 className="force-regular">
                   <strong>
                     {playerData?.globalData?.chestsFound || "N/A"}
+                  </strong>{" "}
+                  chests found.
+                </h4>
+              </span>
+              <span className="flex gap-05">
+                <h4 className="force-regular"> Dungeons completed:</h4>
+                <h4 className="force-regular">
+                  <strong>
+                    {playerData?.globalData?.dungeons.total || "N/A"}
                   </strong>{" "}
                   chests found.
                 </h4>
@@ -960,7 +1008,6 @@ const Profile = ({ characters }) => {
                           formattedRankingId.charAt(0).toUpperCase() +
                           formattedRankingId.slice(1).toLowerCase();
 
-                        console.log(profession);
                         return (
                           <div key={rankingId} className="ranking_item">
                             <img

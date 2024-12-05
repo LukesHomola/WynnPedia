@@ -59,7 +59,7 @@
 .profile_grid_inner_container_bottom {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 0.5fr 1fr;
   grid-column-gap: 60px;
   grid-row-gap: 0px;
   padding: 0.5rem 0;

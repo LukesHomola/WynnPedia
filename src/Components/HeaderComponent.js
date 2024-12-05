@@ -10,7 +10,7 @@ import avatarBar from "../Assests_components/Profile_head_placeholder.png";
 import logo from "../Assests_components/logo.png";
 
 const Header = () => {
-  const { playerName, setPlayerName } = useContext(PlayerContext);
+  const { playerName, setPlayerName, playerData } = useContext(PlayerContext);
 
   const handleInputChange = (e) => {
     const newPlayerName = e.target.value;
@@ -27,7 +27,11 @@ const Header = () => {
         <section></section>
 
         <div className="nav_btns_profile_search_section">
-          <img src={avatarBar} alt="Avatar" id="topbar_avatar" />
+          <img
+            src={`https://crafatar.com/renders/head/${playerData?.uuid}`}
+            alt="Avatar"
+            id="topbar_avatar"
+          />
           <input
             className="nav_btns_profile_search_section_input"
             type="text"
