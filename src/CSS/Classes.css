@@ -30,6 +30,10 @@
   display: flex;
   gap: 1rem;
 }
+
+.p-05 {
+  padding: 0.5rem;
+}
 .p-02-05 {
   padding: 0.2rem 0.5rem;
 }
@@ -53,6 +57,9 @@
 }
 .pB-05 {
   padding-bottom: 0.5rem;
+}
+.mL-05 {
+  margin-left: 0.5rem;
 }
 
 .width-90 {

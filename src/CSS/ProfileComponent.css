@@ -372,6 +372,57 @@ progress::-moz-progress-bar {
   max-width: 5rem;
 }
 
+.fixed-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure it stays above other content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+}
+
+/* CONTAINER OF TAB BTNS */
+.stats_tabs_container_controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-600);
+}
+
+/* PLAYER TABS */
+.stats_tabs_main_profile_tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* SINGLE TAB */
+.stats_tabs_main_profile_tab > button {
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transition for background color and transform */
+  padding: 0.2rem 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.stats_tabs_main_profile_tab > button:hover {
+  cursor: pointer;
+}
+.activeTab {
+  border-radius: 10px;
+  background-color: var(--color-primary-900);
+}
+
+.stats_tabs_tab_input {
+  max-width: 10%;
+  padding: 0.5rem;
+  background-color: var(--color-bg-500);
+}
+
 /* * {
   outline: 1px solid orange;
 } */

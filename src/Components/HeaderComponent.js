@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { PlayerContext } from "../PlayerContext.js"; // Import PlayerContext
-import { Link, useFetcher } from "react-router-dom";
+import { Link, useFetcher, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faQuestion, faGear } from "@fortawesome/free-solid-svg-icons";
 
 import "../CSS/HeaderComponent.css";
-import avatarBar from "../Assests_components/Profile_head_placeholder.png";
+import avatarBar from "../Assests_components/default_avatar/Profile_head_placeholder.png";
 import logo from "../Assests_components/logo.png";
 
 const Header = () => {
@@ -44,12 +44,12 @@ const Header = () => {
       </div>
       <nav className="nav_right_container">
         <section className="nav_btns_section">
-          <Link to="/" className="link">
-            <h5 className="link_hover">Profile</h5>
-          </Link>{" "}
-          <Link to="/activity-check" className="link">
-            <h5 className="link_hover">Tools</h5>
-          </Link>{" "}
+          <NavLink to="/" className="link">
+            <h5>Profile</h5>
+          </NavLink>{" "}
+          <NavLink to="/activity-check" className="link">
+            <h5>Tools</h5>
+          </NavLink>{" "}
           <h5>Stats</h5>
           <h5>Leaderboard</h5>
           <h5>Settings</h5>
