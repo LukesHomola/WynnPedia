@@ -10,7 +10,7 @@ import {
   faCircleArrowRight,
   faUser,
   faCaretUp,
-  faCircleXmark,
+  faXmark,
   faSkull,
   faL,
   faPlus,
@@ -877,13 +877,24 @@ const Profile = ({ characters, currentCharacter }) => {
       <div className="stats_tabs_container_controls">
         <section className="stats_tabs_main_profile_tabs">
           {playerTabs.map((player, index) => (
-            <div className="stats_tabs_main_profile_tab">
+            <div
+              className={`stats_tabs_main_profile_tab ${
+                activeTabIndex === index ? "activeTab" : ""
+              }`}
+            >
               <button
                 key={index}
                 onClick={() => handleTabClick(index, player.username)}
-                className={activeTabIndex === index ? "activeTab" : ""}
               >
                 <h5>{player?.username}</h5>
+              </button>
+              <button
+                key={index}
+                onClick={() => {
+                  handleCloseTab(index, player.username);
+                }}
+              >
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           ))}
