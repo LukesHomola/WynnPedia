@@ -401,6 +401,16 @@ progress::-moz-progress-bar {
   gap: 0.5rem;
 }
 /* SINGLE TAB */
+.stats_tabs_main_profile_tab:nth-child(1):not(.activeTab) {
+  background-color: var(--color-secondary-900);
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transition for background color and transform */
+}
+.stats_tabs_main_profile_tab:not(:first-child):not(.activeTab) {
+  background-color: var(--color-bg-800);
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transition for background color and transform */
+}
 .stats_tabs_main_profile_tab > button {
   transition: background-color 0.3s ease, transform 0.3s ease; /* Transition for background color and transform */
   padding: 0.2rem 0.5rem;

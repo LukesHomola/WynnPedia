@@ -12,6 +12,10 @@ body {
   background-color: var(--color-bg);
   overflow-x: hidden;
 }
+/* Padding for heading to avoid overflow */
+.App {
+  padding-top: 5rem;
+}
 
 a {
   text-decoration: none;

@@ -856,60 +856,50 @@ const Profile = ({ characters, currentCharacter }) => {
 
   return (
     <div className="stats_tabs_container">
-      {playerTabs.map((player, index) => {
-        <div
-          key={index}
-          style={{ border: "1px solid blue" }}
-          className={`tab ${index === activeTabIndex ? "activeTab" : ""}`}
-          onClick={() => handleTabClick(index)}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCloseTab(index);
-            }}
-          >
-            ×xxxx
-          </button>
-        </div>;
-      })}
-
       <div className="stats_tabs_container_controls">
         <section className="stats_tabs_main_profile_tabs">
-          {playerTabs.map((player, index) => (
+          {playerTabs.slice(0, 10).map((player, index) => (
             <div
+              key={`tab-${index}`}
               className={`stats_tabs_main_profile_tab ${
                 activeTabIndex === index ? "activeTab" : ""
               }`}
+              onMouseUp={(event) => {
+                // Check if the middle mouse button was clicked
+                if (event.button === 1) {
+                  handleCloseTab(index);
+                }
+              }}
             >
-              <button
-                key={index}
-                onClick={() => handleTabClick(index, player.username)}
-              >
+              <button onClick={() => handleTabClick(index, player.username)}>
                 <h5>{player?.username}</h5>
               </button>
-              <button
-                key={index}
-                onClick={() => {
-                  handleCloseTab(index, player.username);
-                }}
-              >
-                <FontAwesomeIcon icon={faXmark} />
-              </button>
+              {index > 0 && (
+                <button
+                  onClick={() => {
+                    handleCloseTab(index);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                </button>
+              )}
             </div>
           ))}
         </section>
-        <button
-          className="stats_tabs_add"
-          onClick={() =>
-            handleAddTab({
-              username: `Player ${playerTabs.length + 1}`,
-              characters: [],
-            })
-          }
-        >
-          <FontAwesomeIcon icon={faPlus} />{" "}
-        </button>
+
+        {playerTabs.length < 10 && (
+          <button
+            className="stats_tabs_add"
+            onClick={() =>
+              handleAddTab({
+                username: `Player ${playerTabs.length + 1}`,
+                characters: [],
+              })
+            }
+          >
+            <FontAwesomeIcon icon={faPlus} />{" "}
+          </button>
+        )}
       </div>
 
       {/* TABBED PLAYER RENDERS */}

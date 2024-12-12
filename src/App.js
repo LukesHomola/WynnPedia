@@ -20,6 +20,7 @@ function App() {
       <Router>
         <div className="App">
           <Header />
+
           <Routes>
             <Route path="/" element={<Profile />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
