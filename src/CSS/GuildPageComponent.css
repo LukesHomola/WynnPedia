@@ -1,0 +1,38 @@
+.guild_page_background {
+  background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
+}
+/* Main container */
+.guild_page_container {
+  display: grid;
+  padding: 1rem;
+  grid-template-columns: 0.5fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 30px;
+  height: 80svh;
+}
+.guild_page_right,
+.guild_page_left {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-09);
+}
+.guild_page_right {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.5fr 1fr 0.5fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 30px;
+}
+.guild_page_right section {
+  padding: 1rem;
+}
+
+.guild_page_right_img {
+  height: 10rem;
+  padding-bottom: 1rem;
+}
+
+/* * {
+  outline: 1px solid;
+} */

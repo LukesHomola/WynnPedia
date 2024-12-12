@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./Components/HeaderComponent.js";
 import Profile from "./Components/ProfileComponent.js";
 import Footer from "./Components/FooterComponent.js";
+import GuildPage from "./Components/GuildProfileComponent.js";
 import ActivityCheck from "./Components/ActivityCheckComponent.js";
 
 import { PlayerProvider } from "./PlayerContext.js";
@@ -13,6 +14,7 @@ import "./CSS/HeaderComponent.css";
 import "./CSS/ProfileComponent.css";
 import "./CSS/FooterComponent.css";
 import "./CSS/ActivityCheckComponent.css";
+import "./CSS/GuildPageComponent.css";
 
 function App() {
   return (
@@ -20,9 +22,9 @@ function App() {
       <Router>
         <div className="App">
           <Header />
-
           <Routes>
             <Route path="/" element={<Profile />} />
+            <Route path="/guild" element={<GuildPage />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
           </Routes>
           <Footer />

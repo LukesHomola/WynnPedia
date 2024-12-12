@@ -13,6 +13,11 @@ export const PlayerProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [guildNameProfile, setGuildNameProfile] = useState(() => {
+    return localStorage.getItem("guildNameProfile") || "";
+  });
+  const [guildDataProfile, setGuildDataProfile] = useState({});
+
   const fetchPlayerData = async (name) => {
     try {
       setLoading(true);
@@ -77,6 +82,41 @@ export const PlayerProvider = ({ children }) => {
     }
   }, [playerName]);
 
+  const fetchGuildData = async () => {
+    if (!guildNameProfile) return; // Fetch only if guildName exists
+    try {
+      let response = await fetch(
+        `https://api.wynncraft.com/v3/guild/${guildNameProfile}`
+      );
+
+      if (!response.ok) {
+        // If guild data is not found by name, try to fetch by prefix
+        response = await fetch(
+          `https://api.wynncraft.com/v3/guild/prefix/${guildNameProfile}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Guild data not found.`);
+        }
+      }
+
+      const data = await response.json();
+
+      if (data?.name) {
+        setGuildDataProfile(data);
+      }
+      console.log("GUILD DATA: ", data); // Log fetched data
+    } catch (error) {
+      console.error("Error fetching guild data:", error); // Handle errors
+    }
+  };
+
+  useEffect(() => {
+    if (guildNameProfile) {
+      fetchGuildData();
+    }
+  }, [guildNameProfile]); // Correctly fetch data when guildName changes
+
   return (
     <PlayerContext.Provider
       value={{
@@ -86,6 +126,10 @@ export const PlayerProvider = ({ children }) => {
         extendedPlayerData,
         loading,
         error,
+        guildNameProfile,
+        setGuildNameProfile,
+        guildDataProfile,
+        setGuildDataProfile,
       }}
     >
       {children}

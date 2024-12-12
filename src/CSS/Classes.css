@@ -21,6 +21,13 @@
 .align-end {
   align-items: flex-end;
 }
+.align-center {
+  align-items: center;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
 
 .gap-05 {
   display: flex;
@@ -45,6 +52,9 @@
 }
 .pL-1-5 {
   padding-left: 1.5rem;
+}
+.pR-03 {
+  padding-right: 0.3rem;
 }
 .pR-05 {
   padding-right: 0.5rem;

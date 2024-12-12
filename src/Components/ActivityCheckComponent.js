@@ -32,12 +32,20 @@ const ActivityCheck = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
+        // Try to fetch guild data by name
+        let response = await fetch(
           `https://api.wynncraft.com/v3/guild/${debouncedGuildName}`
         );
 
         if (!response.ok) {
-          throw new Error(`Guild data not found.`);
+          // If guild data is not found by name, try to fetch by prefix
+          response = await fetch(
+            `https://api.wynncraft.com/v3/guild/prefix/${debouncedGuildName}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`Guild data not found.`);
+          }
         }
 
         const data = await response.json();
@@ -181,9 +189,10 @@ const ActivityCheck = () => {
                 type="number"
                 value={purgeTimeValue}
                 min="0"
-                onChange={(e) =>
-                  setPurgeTimeValue(parseInt(e.target.value, 10))
-                }
+                onChange={(e) => {
+                  countInactivePlayers(),
+                    setPurgeTimeValue(parseInt(e.target.value, 10));
+                }}
               />
             </label>
           </section>

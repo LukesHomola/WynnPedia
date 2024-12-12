@@ -47,10 +47,12 @@ const Header = () => {
           <NavLink to="/" className="link">
             <h5>Profile</h5>
           </NavLink>{" "}
+          <NavLink to="/guild" className="link">
+            <h5>Guild</h5>
+          </NavLink>
           <NavLink to="/activity-check" className="link">
             <h5>Tools</h5>
-          </NavLink>{" "}
-          <h5>Stats</h5>
+          </NavLink>
           <h5>Leaderboard</h5>
           <h5>Settings</h5>
           <h5>Credits</h5>
