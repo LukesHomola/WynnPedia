@@ -23,7 +23,17 @@
   grid-template-rows: 0.5fr 1fr 0.5fr;
   grid-column-gap: 0px;
   grid-row-gap: 30px;
+  border-radius: 50px 10px 50px 10px;
+  background: url("../Assests_components/svg_backgrounds/blob-scene-haikei.svg");
 }
+.guild_page_right_inner_stats {
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-05);
+}
+
 .guild_page_right section {
   padding: 1rem;
 }
@@ -32,7 +42,13 @@
   height: 10rem;
   padding-bottom: 1rem;
 }
-
+.guild_page_input_background {
+  padding: 0.5rem;
+  width: 100%;
+  background-color: var(--color-bg-800);
+}
+.guild_page_input {
+}
 /* * {
   outline: 1px solid;
 } */

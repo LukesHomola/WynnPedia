@@ -9,13 +9,28 @@ import "../CSS/HeaderComponent.css";
 import avatarBar from "../Assests_components/default_avatar/Profile_head_placeholder.png";
 import logo from "../Assests_components/logo.png";
 
+import guild_icon from "../Assests_components/guild_assests/guild.webp";
+
 const Header = () => {
-  const { playerName, setPlayerName, playerData } = useContext(PlayerContext);
+  const {
+    playerName,
+    setPlayerName,
+    playerData,
+    guildNameProfile,
+    setGuildNameProfile,
+    guildDataProfile,
+    setGuildDataProfile,
+  } = useContext(PlayerContext);
 
   const handleInputChange = (e) => {
     const newPlayerName = e.target.value;
     setPlayerName(newPlayerName); // Update playerName in context
     localStorage.setItem("playerName", newPlayerName); // Save to local storage
+  };
+  const handleInputChangeGuild = (e) => {
+    const newGuildName = e.target.value;
+    setGuildNameProfile(newGuildName); // Update playerName in context
+    localStorage.setItem("guildName", newGuildName); // Save to local storage
   };
 
   return (
@@ -26,7 +41,7 @@ const Header = () => {
         </div>
         <section></section>
 
-        <div className="nav_btns_profile_search_section">
+        <div className="nav_btns_profile_search_section pR-1-5">
           <img
             src={`https://crafatar.com/renders/head/${playerData?.uuid}`}
             alt="Avatar"
@@ -38,6 +53,17 @@ const Header = () => {
             value={playerName}
             onChange={handleInputChange}
             placeholder="Playername"
+            aria-label="Search profile"
+          />
+        </div>
+        <div className="nav_btns_profile_search_section">
+          <img src={guild_icon} alt="Avatar" id="topbar_avatar" />
+          <input
+            className="nav_btns_profile_search_section_input"
+            type="text"
+            value={guildNameProfile}
+            onChange={handleInputChangeGuild}
+            placeholder="Guild/TAG"
             aria-label="Search profile"
           />
         </div>

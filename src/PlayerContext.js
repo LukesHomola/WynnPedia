@@ -14,7 +14,7 @@ export const PlayerProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const [guildNameProfile, setGuildNameProfile] = useState(() => {
-    return localStorage.getItem("guildNameProfile") || "";
+    return localStorage.getItem("guildName") || "";
   });
   const [guildDataProfile, setGuildDataProfile] = useState({});
 
