@@ -47,8 +47,21 @@
   width: 100%;
   background-color: var(--color-bg-800);
 }
-.guild_page_input {
+
+/* GUILD MEMBER INPUT */
+.guild_page_members_container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  padding: 1rem;
 }
+
+/* guild member inner */
+.guild_page_members_inner {
+}
+
 /* * {
   outline: 1px solid;
 } */

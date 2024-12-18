@@ -408,6 +408,40 @@ const GuildPage = () => {
           </div>
         </div>
       )}
+      {tabGuildData ? (
+        <div className="guild_page_members_container">
+          {Object.entries(tabGuildData.members).map(([role, members]) => {
+            // Check if the role is "total" and skip it
+            if (role === "total") {
+              return null; // Skip rendering this role
+            }
+            return (
+              <div key={role} className="guild_page_members_inner">
+                <h4 className="force-regular">
+                  {role.charAt(0).toUpperCase() + role.slice(1)}'s:
+                </h4>{" "}
+                {/* Capitalize the role name */}
+                <section>
+                  {Object.entries(members).map(([memberName, memberData]) => (
+                    <li key={memberData.uuid}>
+                      <img
+                        src={`https://crafatar.com/avatars/${memberData.uuid}`}
+                        style={{ maxWidth: "1.5rem" }}
+                        className="pR-05"
+                      ></img>
+                      <strong>{memberName}</strong> - Contribution:{" "}
+                      <strong>{memberData.contributed}</strong>xp -{" "}
+                      {memberData.online ? "Yes" : "Offline"}
+                    </li>
+                  ))}
+                </section>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p>No guild data available</p> // Fallback if tabGuildData is not defined
+      )}
       <div>
         <h1>Guild Data</h1>
         <p>Guild Name: {guildNameProfile}</p>
