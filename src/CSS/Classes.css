@@ -24,9 +24,14 @@
 .align-center {
   align-items: center;
 }
-
+.align-left {
+  align-items: flex-start;
+}
 .justify-evenly {
   justify-content: space-evenly;
+}
+.justify-end {
+  justify-content: end;
 }
 
 .gap-05 {

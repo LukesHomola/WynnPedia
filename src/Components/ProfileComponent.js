@@ -910,7 +910,7 @@ const Profile = ({ characters, currentCharacter }) => {
               <>
                 {/* TABBED PLAYER SEARCH */}
                 {activeTabIndex !== 0 && (
-                  <div>
+                  <div className="stats_tabs_main_input_background">
                     {playerTabs.map(
                       (tab, index) =>
                         index === activeTabIndex && (

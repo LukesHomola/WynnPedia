@@ -17,6 +17,15 @@
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--color-bg-09);
 }
+.guild_page_left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.guild_emblem {
+  width: 30%;
+}
+
 .guild_page_right {
   display: grid;
   grid-template-columns: 1fr;
@@ -49,19 +58,99 @@
 }
 
 /* GUILD MEMBER INPUT */
+.guild_page_members_background {
+  padding: 1rem;
+  background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
+}
+
+.guild_page_members_inner_background {
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-05);
+}
+.guild_page_members_search_container {
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg);
+}
+.guild_page_members_search {
+  padding: 1rem;
+  width: 90%;
+  background-color: var(--color-bg-800);
+}
+.guild_page_members_search_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-800);
+}
+.guild_page_members_search_inner * {
+  color: gray !important;
+}
+
 .guild_page_members_container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 0.2fr repeat(auto-fit, minmax(800px, 1fr));
   grid-column-gap: 20px;
   grid-row-gap: 20px;
   padding: 1rem;
 }
 
+.guild_page_members_container_owner {
+  grid-area: 1 / 1 / 2 / 3;
+}
+
+.guild_page_members_container_recruits {
+  grid-area: 4 / 1 / 5 / 3;
+}
+
 /* guild member inner */
-.guild_page_members_inner {
+.guild_page_members_inner,
+.guild_page_members_container_owner,
+.guild_page_members_container_recruits {
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg);
+}
+/* SINGLE PLAYER */
+.guild_page_members_item {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  /*   border: 1px solid;
+ */
+}
+
+.guild_page_members_item:nth-child(odd) {
+  background-color: var(--color-bg-600);
+}
+.guild_page_members_item:hover * {
+  cursor: pointer;
+  transform: scale(1.001);
+  color: var(--color-primary-500);
+}
+
+.guild_page_members_item_joined {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.guild_page_members_item_contributed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* * {
-  outline: 1px solid;
-} */
+  outline: 1px solid blue;
+}
+ */

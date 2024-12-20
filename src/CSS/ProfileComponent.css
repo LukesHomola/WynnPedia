@@ -383,6 +383,9 @@ progress::-moz-progress-bar {
 
 /* CONTAINER OF TAB BTNS */
 .stats_tabs_container_controls {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -392,6 +395,13 @@ progress::-moz-progress-bar {
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   background-color: var(--color-bg-600);
+}
+
+.guild_page_input_background,
+.stats_tabs_main_input_background {
+  position: fixed;
+  z-index: 999;
+  top: 8rem;
 }
 
 /* PLAYER TABS */

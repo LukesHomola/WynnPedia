@@ -6,10 +6,15 @@ import { PlayerContext } from "../PlayerContext.js";
 import guild_members from "../Assests_components/guild_assests/guild_members.webp";
 import guild_online from "../Assests_components/guild_assests/guild_online.webp";
 import guild_territories from "../Assests_components/guild_assests/guild_territories.webp";
+import guild_emblem from "../Assests_components/guild_assests/guild_emblem.webp";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {} from "@fortawesome/free-brands-svg-icons";
-import { faXmark, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faXmark,
+  faPlus,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 
 const GuildPage = () => {
   const { guildNameProfile, guildDataProfile, setGuildNameProfile } =
@@ -26,6 +31,8 @@ const GuildPage = () => {
   const [tabGuildData, setTabGuildData] = useState();
 
   const debounceTimeout = useRef(null);
+
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     if (guildDataProfile && guildDataProfile.name) {
@@ -159,6 +166,11 @@ const GuildPage = () => {
   };
   const createdTimeAgo = timeAgo(tabGuildData?.created); // Calculate how long ago it was
 
+  /* Handeling player search */
+  const handleSearchChange = (event) => {
+    setSearchInput(event.target.value.toLowerCase());
+  };
+
   return (
     <div className="stats_tabs_container">
       {" "}
@@ -238,7 +250,12 @@ const GuildPage = () => {
                   <div>
                     {activeTabIndex !== 0 && (
                       <div className="guild_page_container">
-                        <section className="guild_page_left"></section>
+                        <section className="guild_page_left">
+                          <img
+                            src={guild_emblem}
+                            className="guild_emblem"
+                          ></img>
+                        </section>
                         <section className="guild_page_right">
                           <section>
                             <section className="flex align-center gap-05">
@@ -264,12 +281,19 @@ const GuildPage = () => {
               "
                               >
                                 {" "}
-                                <h5>
-                                  <strong>
-                                    {tabGuildData?.members?.total || "0"}
-                                  </strong>
-                                </h5>{" "}
-                                <h5>/</h5> <h5>N/A</h5>{" "}
+                                <section className="flex-col">
+                                  {" "}
+                                  <label>Players total</label>{" "}
+                                  <section className="flex-center">
+                                    {" "}
+                                    <h5>
+                                      <strong>
+                                        {tabGuildData?.members?.total || "0"}
+                                      </strong>
+                                    </h5>{" "}
+                                    <h5>/</h5> <h5>N/A</h5>
+                                  </section>
+                                </section>
                               </section>
                             </section>{" "}
                             <section className="flex-col align-center">
@@ -281,11 +305,21 @@ const GuildPage = () => {
                                 className="flex gap-05
               "
                               >
-                                <h5>
-                                  <strong>{tabGuildData?.online || "0"}</strong>
-                                </h5>{" "}
-                                <h5>/</h5>{" "}
-                                <h5>{tabGuildData?.members?.total || "0"}</h5>
+                                <section className="flex-col">
+                                  <label>Players online</label>{" "}
+                                  <section className="flex-center">
+                                    {" "}
+                                    <h5>
+                                      <strong>
+                                        {tabGuildData?.online || "0"}
+                                      </strong>
+                                    </h5>{" "}
+                                    <h5>/</h5>{" "}
+                                    <h5>
+                                      {tabGuildData?.members?.total || "0"}
+                                    </h5>
+                                  </section>
+                                </section>
                               </section>{" "}
                             </section>{" "}
                             <section className="flex-col align-center">
@@ -293,7 +327,13 @@ const GuildPage = () => {
                                 src={guild_territories}
                                 className="guild_page_right_img"
                               ></img>
-                              <h5>{tabGuildData?.territories || "0"}</h5>
+                              <section className="flex-col">
+                                <label>Guild territories</label>{" "}
+                                <section className="flex-center">
+                                  {" "}
+                                  <h5>{tabGuildData?.territories || "0"}</h5>
+                                </section>
+                              </section>
                             </section>
                           </section>
                           <section>
@@ -334,7 +374,9 @@ const GuildPage = () => {
         <div className="guild_page_background">
           {" "}
           <div className="guild_page_container">
-            <section className="guild_page_left"></section>
+            <section className="guild_page_left">
+              <img src={guild_emblem} className="guild_emblem"></img>
+            </section>{" "}
             <section className="guild_page_right">
               <section>
                 <section className="flex align-center gap-05">
@@ -342,6 +384,7 @@ const GuildPage = () => {
                   <h1>{tabGuildData?.name || "No data found"}</h1>
                 </section>
                 <section>
+                  {" "}
                   <h5>
                     Created: <strong>{cetFormattedDate}</strong> (
                     {createdTimeAgo})
@@ -356,13 +399,20 @@ const GuildPage = () => {
                   ></img>
                   <section
                     className="flex gap-05
-    "
+"
                   >
                     {" "}
-                    <h5>
-                      <strong>{tabGuildData?.members?.total || "0"}</strong>
-                    </h5>{" "}
-                    <h5>/</h5> <h5>N/A</h5>
+                    <section className="flex-col">
+                      {" "}
+                      <label>Players total</label>{" "}
+                      <section className="flex-center">
+                        {" "}
+                        <h5>
+                          <strong>{tabGuildData?.members?.total || "0"}</strong>
+                        </h5>{" "}
+                        <h5>/</h5> <h5>N/A</h5>
+                      </section>
+                    </section>
                   </section>
                 </section>{" "}
                 <section className="flex-col align-center">
@@ -372,12 +422,19 @@ const GuildPage = () => {
                   ></img>
                   <section
                     className="flex gap-05
-    "
+"
                   >
-                    <h5>
-                      <strong>{tabGuildData?.online || "0"}</strong>
-                    </h5>{" "}
-                    <h5>/</h5> <h5>{tabGuildData?.members?.total || "0"}</h5>
+                    <section className="flex-col">
+                      <label>Players online</label>{" "}
+                      <section className="flex-center">
+                        {" "}
+                        <h5>
+                          <strong>{tabGuildData?.online || "0"}</strong>
+                        </h5>{" "}
+                        <h5>/</h5>{" "}
+                        <h5>{tabGuildData?.members?.total || "0"}</h5>
+                      </section>
+                    </section>
                   </section>{" "}
                 </section>{" "}
                 <section className="flex-col align-center">
@@ -385,7 +442,13 @@ const GuildPage = () => {
                     src={guild_territories}
                     className="guild_page_right_img"
                   ></img>
-                  <h5>{tabGuildData?.territories || "0"}</h5>
+                  <section className="flex-col">
+                    <label>Guild territories</label>{" "}
+                    <section className="flex-center">
+                      {" "}
+                      <h5>{tabGuildData?.territories || "0"}</h5>
+                    </section>
+                  </section>
                 </section>
               </section>
               <section>
@@ -409,38 +472,361 @@ const GuildPage = () => {
         </div>
       )}
       {tabGuildData ? (
-        <div className="guild_page_members_container">
-          {Object.entries(tabGuildData.members).map(([role, members]) => {
-            // Check if the role is "total" and skip it
-            if (role === "total") {
-              return null; // Skip rendering this role
-            }
-            return (
-              <div key={role} className="guild_page_members_inner">
-                <h4 className="force-regular">
-                  {role.charAt(0).toUpperCase() + role.slice(1)}'s:
-                </h4>{" "}
-                {/* Capitalize the role name */}
-                <section>
-                  {Object.entries(members).map(([memberName, memberData]) => (
-                    <li key={memberData.uuid}>
-                      <img
-                        src={`https://crafatar.com/avatars/${memberData.uuid}`}
-                        style={{ maxWidth: "1.5rem" }}
-                        className="pR-05"
-                      ></img>
-                      <strong>{memberName}</strong> - Contribution:{" "}
-                      <strong>{memberData.contributed}</strong>xp -{" "}
-                      {memberData.online ? "Yes" : "Offline"}
-                    </li>
-                  ))}
+        <div className="guild_page_members_background">
+          <div className="guild_page_members_inner_background">
+            <div style={{ padding: "1rem" }}>
+              {" "}
+              <div className="guild_page_members_search_container">
+                <section className="guild_page_members_search_inner">
+                  {" "}
+                  <input
+                    type="text"
+                    placeholder="Search for members..."
+                    value={searchInput}
+                    onChange={handleSearchChange}
+                    className="guild_page_members_search"
+                  />
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    className="pR-1-5"
+                  />
                 </section>
               </div>
-            );
-          })}
+            </div>
+
+            <div className="guild_page_members_container">
+              <div className="guild_page_members_container_owner">
+                <h3 className="force-regular pB-05">Owner</h3>
+                <ul>
+                  <li className="guild_page_members_item">
+                    <section className="flex align-center">
+                      <img
+                        src={`https://crafatar.com/avatars/${
+                          tabGuildData.members.owner[
+                            Object.keys(tabGuildData.members.owner)[0]
+                          ].uuid
+                        }`}
+                        style={{ maxWidth: "1.5rem" }}
+                        className="pR-05"
+                        alt="Owner Avatar"
+                      />
+                      <section className="flex-col">
+                        {" "}
+                        <strong>
+                          {Object.keys(tabGuildData.members.owner)[0]}
+                        </strong>{" "}
+                        <section className="guild_page_members_item_joined">
+                          Joined:&nbsp;
+                          {(() => {
+                            const joinedDate =
+                              tabGuildData.members.owner[
+                                Object.keys(tabGuildData.members.owner)[0]
+                              ]?.joined;
+
+                            if (joinedDate) {
+                              // Create a Date object from the joined date string
+                              const date = new Date(joinedDate);
+                              // Convert to CET format
+                              const cetFormattedDate = date.toLocaleString(
+                                "en-GB",
+                                {
+                                  timeZone: "CET", // Set the time zone to CET
+                                  year: "numeric",
+                                  month: "long", // Full month name
+                                  day: "numeric",
+                                }
+                              );
+
+                              // Calculate time ago
+                              const now = new Date();
+                              const seconds = Math.floor((now - date) / 1000);
+                              const minutes = Math.floor(seconds / 60);
+                              const hours = Math.floor(minutes / 60);
+                              const days = Math.floor(hours / 24);
+                              const months = Math.floor(days / 30.44); // Average month length
+                              const years = Math.floor(days / 365);
+
+                              let timeAgo = "";
+                              if (years > 0) {
+                                timeAgo = `${years} year${
+                                  years > 1 ? "s" : ""
+                                } ago`;
+                              } else if (months > 0) {
+                                timeAgo = `${months} month${
+                                  months > 1 ? "s" : ""
+                                } ago`;
+                              } else if (days > 0) {
+                                timeAgo = `${days} day${
+                                  days > 1 ? "s" : ""
+                                } ago`;
+                              } else if (hours > 0) {
+                                timeAgo = `${hours} hour${
+                                  hours > 1 ? "s" : ""
+                                } ago`;
+                              } else if (minutes > 0) {
+                                timeAgo = `${minutes} minute${
+                                  minutes > 1 ? "s" : ""
+                                } ago`;
+                              } else {
+                                timeAgo = `${seconds} second${
+                                  seconds > 1 ? "s" : ""
+                                } ago`;
+                              }
+
+                              return (
+                                <span>
+                                  {cetFormattedDate} ({timeAgo})
+                                </span>
+                              );
+                            }
+                            return 0; // Fallback if no date is available
+                          })()}
+                        </section>
+                      </section>{" "}
+                    </section>{" "}
+                    <section className="guild_page_members_item_contributed">
+                      Contributed:&nbsp;
+                      {"    "}
+                      <strong>
+                        {tabGuildData.members.owner[
+                          Object.keys(tabGuildData.members.owner)[0]
+                        ]?.contributed || 0}
+                      </strong>
+                      xp
+                    </section>
+                    <section className="flex justify-end">
+                      {tabGuildData.members.owner[
+                        Object.keys(tabGuildData.members.owner)[0]
+                      ]?.online
+                        ? tabGuildData.members.owner[
+                            Object.keys(tabGuildData.members.owner)[0]
+                          ]?.server
+                        : "Offline"}
+                    </section>
+                  </li>
+                </ul>
+              </div>
+              {Object.entries(tabGuildData.members).map(([role, members]) => {
+                if (
+                  role === "total" ||
+                  role === "owner" ||
+                  role === "recruit"
+                ) {
+                  return null; // Skip rendering this role
+                }
+
+                if (role)
+                  return (
+                    <div key={role} className="guild_page_members_inner">
+                      <h3 className="force-regular pB-05">
+                        {role.charAt(0).toUpperCase() + role.slice(1)}s
+                      </h3>
+                      <section>
+                        {Object.entries(members).map(
+                          ([memberName, memberData]) => (
+                            <li
+                              key={memberData.uuid}
+                              className="guild_page_members_item"
+                            >
+                              <section className=" flex align-center">
+                                {" "}
+                                <img
+                                  src={`https://crafatar.com/avatars/${memberData.uuid}`}
+                                  style={{ maxWidth: "1.5rem" }}
+                                  className="pR-05"
+                                />
+                                <section className="flex-col">
+                                  <strong>{memberName}</strong>{" "}
+                                  <section className="guild_page_members_item_joined">
+                                    Joined:&nbsp;
+                                    {(() => {
+                                      const joinedDate = memberData.joined;
+
+                                      if (joinedDate) {
+                                        // Create a Date object from the joined date string
+                                        const date = new Date(joinedDate);
+                                        // Convert to CET format
+                                        const cetFormattedDate =
+                                          date.toLocaleString("en-GB", {
+                                            timeZone: "CET", // Set the time zone to CET
+                                            year: "numeric",
+                                            month: "long", // Full month name
+                                          });
+
+                                        // Calculate time ago
+                                        const now = new Date();
+                                        const seconds = Math.floor(
+                                          (now - date) / 1000
+                                        );
+                                        const minutes = Math.floor(
+                                          seconds / 60
+                                        );
+                                        const hours = Math.floor(minutes / 60);
+                                        const days = Math.floor(hours / 24);
+                                        const months = Math.floor(days / 30.44); // Average month length
+                                        const years = Math.floor(days / 365);
+
+                                        let timeAgo = "";
+                                        if (years > 0) {
+                                          timeAgo = `${years} year${
+                                            years > 1 ? "s" : ""
+                                          } ago`;
+                                        } else if (months > 0) {
+                                          timeAgo = `${months} month${
+                                            months > 1 ? "s" : ""
+                                          } ago`;
+                                        } else if (days > 0) {
+                                          timeAgo = `${days} day${
+                                            days > 1 ? "s" : ""
+                                          } ago`;
+                                        } else if (hours > 0) {
+                                          timeAgo = `${hours} hour${
+                                            hours > 1 ? "s" : ""
+                                          } ago`;
+                                        } else if (minutes > 0) {
+                                          timeAgo = `${minutes} minute${
+                                            minutes > 1 ? "s" : ""
+                                          } ago`;
+                                        } else {
+                                          timeAgo = `${seconds} second${
+                                            seconds > 1 ? "s" : ""
+                                          } ago`;
+                                        }
+
+                                        return (
+                                          <span>
+                                            {cetFormattedDate} ({timeAgo})
+                                          </span>
+                                        );
+                                      }
+                                      return 0; // Fallback if no date is available
+                                    })()}
+                                  </section>
+                                </section>
+                              </section>
+                              <section className="guild_page_members_item_contributed">
+                                Contributed:&nbsp;
+                                <strong>{memberData.contributed}</strong>xp
+                              </section>
+                              <section className="flex justify-end">
+                                {memberData.online
+                                  ? memberData.server
+                                  : "Offline"}
+                              </section>
+                            </li>
+                          )
+                        )}
+                      </section>
+                    </div>
+                  );
+              })}
+              <div className="guild_page_members_container_recruits">
+                <h4 className="force-regular pB-05">Recruits</h4>
+                {tabGuildData?.members?.recruit &&
+                Object.keys(tabGuildData.members.recruit).length > 0 ? (
+                  Object.entries(tabGuildData.members.recruit).map(
+                    ([memberName, memberData]) => (
+                      <li
+                        key={memberData.uuid}
+                        className="guild_page_members_item"
+                      >
+                        <section className="flex align-center">
+                          <img
+                            src={`https://crafatar.com/avatars/${memberData.uuid}`}
+                            style={{ maxWidth: "1.5rem" }}
+                            className="pR-05"
+                            alt={`${memberName}'s avatar`}
+                          />
+                          <section className="flex-col">
+                            <strong>{memberName}</strong>
+                            <section className="guild_page_members_item_joined">
+                              Joined:&nbsp;
+                              {(() => {
+                                const joinedDate = memberData.joined;
+
+                                if (joinedDate) {
+                                  // Create a Date object from the joined date string
+                                  const date = new Date(joinedDate);
+                                  // Convert to CET format
+                                  const cetFormattedDate = date.toLocaleString(
+                                    "en-GB",
+                                    {
+                                      timeZone: "CET", // Set the time zone to CET
+                                      year: "numeric",
+                                      month: "long", // Full month name
+                                      day: "numeric",
+                                    }
+                                  );
+
+                                  // Calculate time ago
+                                  const now = new Date();
+                                  const seconds = Math.floor(
+                                    (now - date) / 1000
+                                  );
+                                  const minutes = Math.floor(seconds / 60);
+                                  const hours = Math.floor(minutes / 60);
+                                  const days = Math.floor(hours / 24);
+                                  const months = Math.floor(days / 30.44); // Average month length
+                                  const years = Math.floor(days / 365);
+
+                                  let timeAgo = "";
+                                  if (years > 0) {
+                                    timeAgo = `${years} year${
+                                      years > 1 ? "s" : ""
+                                    } ago`;
+                                  } else if (months > 0) {
+                                    timeAgo = `${months} month${
+                                      months > 1 ? "s" : ""
+                                    } ago`;
+                                  } else if (days > 0) {
+                                    timeAgo = `${days} day${
+                                      days > 1 ? "s" : ""
+                                    } ago`;
+                                  } else if (hours > 0) {
+                                    timeAgo = `${hours} hour${
+                                      hours > 1 ? "s" : ""
+                                    } ago`;
+                                  } else if (minutes > 0) {
+                                    timeAgo = `${minutes} minute${
+                                      minutes > 1 ? "s" : ""
+                                    } ago`;
+                                  } else {
+                                    timeAgo = `${seconds} second${
+                                      seconds > 1 ? "s" : ""
+                                    } ago`;
+                                  }
+
+                                  return (
+                                    <span>
+                                      {cetFormattedDate} ({timeAgo})
+                                    </span>
+                                  );
+                                }
+                                return 0; // Fallback if no date is available
+                              })()}
+                            </section>
+                          </section>
+                        </section>
+                        <section className="guild_page_members_item_contributed flex-center">
+                          Contributed:&nbsp;{" "}
+                          <strong>{memberData.contributed}</strong>xp
+                        </section>
+                        <section className="flex justify-end">
+                          {" "}
+                          {memberData.online ? memberData.server : "Offline"}
+                        </section>
+                      </li>
+                    )
+                  )
+                ) : (
+                  <li>No recruits available</li>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       ) : (
-        <p>No guild data available</p> // Fallback if tabGuildData is not defined
+        <p>No guild data available</p>
       )}
       <div>
         <h1>Guild Data</h1>
