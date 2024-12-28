@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "../CSS/FooterComponent.css";
 import { PlayerContext } from "../PlayerContext.js";
@@ -17,8 +18,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const GuildPage = () => {
-  const { guildNameProfile, guildDataProfile, setGuildNameProfile } =
-    useContext(PlayerContext);
+  const {
+    guildNameProfile,
+    guildDataProfile,
+    setGuildNameProfile,
+    clickedGuildPlayer,
+    setClickedGuildPlayer,
+  } = useContext(PlayerContext);
+
+  const navigate = useNavigate();
 
   const [guildTabs, setGuildTabs] = useState([
     {
@@ -171,6 +179,17 @@ const GuildPage = () => {
     setSearchInput(event.target.value.toLowerCase());
   };
 
+  /* Handeling global .guild_page_members_item click for character details*/
+
+  const handleMemberClick = (clickedPlayer) => {
+    console.log("====================================== ", clickedPlayer);
+
+    // Store the updated player data back in local storage
+    setClickedGuildPlayer(clickedPlayer);
+    localStorage.setItem("clickedGuildPlayer", clickedPlayer);
+    console.log(clickedGuildPlayer);
+    navigate(`/`);
+  };
   return (
     <div className="stats_tabs_container">
       {" "}
@@ -497,8 +516,15 @@ const GuildPage = () => {
             <div className="guild_page_members_container">
               <div className="guild_page_members_container_owner">
                 <h3 className="force-regular pB-05">Owner</h3>
-                <ul>
-                  <li className="guild_page_members_item">
+                <ul className="guild_page_members_item_wrap">
+                  <li
+                    className="guild_page_members_item"
+                    onClick={() => {
+                      handleMemberClick(
+                        Object.keys(tabGuildData.members.owner)[0]
+                      );
+                    }}
+                  >
                     <section className="flex align-center">
                       <img
                         src={`https://crafatar.com/avatars/${
@@ -594,7 +620,7 @@ const GuildPage = () => {
                       </strong>
                       xp
                     </section>
-                    <section className="flex justify-end">
+                    <section className="flex-center justify-end">
                       {tabGuildData.members.owner[
                         Object.keys(tabGuildData.members.owner)[0]
                       ]?.online
@@ -627,6 +653,9 @@ const GuildPage = () => {
                             <li
                               key={memberData.uuid}
                               className="guild_page_members_item"
+                              onClick={() => {
+                                handleMemberClick(memberName);
+                              }}
                             >
                               <section className=" flex align-center">
                                 {" "}
@@ -708,7 +737,7 @@ const GuildPage = () => {
                                 Contributed:&nbsp;
                                 <strong>{memberData.contributed}</strong>xp
                               </section>
-                              <section className="flex justify-end">
+                              <section className="flex-center justify-end">
                                 {memberData.online
                                   ? memberData.server
                                   : "Offline"}
@@ -729,6 +758,9 @@ const GuildPage = () => {
                       <li
                         key={memberData.uuid}
                         className="guild_page_members_item"
+                        onClick={() => {
+                          handleMemberClick(memberName);
+                        }}
                       >
                         <section className="flex align-center">
                           <img
@@ -811,7 +843,7 @@ const GuildPage = () => {
                           Contributed:&nbsp;{" "}
                           <strong>{memberData.contributed}</strong>xp
                         </section>
-                        <section className="flex justify-end">
+                        <section className="flex-center justify-end">
                           {" "}
                           {memberData.online ? memberData.server : "Offline"}
                         </section>

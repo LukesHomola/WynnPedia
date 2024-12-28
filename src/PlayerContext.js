@@ -18,6 +18,8 @@ export const PlayerProvider = ({ children }) => {
   });
   const [guildDataProfile, setGuildDataProfile] = useState({});
 
+  const [clickedGuildPlayer, setClickedGuildPlayer] = useState(null);
+
   const fetchPlayerData = async (name) => {
     try {
       setLoading(true);
@@ -130,6 +132,8 @@ export const PlayerProvider = ({ children }) => {
         setGuildNameProfile,
         guildDataProfile,
         setGuildDataProfile,
+        clickedGuildPlayer,
+        setClickedGuildPlayer,
       }}
     >
       {children}

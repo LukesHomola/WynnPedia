@@ -443,6 +443,16 @@ progress::-moz-progress-bar {
   background-color: var(--color-bg-500);
 }
 
+.guild_jump {
+  font-size: var(--fs-h5);
+  color: var(--color-text);
+}
+.guild_jump:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--color-primary-500);
+}
+
 /* * {
   outline: 1px solid orange;
 } */

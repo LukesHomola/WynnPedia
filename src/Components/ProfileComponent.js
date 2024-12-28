@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
-
+import { useNavigate } from "react-router-dom";
 import { PlayerContext } from "../PlayerContext.js"; // Access context
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -680,9 +680,18 @@ const CharacterInfo = ({
 };
 
 const Profile = ({ characters, currentCharacter }) => {
-  const { playerData, extendedPlayerData, loading, error, playerName } =
-    useContext(PlayerContext); // Access playerName from context
+  const {
+    playerData,
+    extendedPlayerData,
+    loading,
+    error,
+    playerName,
+    clickedGuildPlayer,
+    setClickedGuildPlayer,
+  } = useContext(PlayerContext); // Access playerName from context
   const debounceTimeout = useRef(null);
+
+  const navigate = useNavigate();
 
   const [isProfessionsVisible, setIsProfessionsVisible] = useState(false);
   const [isContentCompletionVisible, setIsContentCompletionVisible] =
@@ -810,6 +819,11 @@ const Profile = ({ characters, currentCharacter }) => {
     : null; // Default to null
   const rankImage = supportRank ? rankImages[supportRank.toUpperCase()] : null; // Only call toUpperCase if supportRank is not null
 
+  const tabbedPlayerRank = playerTabs[activeTabIndex]?.data?.supportRank;
+  const rankTabbedImage = tabbedPlayerRank
+    ? rankImages[tabbedPlayerRank.toUpperCase()]
+    : null;
+
   // Determine the width based on the rank
   const imgWidth = supportRank === "champion" ? "8rem" : "8rem";
 
@@ -853,6 +867,21 @@ const Profile = ({ characters, currentCharacter }) => {
   }, [playerData, extendedPlayerData]);
 
   /*  */
+
+  useEffect(() => {
+    if (clickedGuildPlayer !== null) {
+      console.log("DATA CALL: ", clickedGuildPlayer);
+
+      handleAddTab();
+      fetchPlayerData(clickedGuildPlayer, 1);
+    }
+  }, [clickedGuildPlayer]);
+
+  /*  */
+
+  const guildJump = () => {
+    navigate(`/guild`);
+  };
 
   return (
     <div className="stats_tabs_container">
@@ -940,7 +969,7 @@ const Profile = ({ characters, currentCharacter }) => {
                           character={selectedCharacter}
                           isCharacterInfoVisible={isCharacterInfoVisible}
                           setIsCharacterInfoVisible={setIsCharacterInfoVisible}
-                          rankImage={rankImage}
+                          rankImage={rankTabbedImage}
                           supportRank={supportRank}
                           imgWidth={imgWidth}
                           tabPlayerData={tabPlayerData}
@@ -970,9 +999,9 @@ const Profile = ({ characters, currentCharacter }) => {
 
                             <section className="flex-col ">
                               <span className="flex gap-05">
-                                {rankImage ? (
+                                {rankTabbedImage ? (
                                   <img
-                                    src={rankImage}
+                                    src={rankTabbedImage}
                                     alt={supportRank}
                                     style={{ width: imgWidth }}
                                   />
@@ -1006,7 +1035,15 @@ const Profile = ({ characters, currentCharacter }) => {
                                     <h5 className="force-regular">
                                       {tabPlayerData.guild?.rankStars}{" "}
                                       {tabPlayerData.guild?.rank} of the{" "}
-                                      {tabPlayerData.guild?.name}
+                                      <a
+                                        className="guild_jump"
+                                        onClick={() => {
+                                          guildJump();
+                                        }}
+                                      >
+                                        {" "}
+                                        {tabPlayerData.guild?.name}
+                                      </a>
                                     </h5>
                                   ) : (
                                     <h5 className="force-regular">
@@ -1555,6 +1592,7 @@ const Profile = ({ characters, currentCharacter }) => {
                   <img
                     src={`https://crafatar.com/renders/head/${playerData?.uuid}`}
                     className="grid_container_top_avatar"
+                    onClick={() => console.log("log, ", clickedGuildPlayer)}
                   ></img>
                 </section>
 
@@ -1589,7 +1627,15 @@ const Profile = ({ characters, currentCharacter }) => {
                       {playerData?.guild?.name ? (
                         <h5 className="force-regular">
                           {playerData.guild?.rankStars} {playerData.guild?.rank}{" "}
-                          of the {playerData.guild?.name}
+                          of the{" "}
+                          <a
+                            className="guild_jump"
+                            onClick={() => {
+                              guildJump();
+                            }}
+                          >
+                            {playerData.guild?.name}
+                          </a>
                         </h5>
                       ) : (
                         <h5 className="force-regular">No guild registered.</h5>

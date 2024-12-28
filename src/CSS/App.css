@@ -60,8 +60,10 @@ button {
 }
 
 ul,
-li {
+li,
+a {
   list-style: none;
+  color: var(--color-text);
 }
 
 /* ===================================================
@@ -147,6 +149,7 @@ li {
   --font-size-h6: 1rem; /* 16px */
   --font-size-p: 0.875rem; /* 14px */
   --font-size-a: 0.875rem; /* 14px */
+  --font-size-small: 0.65rem;
   --font-size-span: 0.875rem; /* 14px */
   --font-size-bold: 0.875rem; /* 14px */
 
