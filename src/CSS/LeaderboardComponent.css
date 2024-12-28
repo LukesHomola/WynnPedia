@@ -1,0 +1,31 @@
+.leaderboard_wrapper {
+  padding-top: 0rem;
+  padding: 1rem;
+}
+/* Wrapper for leaderboard selection */
+.leaderboard_selection_wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  justify-items: center;
+}
+.leaderboard_selection_item {
+  height: 10rem;
+  width: 90%;
+
+  background-color: yellow;
+}
+@media (min-width: 1000px) {
+  .leaderboard_selection_item {
+    height: 13rem;
+  }
+}
+
+/* SEARCH CONTAINER */
+.leaderboard_selection_search {
+  padding: 1rem;
+}
+
+* {
+  /*   outline: 1px solid; */
+}

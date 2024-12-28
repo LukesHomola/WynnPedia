@@ -19,6 +19,7 @@ export const PlayerProvider = ({ children }) => {
   const [guildDataProfile, setGuildDataProfile] = useState({});
 
   const [clickedGuildPlayer, setClickedGuildPlayer] = useState(null);
+  const [clickedGuild, setClickedGuild] = useState(null);
 
   const fetchPlayerData = async (name) => {
     try {
@@ -107,7 +108,6 @@ export const PlayerProvider = ({ children }) => {
       if (data?.name) {
         setGuildDataProfile(data);
       }
-      console.log("GUILD DATA: ", data); // Log fetched data
     } catch (error) {
       console.error("Error fetching guild data:", error); // Handle errors
     }
@@ -134,6 +134,8 @@ export const PlayerProvider = ({ children }) => {
         setGuildDataProfile,
         clickedGuildPlayer,
         setClickedGuildPlayer,
+        clickedGuild,
+        setClickedGuild,
       }}
     >
       {children}

@@ -49,7 +49,6 @@ const ActivityCheck = () => {
         }
 
         const data = await response.json();
-        console.log("API Response:", data); // Debugging the API response
 
         if (data?.name) {
           setGuildData(data);

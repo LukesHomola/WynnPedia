@@ -688,6 +688,8 @@ const Profile = ({ characters, currentCharacter }) => {
     playerName,
     clickedGuildPlayer,
     setClickedGuildPlayer,
+    clickedGuild,
+    setClickedGuild,
   } = useContext(PlayerContext); // Access playerName from context
   const debounceTimeout = useRef(null);
 
@@ -731,7 +733,6 @@ const Profile = ({ characters, currentCharacter }) => {
   const handleTabClick = (index, playerName) => {
     setActiveTabIndex(index);
     fetchPlayerData(playerName);
-    console.log("INDEX TEST: ", playerName);
   };
 
   // Fetch data for a specific tab
@@ -742,8 +743,8 @@ const Profile = ({ characters, currentCharacter }) => {
         `https://api.wynncraft.com/v3/player/${username}?fullResult`
       );
       const data = await response.json();
-      setTabPlayerData(data), console.log(data);
-      setPlayerTabs((prevTabs) =>
+      /*       setTabPlayerData(data), console.log(data);
+       */ setPlayerTabs((prevTabs) =>
         prevTabs.map((tab, i) =>
           i === index ? { ...tab, username, data } : tab
         )
@@ -868,10 +869,9 @@ const Profile = ({ characters, currentCharacter }) => {
 
   /*  */
 
+  /* Creating new tab for clicked player from guild apge */
   useEffect(() => {
     if (clickedGuildPlayer !== null) {
-      console.log("DATA CALL: ", clickedGuildPlayer);
-
       handleAddTab();
       fetchPlayerData(clickedGuildPlayer, 1);
     }
@@ -879,7 +879,8 @@ const Profile = ({ characters, currentCharacter }) => {
 
   /*  */
 
-  const guildJump = () => {
+  const handleGuildJump = (clickedGuild) => {
+    setClickedGuild(clickedGuild);
     navigate(`/guild`);
   };
 
@@ -1038,7 +1039,9 @@ const Profile = ({ characters, currentCharacter }) => {
                                       <a
                                         className="guild_jump"
                                         onClick={() => {
-                                          guildJump();
+                                          handleGuildJump(
+                                            tabPlayerData.guild?.name
+                                          );
                                         }}
                                       >
                                         {" "}
@@ -1193,7 +1196,6 @@ const Profile = ({ characters, currentCharacter }) => {
                                         key={characterId}
                                         className="characters_item"
                                         onClick={() => {
-                                          console.log("CHARACTER: ", character);
                                           setSelectedCharacter(character); // Update selected character
                                           setIsCharacterInfoVisible(true); // Optionally show character info
                                         }}
@@ -1592,7 +1594,6 @@ const Profile = ({ characters, currentCharacter }) => {
                   <img
                     src={`https://crafatar.com/renders/head/${playerData?.uuid}`}
                     className="grid_container_top_avatar"
-                    onClick={() => console.log("log, ", clickedGuildPlayer)}
                   ></img>
                 </section>
 
@@ -1631,7 +1632,7 @@ const Profile = ({ characters, currentCharacter }) => {
                           <a
                             className="guild_jump"
                             onClick={() => {
-                              guildJump();
+                              handleGuildJump(playerData.guild?.name);
                             }}
                           >
                             {playerData.guild?.name}
@@ -1760,7 +1761,6 @@ const Profile = ({ characters, currentCharacter }) => {
                             key={characterId}
                             className="characters_item"
                             onClick={() => {
-                              console.log("CHARACTER 2: ", character);
                               setSelectedCharacter(character); // Update selected character
                               setIsCharacterInfoVisible(true); // Optionally show character info
                             }}

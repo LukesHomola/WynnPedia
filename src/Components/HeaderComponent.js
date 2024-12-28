@@ -78,8 +78,10 @@ const Header = () => {
           </NavLink>
           <NavLink to="/activity-check" className="link">
             <h5>Tools</h5>
+          </NavLink>{" "}
+          <NavLink to="/leaderboard" className="link">
+            <h5>Leaderboard</h5>
           </NavLink>
-          <h5>Leaderboard</h5>
           <h5>Settings</h5>
           <h5>Credits</h5>
         </section>

@@ -5,6 +5,7 @@ import Profile from "./Components/ProfileComponent.js";
 import Footer from "./Components/FooterComponent.js";
 import GuildPage from "./Components/GuildProfileComponent.js";
 import ActivityCheck from "./Components/ActivityCheckComponent.js";
+import LeaderboardComponent from "./Components/LeaderboardComponent.js";
 
 import { PlayerProvider } from "./PlayerContext.js";
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/" element={<Profile />} />
             <Route path="/guild" element={<GuildPage />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
+            <Route path="/leaderboard" element={<LeaderboardComponent />} />
           </Routes>
           <Footer />
         </div>

@@ -24,6 +24,8 @@ const GuildPage = () => {
     setGuildNameProfile,
     clickedGuildPlayer,
     setClickedGuildPlayer,
+    clickedGuild,
+    setClickedGuild,
   } = useContext(PlayerContext);
 
   const navigate = useNavigate();
@@ -56,7 +58,6 @@ const GuildPage = () => {
   const handleTabClick = (index, guildName) => {
     setActiveTabIndex(index);
     fetchGuildData(guildName);
-    console.log("INDEX TEST: ", guildName);
   };
 
   // Fetch data for a specific tab
@@ -76,8 +77,8 @@ const GuildPage = () => {
       }
 
       const data = await response.json();
-      setTabGuildData(data), console.log(data);
-      setGuildTabs((prevTabs) =>
+      /*       setTabGuildData(data), console.log(data);
+       */ setGuildTabs((prevTabs) =>
         prevTabs.map((tab, i) => (i === index ? { ...tab, name, data } : tab))
       );
     } catch (error) {
@@ -179,15 +180,17 @@ const GuildPage = () => {
     setSearchInput(event.target.value.toLowerCase());
   };
 
+  /* Creating new tab for clicked guild from player page */
+  useEffect(() => {
+    if (clickedGuild !== null) {
+      handleAddTab();
+      fetchGuildData(clickedGuild, 1);
+    }
+  }, [clickedGuild]);
+
   /* Handeling global .guild_page_members_item click for character details*/
-
   const handleMemberClick = (clickedPlayer) => {
-    console.log("====================================== ", clickedPlayer);
-
-    // Store the updated player data back in local storage
     setClickedGuildPlayer(clickedPlayer);
-    localStorage.setItem("clickedGuildPlayer", clickedPlayer);
-    console.log(clickedGuildPlayer);
     navigate(`/`);
   };
   return (
@@ -860,7 +863,7 @@ const GuildPage = () => {
       ) : (
         <p>No guild data available</p>
       )}
-      <div>
+      {/*       <div>
         <h1>Guild Data</h1>
         <p>Guild Name: {guildNameProfile}</p>
         <button
@@ -871,8 +874,7 @@ const GuildPage = () => {
           Change Guild Name
         </button>
         <pre>{JSON.stringify(guildDataProfile, null, 2)}</pre>{" "}
-        {/* Display fetched data */}
-      </div>
+      </div> */}
     </div>
   );
 };
