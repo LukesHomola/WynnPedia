@@ -77,8 +77,8 @@ const GuildPage = () => {
       }
 
       const data = await response.json();
-      /*       setTabGuildData(data), console.log(data);
-       */ setGuildTabs((prevTabs) =>
+      setTabGuildData(data);
+      setGuildTabs((prevTabs) =>
         prevTabs.map((tab, i) => (i === index ? { ...tab, name, data } : tab))
       );
     } catch (error) {
