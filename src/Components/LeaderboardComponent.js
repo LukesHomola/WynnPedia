@@ -50,10 +50,58 @@ const debounce = (func, delay) => {
   };
 };
 
+/* MetaData table for options */
+const playerTableConfigs = {
+  default: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  woodcuttingLevel: [
+    { key: "name", label: "NAME" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  scribing: [
+    { key: "metadata.totalLevel", label: "Total Level" },
+    { key: "metadata.completions", label: "Completions" },
+    { key: "metadata.gambits", label: "Gambits" },
+  ],
+  /*  */
+  /* Total Content */
+  playerContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterType", label: "CHARACTER" },
+  ],
+  /* Global Total Content */
+  globalPlayerContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  /* Ward compl. */
+  warsCompletion: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETITION" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+};
+
+// Helper function to safely access nested data
+const getNestedValue = (obj, path) => {
+  return path
+    .split(".")
+    .reduce((acc, key) => (acc && acc[key] ? acc[key] : null), obj);
+};
+
 const LeaderboardComponent = () => {
   const [leaderboardType, setLeaderboardType] = useState([]);
   const [selectedTypePlayerGuild, setselectedTypePlayerGuild] = useState("");
-  const [selectedTypePlayer, setselectedTypePlayer] = useState("");
+  const [selectedTypePlayer, setselectedTypePlayer] = useState("playerContent");
   const [selectedTypePlayerGameMode, setselectedTypePlayerGameMode] =
     useState("");
   const [data, setData] = useState([]);
@@ -64,6 +112,57 @@ const LeaderboardComponent = () => {
 
   const [clickedItem, setClickedItem] =
     useState(null); /* CLICKED ITEM FOR OPTION FILTER */
+
+  // Fetch leaderboard data based on selected type
+  const fetchLeaderboardData = async (type) => {
+    const url = `https://api.wynncraft.com/v3/leaderboards/${type}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+      const result = await response.json();
+      setData(result); // Update state with fetched data
+    } catch (err) {
+      setError(err.message);
+      setData([]);
+    }
+  };
+
+  // Fetch data when the selected type changes
+  useEffect(() => {
+    fetchLeaderboardData(selectedTypePlayer);
+    console.log("Selected type:", selectedTypePlayer);
+  }, [selectedTypePlayer]);
+
+  // Render the dynamic leaderboard table
+  const renderTable = () => {
+    const tableConfig =
+      playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
+
+    if (!data || Object.keys(data).length === 0) {
+      return <p>No data available.</p>;
+    }
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            {tableConfig.map((col) => (
+              <th key={col.key}>{col.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Object.values(data).map((row, index) => (
+            <tr key={index}>
+              {tableConfig.map((col) => (
+                <td key={col.key}>{getNestedValue(row, col.key) || "N/A"}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   // Fetch function for leaderboard types
   const fetchLeaderboardTypes = async () => {
@@ -130,6 +229,7 @@ const LeaderboardComponent = () => {
   const handleItemClick = (item) => {
     setClickedItem(item);
     setselectedTypePlayer(item);
+    console.log("Selected type:", item); // Debugging
   };
 
   return (
@@ -317,7 +417,7 @@ const LeaderboardComponent = () => {
                           ? "clicked_item"
                           : ""
                       }`}
-                      onClick={() => handleItemClick("weaponsmith ingLevel")}
+                      onClick={() => handleItemClick("weaponsmithingLevel")}
                     >
                       <img src={weaponsmithing}></img>
                       Weaponsmithing
@@ -368,6 +468,9 @@ const LeaderboardComponent = () => {
                   </div>
                 </div>
               </div>
+
+              {renderTable()}
+
               {/*      <h2>Table 1</h2>
               <table>
                 <thead>
