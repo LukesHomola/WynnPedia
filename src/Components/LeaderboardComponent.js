@@ -3,6 +3,40 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import "../CSS/LeaderboardComponent.css";
 import { PlayerContext } from "../PlayerContext.js";
 
+import guildImg from "../Assests_components/Leaderboard/Section_icons/guild.webp";
+import playerImg from "../Assests_components/Leaderboard/Section_icons/player.webp";
+import gamemodeImg from "../Assests_components/Leaderboard/Section_icons/gamemode.webp";
+
+// Import the images for each profession
+import scribing from "../Assests_components/professions/Scribing.webp";
+import cooking from "../Assests_components/professions/Cooking.webp";
+import woodcutting from "../Assests_components/professions/Woodcutting.webp";
+import farming from "../Assests_components/professions/Farming.webp";
+import mining from "../Assests_components/professions/Mining.webp";
+import alchemism from "../Assests_components/professions/Alchemism.webp";
+import jeweling from "../Assests_components/professions/Jeweling.webp";
+import weaponsmithing from "../Assests_components/professions/Weaponsmithing.webp";
+import armouring from "../Assests_components/professions/Armouring.webp";
+import tailoring from "../Assests_components/professions/Tailoring.webp";
+import fishing from "../Assests_components/professions/Fishing.webp";
+import woodworking from "../Assests_components/professions/Woodworking.webp";
+
+// Import the images for each total completion
+import wars_completion from "../Assests_components/content_completion/wars.webp";
+import global_total_completion from "../Assests_components/content_completion/global_total_completions.webp";
+import total_completion from "../Assests_components/content_completion/total_completions.webp";
+
+// Import the images for each total lvl
+import total from "../Assests_components/total_levels/total.webp";
+import profs from "../Assests_components/total_levels/profs.webp";
+import combat from "../Assests_components/total_levels/combat.webp";
+
+// Import the games for each raid
+import NoL from "../Assests_components/raids/NoL.webp";
+import NotG from "../Assests_components/raids/NotG.webp";
+import TCC from "../Assests_components/raids/TCC.webp";
+import TNA from "../Assests_components/raids/TNA.webp";
+
 // Debounce function
 const debounce = (func, delay) => {
   let timeoutId;
@@ -18,12 +52,18 @@ const debounce = (func, delay) => {
 
 const LeaderboardComponent = () => {
   const [leaderboardType, setLeaderboardType] = useState([]);
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedTypePlayerGuild, setselectedTypePlayerGuild] = useState("");
+  const [selectedTypePlayer, setselectedTypePlayer] = useState("");
+  const [selectedTypePlayerGameMode, setselectedTypePlayerGameMode] =
+    useState("");
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
   const [selectedLeaderboard, setSelectedLeaderboard] =
     useState("leaderboardPlayers");
+
+  const [clickedItem, setClickedItem] =
+    useState(null); /* CLICKED ITEM FOR OPTION FILTER */
 
   // Fetch function for leaderboard types
   const fetchLeaderboardTypes = async () => {
@@ -56,8 +96,8 @@ const LeaderboardComponent = () => {
 
   // Fetch function for guild leaderboard
   const fetchLeaderboard = async () => {
-    if (!selectedType) return; // Prevent fetch if selectedType is not set
-    const url = `https://api.wynncraft.com/v3/leaderboards/${selectedType}`; // Use selectedType directly
+    if (!selectedTypePlayer) return; // Prevent fetch if selectedTypePlayer is not set
+    const url = `https://api.wynncraft.com/v3/leaderboards/${selectedTypePlayer}`; // Use selectedTypePlayer directly
     try {
       const response = await fetch(url);
       if (response.ok) {
@@ -71,10 +111,10 @@ const LeaderboardComponent = () => {
     }
   };
 
-  // Use effect to call fetch function when selectedType changes
+  // Use effect to call fetch function when selectedTypePlayer changes
   useEffect(() => {
     fetchLeaderboard();
-  }, [selectedType]); // Dependency array to refetch if selectedType changes
+  }, [selectedTypePlayer]); // Dependency array to refetch if selectedTypePlayer changes
 
   // Use effect to call fetch function on component mount
   useEffect(() => {
@@ -86,110 +126,311 @@ const LeaderboardComponent = () => {
     setSelectedLeaderboard(tableId);
   };
 
+  // Function to handle item click
+  const handleItemClick = (item) => {
+    setClickedItem(item);
+    setselectedTypePlayer(item);
+  };
+
   return (
     <div className="leaderboard_wrapper">
-      <br></br>
-      <div className="leaderboard_selection_wrapper">
-        <section
-          className="leaderboard_selection_item"
-          onClick={() => showTable("leaderboardGuilds")}
-        ></section>
-        <section
-          className="leaderboard_selection_item"
-          onClick={() => showTable("leaderboardPlayers")}
-        ></section>
-        <section
-          className="leaderboard_selection_item"
-          onClick={() => showTable("leaderboardGamemodes")}
-        ></section>
-      </div>
-      <br></br>
-      <div className="leaderboard_selection_search">
-        {" "}
-        <h5>Quick search</h5>
-        <input placeholder="Enter playername or guild..."></input>
-      </div>
-      <br></br>
-      {selectedLeaderboard === "leaderboardGuilds" && (
-        <div className="table-section">
-          <h2>Table 1</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Header 1</th>
-                <th>Header 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Data 1</td>
-                <td>Data 2</td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="leaderboard_inner">
+        <br></br>
+        <div className="leaderboard_selection_wrapper">
+          <section
+            className={`leaderboard_selection_item ${
+              selectedLeaderboard === "leaderboardGuilds"
+                ? "selected_leaderboard"
+                : ""
+            }`}
+            onClick={() => showTable("leaderboardGuilds")}
+          >
+            <img
+              className="leaderboard_selection_item_img"
+              src={guildImg}
+              alt="Guild"
+            />
+            <h4>GUILD</h4>
+          </section>
+          <section
+            className={`leaderboard_selection_item ${
+              selectedLeaderboard === "leaderboardPlayers"
+                ? "selected_leaderboard"
+                : ""
+            }`}
+            onClick={() => showTable("leaderboardPlayers")}
+          >
+            <img
+              className="leaderboard_selection_item_img"
+              src={playerImg}
+              alt="Player"
+            />
+            <h4>PLAYER</h4>
+          </section>
+          <section
+            className={`leaderboard_selection_item ${
+              selectedLeaderboard === "leaderboardGamemodes"
+                ? "selected_leaderboard"
+                : ""
+            }`}
+            onClick={() => showTable("leaderboardGamemodes")}
+          >
+            <img
+              className="leaderboard_selection_item_img"
+              src={gamemodeImg}
+              alt="Gamemode"
+            />
+            <h4>GAMEMODE</h4>
+          </section>
         </div>
-      )}
-      {selectedLeaderboard === "leaderboardPlayers" && (
-        <div className="table-section">
-          <h2>Table 2</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Header 1</th>
-                <th>Header 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Data 1</td>
-                <td>Data 2</td>
-              </tr>
-            </tbody>
-          </table>
+        <br></br>
+        <div className="leaderboard_selection_search_wrapper">
+          {" "}
+          <div className="leaderboard_selection_search">
+            {" "}
+            <h5>Quick search</h5>
+            <input placeholder="Enter playername or guild..."></input>
+          </div>
         </div>
-      )}{" "}
-      {selectedLeaderboard === "leaderboardGamemodes" && (
-        <div className="table-section">
-          <h2>Table 3</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Header 1</th>
-                <th>Header 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Data 1</td>
-                <td>Data 2</td>
-              </tr>
-            </tbody>
-          </table>
+        <br></br>
+        <div className="leaderboard_table_wrapper">
+          {" "}
+          {selectedLeaderboard === "leaderboardGuilds" && (
+            <div className="leaderboard_selection_body">
+              <div className="leader_board_selection_options_wrapper"></div>
+              <h2>Table 1</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Data 1</td>
+                    <td>Data 2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+          {selectedLeaderboard === "leaderboardPlayers" && (
+            <div className="leaderboard_selection_body">
+              <div className="leaderboard_selection_options_wrapper">
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Professions Levels</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "woodcuttingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("woodcuttingLevel")}
+                    >
+                      <img src={woodcutting}></img>
+                      Woodcutting
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "miningLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("miningLevel")}
+                    >
+                      <img src={mining}></img>
+                      Mining
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "fishingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("fishingLevel")}
+                    >
+                      <img src={fishing}></img>
+                      Fishing
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "farmingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("farmingLevel")}
+                    >
+                      <img src={farming}></img>
+                      Farming
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "alchemismLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("alchemismLevel")}
+                    >
+                      <img src={alchemism}></img>
+                      Alchemism
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "armouringLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("armouringLevel")}
+                    >
+                      <img src={armouring}></img>
+                      Armouring
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "cookingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("cookingLevel")}
+                    >
+                      <img src={cooking}></img>
+                      Cooking
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "jewelingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("jewelingLevel")}
+                    >
+                      <img src={jeweling}></img>
+                      Jeweling
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "scribingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("scribingLevel")}
+                    >
+                      <img src={scribing}></img>
+                      Scribing
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "tailoringLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("tailoringLevel")}
+                    >
+                      <img src={tailoring}></img>
+                      Tailoring
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "weaponsmithingLevel"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("weaponsmith ingLevel")}
+                    >
+                      <img src={weaponsmithing}></img>
+                      Weaponsmithing
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "woodworkingLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("woodworkingLevel")}
+                    >
+                      <img src={woodworking}></img>
+                      Woodworking
+                    </section>
+                  </div>
+                </div>
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Content Completions</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "playerContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("playerContent")}
+                    >
+                      <img src={total_completion}></img>
+                      Total Content
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "globalPlayerContent"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("globalPlayerContent")}
+                    >
+                      <img src={global_total_completion}></img>
+                      Global Total Content
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "warsCompletion" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("warsCompletion")}
+                    >
+                      <img src={wars_completion}></img>
+                      Wars (Completions)
+                    </section>
+                  </div>
+                </div>
+              </div>
+              {/*      <h2>Table 1</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Data 1</td>
+                    <td>Data 2</td>
+                  </tr>
+                </tbody>
+              </table> */}
+              <pre>{JSON.stringify(data, null, 2)}</pre>
+            </div>
+          )}
+          {selectedLeaderboard === "leaderboardGamemodes" && (
+            <div className="leaderboard_selection_body">
+              <h2>Table 3</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Data 1</td>
+                    <td>Data 2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-      )}
-      <br></br>
-      <label>Enter guild type to search for</label>
-      <select
-        onChange={(e) => {
-          const value = e.target.value;
-          if (value === "Expand...") {
-            setSelectedType(""); // Reset selectedType when "Expand..." is selected
-          } else {
-            fetchLeaderboard();
-            setSelectedType(value); // Set selectedType to the chosen value
-          }
+        <br></br>
+        <label>Enter guild type to search for</label>
+        <select
+          onChange={(e) => {
+            const value = e.target.value;
+            if (value === "Expand...") {
+              setselectedTypePlayer(""); // Reset selectedTypePlayer when "Expand..." is selected_leaderboard
+            } else {
+              fetchLeaderboard();
+              setselectedTypePlayer(value); // Set selectedTypePlayer to the chosen value
+            }
 
-          console.log("Selected type:", value);
-        }}
-      >
-        <option>Expand...</option>
-        {Array.isArray(leaderboardType) &&
-          leaderboardType.map((type) => <option key={type}>{type}</option>)}
-        {error && <p>Error: {error}</p>}
-      </select>
-      <div>
-        {" "}
-        <pre>{JSON.stringify(data, null, 2)}</pre>{" "}
+            console.log("Selected type:", value);
+          }}
+        >
+          <option>Expand...</option>
+          {Array.isArray(leaderboardType) &&
+            leaderboardType.map((type) => <option key={type}>{type}</option>)}
+          {error && <p>Error: {error}</p>}
+        </select>
+        <div>
+          {" "}
+          {/*           <pre>{JSON.stringify(data, null, 2)}</pre>{" "}
+           */}{" "}
+        </div>{" "}
       </div>
     </div>
   );
