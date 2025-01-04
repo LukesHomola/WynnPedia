@@ -85,7 +85,6 @@
   border-radius: 8px;
 }
 
-/* TABLE BODIES */
 /* WRAPPER FOR CONDITIONAL RENDERING */
 .leaderboard_table_wrapper {
   padding: 1rem;
@@ -125,6 +124,7 @@
 }
 .clicked_item {
   animation: clickAnimatiom 0.5s !important;
+  border: 1px solid var(--color-primary);
 }
 @keyframes clickAnimatiom {
   0% {
@@ -136,6 +136,63 @@
   100% {
     transform: scale(1);
   }
+}
+
+/* TABLE BODIES */
+.leaderboard_table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+/* HEADER */
+.leaderboard_table_header * {
+  padding: 1rem;
+  background-color: var(--color-bg-800);
+}
+.leaderboard_table_header_row {
+  background-color: var(--color-bg-800);
+  color: var(--color-text-100);
+  text-align: left;
+}
+
+/* BODY */
+.leaderboard_table_body * {
+  padding: 1rem;
+}
+.leaderboard_table_body_row:nth-child(odd) {
+  background-color: var(--color-bg-700);
+}
+.leaderboard_table_body_row:hover {
+  cursor: pointer;
+  animation: shadowPulse 1s infinite;
+  border: 1px solid var(--color-primary);
+  transition: border 0.1s ease, transform 0.1s ease;
+}
+/* PAGINAION */
+.leaderboard_table_pagination {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+.leaderboard_table_pagination button {
+  font-size: var(--font-size-h3);
+}
+.leaderboard_table_pagination_buttons {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--color-bg-800);
+  border-radius: 8px;
+}
+.leaderboard_table_pagination_buttons button {
+  font-size: var(--font-size-h3);
+}
+
+.name-column {
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 * {

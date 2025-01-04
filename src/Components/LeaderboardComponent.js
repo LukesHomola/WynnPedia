@@ -7,6 +7,15 @@ import guildImg from "../Assests_components/Leaderboard/Section_icons/guild.webp
 import playerImg from "../Assests_components/Leaderboard/Section_icons/player.webp";
 import gamemodeImg from "../Assests_components/Leaderboard/Section_icons/gamemode.webp";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {} from "@fortawesome/free-brands-svg-icons";
+import {
+  faCaretLeft,
+  faCaretRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
+
 // Import the images for each profession
 import scribing from "../Assests_components/professions/Scribing.webp";
 import cooking from "../Assests_components/professions/Cooking.webp";
@@ -89,6 +98,50 @@ const playerTableConfigs = {
     { key: "score", label: "COMPLETITION" },
     { key: "metadata.playtime", label: "PLAYTIME" },
   ],
+  grootslangSrPlayers: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  orphionSrPlayers: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  colossusSrPlayers: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  namelessSrPlayers: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  grootslangCompletion: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETIONS" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  orphionCompletion: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETIONS" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  colossusCompletion: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETIONS" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  namelessCompletion: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETIONS" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
 };
 
 // Helper function to safely access nested data
@@ -111,7 +164,15 @@ const LeaderboardComponent = () => {
     useState("leaderboardPlayers");
 
   const [clickedItem, setClickedItem] =
-    useState(null); /* CLICKED ITEM FOR OPTION FILTER */
+    useState("playerContent"); /* CLICKED ITEM FOR OPTION FILTER */
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   // Fetch leaderboard data based on selected type
   const fetchLeaderboardData = async (type) => {
@@ -120,17 +181,18 @@ const LeaderboardComponent = () => {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const result = await response.json();
-      setData(result); // Update state with fetched data
+      const dataArray = Object.values(result); // Convert the object to an array
+      setData(dataArray); // Update state with the array
     } catch (err) {
       setError(err.message);
-      setData([]);
+      setData([]); // Reset to an empty array on error
     }
   };
 
   // Fetch data when the selected type changes
   useEffect(() => {
     fetchLeaderboardData(selectedTypePlayer);
-    console.log("Selected type:", selectedTypePlayer);
+    console.log("API Response:", data);
   }, [selectedTypePlayer]);
 
   // Render the dynamic leaderboard table
@@ -138,29 +200,104 @@ const LeaderboardComponent = () => {
     const tableConfig =
       playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
 
-    if (!data || Object.keys(data).length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
       return <p>No data available.</p>;
     }
 
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = Array.isArray(data)
+      ? data.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
+    const totalPages = Array.isArray(data)
+      ? Math.ceil(data.length / itemsPerPage)
+      : 1;
+
     return (
-      <table>
-        <thead>
-          <tr>
-            {tableConfig.map((col) => (
-              <th key={col.key}>{col.label}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {Object.values(data).map((row, index) => (
-            <tr key={index}>
+      <div>
+        <table className="leaderboard_table">
+          <thead className="leaderboard_table_header">
+            <tr className="leaderboard_table_header_row">
+              <th>#</th>
               {tableConfig.map((col) => (
-                <td key={col.key}>{getNestedValue(row, col.key) || "N/A"}</td>
+                <th key={col.key}>{col.label}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="leaderboard_table_body">
+            {Array.isArray(currentItems) ? (
+              currentItems.map((row, index) => (
+                <tr key={index} className="leaderboard_table_body_row">
+                  <td>#{indexOfFirstItem + index + 1}</td>
+
+                  {tableConfig.map((col) => (
+                    <td
+                      key={col.key}
+                      className={col.key === "name" ? "name-column" : ""}
+                    >
+                      {col.key === "name" && (
+                        <img
+                          src={`https://crafatar.com/avatars/${row.uuid}`}
+                          style={{ maxWidth: "1.5rem" }}
+                          alt="Owner Avatar"
+                        />
+                      )}
+                      {getNestedValue(row, col.key) || "N/A"}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={tableConfig.length + 1}>No data available.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {/* Pagination Controls */}
+        <div className="leaderboard_table_pagination">
+          <button
+            onClick={() => {
+              handlePageChange(1);
+            }}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faAnglesLeft} />
+          </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faCaretLeft} />
+          </button>
+          <div className="leaderboard_table_pagination_buttons">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={currentPage === page ? "active" : ""}
+              >
+                {page}
+              </button>
+            ))}{" "}
+          </div>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faCaretRight} />
+          </button>{" "}
+          <button
+            onClick={() => {
+              handlePageChange(totalPages);
+            }}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faAnglesRight} />{" "}
+          </button>
+        </div>
+      </div>
     );
   };
 
@@ -202,6 +339,8 @@ const LeaderboardComponent = () => {
       if (response.ok) {
         const result = await response.json();
         setData(result);
+        const dataArray = Object.values(result);
+        setData(dataArray);
       } else {
         throw new Error(`HTTP Error: ${response.status}`);
       }
@@ -467,26 +606,106 @@ const LeaderboardComponent = () => {
                     </section>
                   </div>
                 </div>
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Raids</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "grootslangSrPlayers"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("grootslangSrPlayers")}
+                    >
+                      <img src={NotG}></img>
+                      NotG Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "orphionSrPlayers" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("orphionSrPlayers")}
+                    >
+                      <img src={NoL}></img>
+                      NoL Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "colossusSrPlayers"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("colossusSrPlayers")}
+                    >
+                      <img src={TCC}></img>
+                      TCC Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "namelessSrPlayers"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("namelessSrPlayers")}
+                    >
+                      <img src={TNA}></img>
+                      TNA Raid
+                    </section>
+                  </div>
+                </div>
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Raids (COMPLETIONS)</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "grootslangCompletion"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("grootslangCompletion")}
+                    >
+                      <img src={NotG}></img>
+                      NotG Raid (COMPLETIONS)
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "orphionCompletion"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("orphionCompletion")}
+                    >
+                      <img src={NoL}></img>
+                      NoL Raid (COMPLETIONS)
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "colossusCompletion"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("colossusCompletion")}
+                    >
+                      <img src={TCC}></img>
+                      TCC Raid (COMPLETIONS)
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "namelessCompletion"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("namelessCompletion")}
+                    >
+                      <img src={TNA}></img>
+                      TNA Raid (COMPLETIONS)
+                    </section>
+                  </div>
+                </div>
               </div>
 
+              <br></br>
               {renderTable()}
-
-              {/*      <h2>Table 1</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Header 1</th>
-                    <th>Header 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Data 1</td>
-                    <td>Data 2</td>
-                  </tr>
-                </tbody>
-              </table> */}
-              <pre>{JSON.stringify(data, null, 2)}</pre>
             </div>
           )}
           {selectedLeaderboard === "leaderboardGamemodes" && (
@@ -509,31 +728,6 @@ const LeaderboardComponent = () => {
             </div>
           )}
         </div>
-        <br></br>
-        <label>Enter guild type to search for</label>
-        <select
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === "Expand...") {
-              setselectedTypePlayer(""); // Reset selectedTypePlayer when "Expand..." is selected_leaderboard
-            } else {
-              fetchLeaderboard();
-              setselectedTypePlayer(value); // Set selectedTypePlayer to the chosen value
-            }
-
-            console.log("Selected type:", value);
-          }}
-        >
-          <option>Expand...</option>
-          {Array.isArray(leaderboardType) &&
-            leaderboardType.map((type) => <option key={type}>{type}</option>)}
-          {error && <p>Error: {error}</p>}
-        </select>
-        <div>
-          {" "}
-          {/*           <pre>{JSON.stringify(data, null, 2)}</pre>{" "}
-           */}{" "}
-        </div>{" "}
       </div>
     </div>
   );

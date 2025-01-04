@@ -50,6 +50,7 @@ button {
   font-size: var(--font-size-h5);
   line-height: var(--line-height-h3);
   font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-heading);
 }
 
 .active {
