@@ -743,12 +743,12 @@ const Profile = ({ characters, currentCharacter }) => {
         `https://api.wynncraft.com/v3/player/${username}?fullResult`
       );
       const data = await response.json();
-      /*       setTabPlayerData(data), console.log(data);
-       */ setPlayerTabs((prevTabs) =>
-        prevTabs.map((tab, i) =>
-          i === index ? { ...tab, username, data } : tab
-        )
-      );
+      setTabPlayerData(data),
+        setPlayerTabs((prevTabs) =>
+          prevTabs.map((tab, i) =>
+            i === index ? { ...tab, username, data } : tab
+          )
+        );
     } catch (error) {
       console.error("Failed to fetch player data:", error);
     }
@@ -758,6 +758,7 @@ const Profile = ({ characters, currentCharacter }) => {
   const handleInputChange = (index, value) => {
     setTabInputs((prevInputs) => {
       const updatedInputs = [...prevInputs];
+      console.log("LOG: ", playerTabs);
       updatedInputs[index] = value;
       return updatedInputs;
     });
