@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "../CSS/LeaderboardComponent.css";
 import { PlayerContext } from "../PlayerContext.js";
@@ -142,6 +143,46 @@ const playerTableConfigs = {
     { key: "score", label: "COMPLETIONS" },
     { key: "metadata.playtime", label: "PLAYTIME" },
   ],
+  /*  */
+  professionsGlobalLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "COMPLETIONS" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+
+  professionsSoloLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "LEVEL" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.XP", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  combatGlobalLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "LEVEL" },
+    { key: "metadata.XP", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "metadata.character", label: "CHARACTR" },
+  ],
+  combatSoloLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "LEVEL" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.XP", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  totalGlobalLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "LEVEL" },
+    { key: "metadata.XP", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
+  totalSoloLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "TOTAL LEVEL" },
+    { key: "metadata.XP", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+  ],
 };
 
 // Helper function to safely access nested data
@@ -152,6 +193,7 @@ const getNestedValue = (obj, path) => {
 };
 
 const LeaderboardComponent = () => {
+  const { clickedPlayer, setClickedPlayer } = useContext(PlayerContext); // Access playerName from context
   const [leaderboardType, setLeaderboardType] = useState([]);
   const [selectedTypePlayerGuild, setselectedTypePlayerGuild] = useState("");
   const [selectedTypePlayer, setselectedTypePlayer] = useState("playerContent");
@@ -168,6 +210,7 @@ const LeaderboardComponent = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const navigate = useNavigate();
 
   // Handle page change
   const handlePageChange = (page) => {
@@ -228,7 +271,14 @@ const LeaderboardComponent = () => {
           <tbody className="leaderboard_table_body">
             {Array.isArray(currentItems) ? (
               currentItems.map((row, index) => (
-                <tr key={index} className="leaderboard_table_body_row">
+                <tr
+                  key={index}
+                  className="leaderboard_table_body_row"
+                  onClick={() => {
+                    handleMemberClick(row.name);
+                    console.log("Clicked on:", row.name);
+                  }}
+                >
                   <td>#{indexOfFirstItem + index + 1}</td>
 
                   {tableConfig.map((col) => (
@@ -369,6 +419,15 @@ const LeaderboardComponent = () => {
     setClickedItem(item);
     setselectedTypePlayer(item);
     console.log("Selected type:", item); // Debugging
+  };
+
+  /* Handeling global .guild_page_members_item click for character details*/
+  /* Creating new tab for clicked player from guild apge */
+
+  const handleMemberClick = (clickedPlayer) => {
+    console.log("TEST");
+    setClickedPlayer(clickedPlayer);
+    navigate(`/`);
   };
 
   return (
@@ -701,9 +760,91 @@ const LeaderboardComponent = () => {
                       TNA Raid (COMPLETIONS)
                     </section>
                   </div>
+                </div>{" "}
+              </div>
+              <div className="leaderboard_selection_options_inner_wrapper_total">
+                <h5>Total Levels</h5>
+                <br></br>
+                <div className="leaderboard_selection_options_section_total">
+                  <div className="leaderboard_selection_options_section_total_item">
+                    <h5>Professions</h5>
+                    <section className="flex gap-05">
+                      <button
+                        className={`option_item ${
+                          clickedItem === "professionsGlobalLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleItemClick("professionsGlobalLevel")
+                        }
+                      >
+                        All classes
+                      </button>
+                      <button
+                        className={`option_item ${
+                          clickedItem === "professionsSoloLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() => handleItemClick("professionsSoloLevel")}
+                      >
+                        Solo class
+                      </button>
+                    </section>
+                  </div>
+                  <div className="leaderboard_selection_options_section_total_item">
+                    <h5>Combat</h5>
+                    <section className="flex gap-05">
+                      <button
+                        className={`option_item ${
+                          clickedItem === "combatGlobalLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() => handleItemClick("combatGlobalLevel")}
+                      >
+                        All classes
+                      </button>
+                      <button
+                        className={`option_item ${
+                          clickedItem === "combatSoloLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() => handleItemClick("combatSoloLevel")}
+                      >
+                        Solo class
+                      </button>
+                    </section>
+                  </div>{" "}
+                  <div className="leaderboard_selection_options_section_total_item leaderboard_selection_options_section_total_bottom">
+                    <h5>Total</h5>
+                    <section className="flex gap-05">
+                      <button
+                        className={`option_item ${
+                          clickedItem === "totalGlobalLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() => handleItemClick("totalGlobalLevel")}
+                      >
+                        All classes
+                      </button>
+                      <button
+                        className={`option_item ${
+                          clickedItem === "totalSoloLevel"
+                            ? "clicked_item_btn"
+                            : ""
+                        }`}
+                        onClick={() => handleItemClick("totalSoloLevel")}
+                      >
+                        Solo class
+                      </button>
+                    </section>
+                  </div>
                 </div>
               </div>
-
               <br></br>
               {renderTable()}
             </div>

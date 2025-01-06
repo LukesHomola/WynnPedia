@@ -20,6 +20,7 @@ export const PlayerProvider = ({ children }) => {
 
   const [clickedGuildPlayer, setClickedGuildPlayer] = useState(null);
   const [clickedGuild, setClickedGuild] = useState(null);
+  const [clickedPlayer, setClickedPlayer] = useState(null);
 
   const fetchPlayerData = async (name) => {
     try {
@@ -136,6 +137,8 @@ export const PlayerProvider = ({ children }) => {
         setClickedGuildPlayer,
         clickedGuild,
         setClickedGuild,
+        clickedPlayer,
+        setClickedPlayer,
       }}
     >
       {children}

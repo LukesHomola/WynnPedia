@@ -690,6 +690,8 @@ const Profile = ({ characters, currentCharacter }) => {
     setClickedGuildPlayer,
     clickedGuild,
     setClickedGuild,
+    clickedPlayer,
+    setClickedPlayer,
   } = useContext(PlayerContext); // Access playerName from context
   const debounceTimeout = useRef(null);
 
@@ -877,6 +879,12 @@ const Profile = ({ characters, currentCharacter }) => {
       fetchPlayerData(clickedGuildPlayer, 1);
     }
   }, [clickedGuildPlayer]);
+  useEffect(() => {
+    if (clickedPlayer !== null) {
+      handleAddTab();
+      fetchPlayerData(clickedPlayer, 1);
+    }
+  }, [clickedPlayer]);
 
   /*  */
 

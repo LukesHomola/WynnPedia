@@ -157,7 +157,7 @@
 
 /* BODY */
 .leaderboard_table_body * {
-  padding: 1rem;
+  padding: 0.5rem;
 }
 .leaderboard_table_body_row:nth-child(odd) {
   background-color: var(--color-bg-700);
@@ -168,6 +168,47 @@
   border: 1px solid var(--color-primary);
   transition: border 0.1s ease, transform 0.1s ease;
 }
+
+/* CUSTOM TOTAL LEVELS SECTION*/
+.leaderboard_selection_options_inner_wrapper_total {
+}
+.leaderboard_selection_options_section_total {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+}
+
+.leaderboard_selection_options_section_total_bottom {
+  grid-area: 2 / 1 / 3 / 3;
+}
+
+.leaderboard_selection_options_section_total div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  background-color: var(--color-bg-800);
+}
+.leaderboard_selection_options_section_total_item button {
+  padding: 0.5rem;
+  background-color: var(--color-primary-400);
+}
+
+.clicked_item_btn {
+  animation: clickAnimatiom 0.5s !important;
+  background-color: var(--color-primary) !important ;
+}
+.leaderboard_selection_options_section_total_item button:hover {
+  cursor: pointer;
+  animation: shadowPulse 1.5s infinite;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
 /* PAGINAION */
 .leaderboard_table_pagination {
   display: flex;
@@ -196,5 +237,5 @@
 }
 
 * {
-  /*   outline: 1px solid; */
+  /* outline: 1px solid; */
 }
