@@ -183,6 +183,133 @@ const playerTableConfigs = {
     { key: "metadata.XP", label: "XP" },
     { key: "metadata.playtime", label: "PLAYTIME" },
   ],
+  /*  */
+  guildLevel: [
+    { key: "name", label: "NAME" },
+    { key: "level", label: "LEVEL" },
+    { key: "territories", label: "TERRITORIES" },
+    { key: "wars", label: "WARS" },
+    { key: "members", label: "MEMBERS" },
+  ],
+  guildTerritories: [
+    { key: "name", label: "NAME" },
+    { key: "territories", label: "TERRITORIES" },
+    { key: "level", label: "LEVEL" },
+    { key: "wars", label: "WARS" },
+    { key: "members", label: "MEMBERS" },
+  ],
+  guildWars: [
+    { key: "name", label: "NAME" },
+    { key: "wars", label: "WARS" },
+    { key: "territories", label: "TERRITORIES" },
+    { key: "level", label: "LEVEL" },
+    { key: "members", label: "MEMBERS" },
+  ],
+  grootslangSrGuilds: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  orphionSrGuilds: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  colossusSrGuilds: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  namelessSrGuilds: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "SCORE" },
+    { key: "metadata.completions", label: "COMPLETIONS" },
+    { key: "metadata.gambits", label: "GAMBITS" },
+  ],
+  /*  */
+  ironmanContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterType", label: "CHARACTER" },
+  ],
+  ultimateIronmanContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterType", label: "CHARACTER" },
+  ],
+  hardcoreContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
+  craftsmanContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterType", label: "CHARACTER" },
+  ],
+  huntedContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterType", label: "CHARACTER" },
+  ],
+  huicContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
+  huichContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
+  hichContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
+  hicContent: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "CONTENT" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
+  hardcoreLegacyLevel: [
+    { key: "name", label: "NAME" },
+    { key: "score", label: "LEVEL" },
+    { key: "metadata.totalLevel", label: "TOTAL LEVEL" },
+    { key: "metadata.xp", label: "XP" },
+    { key: "metadata.playtime", label: "PLAYTIME" },
+    { key: "characterData.type", label: "CHARACTER" },
+  ],
 };
 
 // Helper function to safely access nested data
@@ -193,7 +320,8 @@ const getNestedValue = (obj, path) => {
 };
 
 const LeaderboardComponent = () => {
-  const { clickedPlayer, setClickedPlayer } = useContext(PlayerContext); // Access playerName from context
+  const { clickedPlayer, setClickedPlayer, clickedGuild, setClickedGuild } =
+    useContext(PlayerContext); // Access playerName from context
   const [leaderboardType, setLeaderboardType] = useState([]);
   const [selectedTypePlayerGuild, setselectedTypePlayerGuild] = useState("");
   const [selectedTypePlayer, setselectedTypePlayer] = useState("playerContent");
@@ -233,13 +361,133 @@ const LeaderboardComponent = () => {
   };
 
   // Fetch data when the selected type changes
+  /*   useEffect(() => {
+    fetchLeaderboardData(selectedTypePlayerGuild);
+    console.log("API Response:", data);
+  }, [selectedTypePlayerGuild]); */
   useEffect(() => {
     fetchLeaderboardData(selectedTypePlayer);
     console.log("API Response:", data);
   }, [selectedTypePlayer]);
+  /* useEffect(() => {
+    fetchLeaderboardData(selectedTypePlayerGameMode);
+    console.log("API Response:", data);
+  }, [selectedTypePlayerGameMode]); */
 
   // Render the dynamic leaderboard table
-  const renderTable = () => {
+
+  const renderTableGuild = () => {
+    const tableConfig =
+      playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return <p>No data available.</p>;
+    }
+
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = Array.isArray(data)
+      ? data.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
+    const totalPages = Array.isArray(data)
+      ? Math.ceil(data.length / itemsPerPage)
+      : 1;
+
+    return (
+      <div>
+        <table className="leaderboard_table">
+          <thead className="leaderboard_table_header">
+            <tr className="leaderboard_table_header_row">
+              <th>#</th>
+              {tableConfig.map((col) => (
+                <th key={col.key}>{col.label}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="leaderboard_table_body">
+            {Array.isArray(currentItems) ? (
+              currentItems.map((row, index) => (
+                <tr
+                  key={index}
+                  className="leaderboard_table_body_row"
+                  onClick={() => {
+                    handleGuildClick(row.name);
+                    console.log("Clicked on:", row.name);
+                  }}
+                >
+                  <td> #{index + 1} </td>
+                  {tableConfig.map((col) => (
+                    <td
+                      key={col.key}
+                      className={col.key === "name" ? "name-column" : ""}
+                    >
+                      {/* NEEDED FOR GUILD BANNER IMG */}
+                      {/*   {col.key === "name" && col.key !== "prefix" && (
+                        <img
+                          src={`https://crafatar.com/avatars/${row.uuid}`}
+                          style={{ maxWidth: "1.5rem" }}
+                          alt="Owner Avatar"
+                        />
+                      )} */}
+                      {getNestedValue(row, col.key) || "N/A"}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={tableConfig.length + 1}>No data available.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {/* Pagination Controls */}
+        <div className="leaderboard_table_pagination">
+          <button
+            onClick={() => {
+              handlePageChange(1);
+            }}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faAnglesLeft} />
+          </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faCaretLeft} />
+          </button>
+          <div className="leaderboard_table_pagination_buttons">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={currentPage === page ? "active" : ""}
+              >
+                {page}
+              </button>
+            ))}{" "}
+          </div>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faCaretRight} />
+          </button>{" "}
+          <button
+            onClick={() => {
+              handlePageChange(totalPages);
+            }}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faAnglesRight} />{" "}
+          </button>
+        </div>
+      </div>
+    );
+  };
+  const renderTablePlayer = () => {
     const tableConfig =
       playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
 
@@ -286,7 +534,117 @@ const LeaderboardComponent = () => {
                       key={col.key}
                       className={col.key === "name" ? "name-column" : ""}
                     >
-                      {col.key === "name" && (
+                      {col.key === "name" && col.key !== "prefix" && (
+                        <img
+                          src={`https://crafatar.com/avatars/${row.uuid}`}
+                          style={{ maxWidth: "1.5rem" }}
+                          alt="Owner Avatar"
+                        />
+                      )}
+                      {getNestedValue(row, col.key) || "N/A"}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={tableConfig.length + 1}>No data available.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {/* Pagination Controls */}
+        <div className="leaderboard_table_pagination">
+          <button
+            onClick={() => {
+              handlePageChange(1);
+            }}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faAnglesLeft} />
+          </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <FontAwesomeIcon icon={faCaretLeft} />
+          </button>
+          <div className="leaderboard_table_pagination_buttons">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={currentPage === page ? "active" : ""}
+              >
+                {page}
+              </button>
+            ))}{" "}
+          </div>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faCaretRight} />
+          </button>{" "}
+          <button
+            onClick={() => {
+              handlePageChange(totalPages);
+            }}
+            disabled={currentPage === totalPages}
+          >
+            <FontAwesomeIcon icon={faAnglesRight} />{" "}
+          </button>
+        </div>
+      </div>
+    );
+  };
+  const renderTableGamemode = () => {
+    const tableConfig =
+      playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return <p>No data available.</p>;
+    }
+
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = Array.isArray(data)
+      ? data.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
+    const totalPages = Array.isArray(data)
+      ? Math.ceil(data.length / itemsPerPage)
+      : 1;
+
+    return (
+      <div>
+        <table className="leaderboard_table">
+          <thead className="leaderboard_table_header">
+            <tr className="leaderboard_table_header_row">
+              <th>#</th>
+              {tableConfig.map((col) => (
+                <th key={col.key}>{col.label}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="leaderboard_table_body">
+            {Array.isArray(currentItems) ? (
+              currentItems.map((row, index) => (
+                <tr
+                  key={index}
+                  className="leaderboard_table_body_row"
+                  onClick={() => {
+                    handleMemberClick(row.name);
+                    console.log("Clicked on:", row.name);
+                  }}
+                >
+                  <td> #{index + 1} </td>
+                  {tableConfig.map((col) => (
+                    <td
+                      key={col.key}
+                      className={col.key === "name" ? "name-column" : ""}
+                    >
+                      {col.key === "name" && col.key !== "prefix" && (
                         <img
                           src={`https://crafatar.com/avatars/${row.uuid}`}
                           style={{ maxWidth: "1.5rem" }}
@@ -423,9 +781,11 @@ const LeaderboardComponent = () => {
 
   /* Handeling global .guild_page_members_item click for character details*/
   /* Creating new tab for clicked player from guild apge */
-
+  const handleGuildClick = (clickedGuild) => {
+    setClickedGuild(clickedGuild);
+    navigate(`/guild`);
+  };
   const handleMemberClick = (clickedPlayer) => {
-    console.log("TEST");
     setClickedPlayer(clickedPlayer);
     navigate(`/`);
   };
@@ -441,7 +801,10 @@ const LeaderboardComponent = () => {
                 ? "selected_leaderboard"
                 : ""
             }`}
-            onClick={() => showTable("leaderboardGuilds")}
+            onClick={() => {
+              showTable("leaderboardGuilds");
+              handleItemClick("guildLevel");
+            }}
           >
             <img
               className="leaderboard_selection_item_img"
@@ -456,7 +819,10 @@ const LeaderboardComponent = () => {
                 ? "selected_leaderboard"
                 : ""
             }`}
-            onClick={() => showTable("leaderboardPlayers")}
+            onClick={() => {
+              showTable("leaderboardPlayers");
+              handleItemClick("playerContent");
+            }}
           >
             <img
               className="leaderboard_selection_item_img"
@@ -471,7 +837,10 @@ const LeaderboardComponent = () => {
                 ? "selected_leaderboard"
                 : ""
             }`}
-            onClick={() => showTable("leaderboardGamemodes")}
+            onClick={() => {
+              showTable("leaderboardGamemodes");
+              handleItemClick("ironmanContent");
+            }}
           >
             <img
               className="leaderboard_selection_item_img"
@@ -495,22 +864,82 @@ const LeaderboardComponent = () => {
           {" "}
           {selectedLeaderboard === "leaderboardGuilds" && (
             <div className="leaderboard_selection_body">
-              <div className="leader_board_selection_options_wrapper"></div>
-              <h2>Table 1</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Header 1</th>
-                    <th>Header 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Data 1</td>
-                    <td>Data 2</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="leaderboard_selection_options_wrapper">
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Global</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "guildLevel" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("guildLevel")}
+                    >
+                      By Level
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "guildTerritories" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("guildTerritories")}
+                    >
+                      By Territories
+                    </section>{" "}
+                    <section
+                      className={`option_item ${
+                        clickedItem === "guildWars" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("guildWars")}
+                    >
+                      By Wars
+                    </section>{" "}
+                  </div>
+                </div>
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Raids</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "grootslangSrGuilds"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("grootslangSrGuilds")}
+                    >
+                      <img src={NotG}></img>
+                      NotG Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "orphionSrGuilds" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("orphionSrGuilds")}
+                    >
+                      <img src={NoL}></img>
+                      NoL Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "colossusSrGuilds" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("colossusSrGuilds")}
+                    >
+                      <img src={TCC}></img>
+                      TCC Raid
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "namelessSrGuilds" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("namelessSrGuilds")}
+                    >
+                      <img src={TNA}></img>
+                      TNA Raid
+                    </section>
+                  </div>
+                </div>{" "}
+              </div>
+              <br></br>
+              {renderTableGuild()}{" "}
             </div>
           )}
           {selectedLeaderboard === "leaderboardPlayers" && (
@@ -846,26 +1275,115 @@ const LeaderboardComponent = () => {
                 </div>
               </div>
               <br></br>
-              {renderTable()}
+              {renderTablePlayer()}
             </div>
           )}
           {selectedLeaderboard === "leaderboardGamemodes" && (
             <div className="leaderboard_selection_body">
-              <h2>Table 3</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Header 1</th>
-                    <th>Header 2</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Data 1</td>
-                    <td>Data 2</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="leaderboard_selection_options_wrapper">
+                {" "}
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Global</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "ironmanContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("ironmanContent")}
+                    >
+                      Ironman{" "}
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "ultimateIronmanContent"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("ultimateIronmanContent")}
+                    >
+                      Ultimate Ironman{" "}
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "hardcoreContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("hardcoreContent")}
+                    >
+                      Hardcore
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "craftsmanContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("craftsmanContent")}
+                    >
+                      Craftsman{" "}
+                    </section>{" "}
+                    <section
+                      className={`option_item ${
+                        clickedItem === "huntedContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("huntedContent")}
+                    >
+                      Hunter{" "}
+                    </section>
+                  </div>
+                </div>{" "}
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Special</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "huicContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("huicContent")}
+                    >
+                      HUIC{" "}
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "huichContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("huichContent")}
+                    >
+                      HUICH{" "}
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "hichContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("hichContent")}
+                    >
+                      HICH
+                    </section>
+                    <section
+                      className={`option_item ${
+                        clickedItem === "hicContent" ? "clicked_item" : ""
+                      }`}
+                      onClick={() => handleItemClick("hicContent")}
+                    >
+                      HIC{" "}
+                    </section>{" "}
+                  </div>
+                </div>{" "}
+                <div className="leaderboard_selection_options_inner_wrapper">
+                  <h5>Legacy</h5>
+                  <div className="leaderboard_selection_options_section">
+                    <section
+                      className={`option_item ${
+                        clickedItem === "hardcoreLegacyLevel"
+                          ? "clicked_item"
+                          : ""
+                      }`}
+                      onClick={() => handleItemClick("hardcoreLegacyLevel")}
+                    >
+                      Hardcore{" "}
+                    </section>
+                  </div>
+                </div>
+              </div>
+              <br></br>
+              {renderTableGamemode()}{" "}
             </div>
           )}
         </div>
