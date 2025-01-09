@@ -340,6 +340,26 @@ const LeaderboardComponent = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
 
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState({
+    players: [],
+    guilds: [],
+  });
+
+  const [currentPagePlayers, setCurrentPagePlayers] = useState(1);
+  const [currentPageGuilds, setCurrentPageGuilds] = useState(1);
+  const [itemsPerPagePlayers, setItemsPerPagePlayers] = useState(10); // Default to 10 items per page
+  const [itemsPerPageGuilds, setItemsPerPageGuilds] = useState(10); // Default to 10 items per page
+
+  // Calculate pagination
+  const indexOfLastPlayer = currentPage * itemsPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - itemsPerPage;
+  const currentPlayers = searchResults.players.slice(
+    indexOfFirstPlayer,
+    indexOfLastPlayer
+  );
+  const totalPages = Math.ceil(searchResults.players.length / itemsPerPage);
+
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -361,21 +381,200 @@ const LeaderboardComponent = () => {
   };
 
   // Fetch data when the selected type changes
-  /*   useEffect(() => {
-    fetchLeaderboardData(selectedTypePlayerGuild);
-    console.log("API Response:", data);
-  }, [selectedTypePlayerGuild]); */
   useEffect(() => {
     fetchLeaderboardData(selectedTypePlayer);
     console.log("API Response:", data);
   }, [selectedTypePlayer]);
-  /* useEffect(() => {
-    fetchLeaderboardData(selectedTypePlayerGameMode);
-    console.log("API Response:", data);
-  }, [selectedTypePlayerGameMode]); */
+
+  const renderSearchResults = () => {
+    if (!searchInput || !searchResults) {
+      return null; // Don't render if there's no input or no results
+    }
+
+    // Calculate pagination for players
+    const indexOfLastPlayer = currentPagePlayers * itemsPerPagePlayers;
+    const indexOfFirstPlayer = indexOfLastPlayer - itemsPerPagePlayers;
+    const currentPlayers = searchResults.players.slice(
+      indexOfFirstPlayer,
+      indexOfLastPlayer
+    );
+
+    // Calculate pagination for guilds
+    const indexOfLastGuild = currentPageGuilds * itemsPerPageGuilds;
+    const indexOfFirstGuild = indexOfLastGuild - itemsPerPageGuilds;
+    const currentGuilds = searchResults.guilds.slice(
+      indexOfFirstGuild,
+      indexOfLastGuild
+    );
+
+    // Calculate total pages for players and guilds
+    const totalPagesPlayers = Math.ceil(
+      searchResults.players.length / itemsPerPagePlayers
+    );
+    const totalPagesGuilds = Math.ceil(
+      searchResults.guilds.length / itemsPerPageGuilds
+    );
+
+    // Function to handle page change for players
+    const handlePageChangePlayers = (pageNumber) => {
+      setCurrentPagePlayers(pageNumber);
+    };
+
+    // Function to handle page change for guilds
+    const handlePageChangeGuilds = (pageNumber) => {
+      setCurrentPageGuilds(pageNumber);
+    };
+
+    return (
+      <div className="leaderboard_selection_search_wraper_results">
+        <div className="leaderboard_selection_search_results">
+          <div className="leaderboard_selection_search_players">
+            <h4 className="force-medium">Players</h4>
+            <br></br>
+            <ul>
+              {currentPlayers.length > 0 ? (
+                currentPlayers.map((player, index) => (
+                  <li
+                    key={index}
+                    className="leaderboard_selection_hover"
+                    onClick={() => handleMemberClick(player)}
+                  >
+                    {player}
+                  </li>
+                ))
+              ) : (
+                <li>No players found.</li>
+              )}
+            </ul>
+            <br></br>
+            <div className="leaderboard_search_pagination">
+              <section className="flex">
+                {" "}
+                <button
+                  onClick={() =>
+                    handlePageChangePlayers(currentPagePlayers - 1)
+                  }
+                  disabled={currentPagePlayers === 1}
+                >
+                  <FontAwesomeIcon icon={faAnglesLeft} />
+                </button>{" "}
+                <button
+                  onClick={() =>
+                    handlePageChangePlayers(currentPagePlayers - 1)
+                  }
+                  disabled={currentPagePlayers === 1}
+                >
+                  <FontAwesomeIcon icon={faCaretLeft} />
+                </button>
+              </section>
+              <div className="pagination_buttons">
+                {Array.from({ length: totalPagesPlayers }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChangePlayers(page)}
+                      className={currentPagePlayers === page ? "active" : ""}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}{" "}
+              </div>
+              <section className="flex">
+                {" "}
+                <button
+                  onClick={() =>
+                    handlePageChangePlayers(currentPagePlayers + 1)
+                  }
+                  disabled={currentPagePlayers === totalPagesPlayers}
+                >
+                  <FontAwesomeIcon icon={faCaretRight} />
+                </button>{" "}
+                <button
+                  onClick={() => {
+                    handlePageChangePlayers(totalPagesPlayers);
+                  }}
+                  disabled={currentPagePlayers === totalPagesPlayers}
+                >
+                  <FontAwesomeIcon icon={faAnglesRight} />{" "}
+                </button>
+              </section>
+            </div>
+          </div>
+          <div className="leaderboard_selection_search_guilds">
+            <h4 className="force-medium">Guilds</h4>
+            <br></br>
+            <ul>
+              {currentGuilds.length > 0 ? (
+                currentGuilds.map((guild, index) => (
+                  <li
+                    key={index}
+                    className="leaderboard_selection_hover"
+                    onClick={() => handleGuildClick(guild.name)}
+                  >
+                    {guild.name} ({guild.prefix})
+                  </li>
+                ))
+              ) : (
+                <li>No guilds found.</li>
+              )}
+            </ul>
+            <br></br>
+            <div className="leaderboard_search_pagination">
+              <section className="flex">
+                {" "}
+                <button
+                  onClick={() => handlePageChangeGuilds(currentPageGuilds - 1)}
+                  disabled={currentPageGuilds === 1}
+                >
+                  <FontAwesomeIcon icon={faAnglesLeft} />
+                </button>{" "}
+                <button
+                  onClick={() => handlePageChangeGuilds(currentPageGuilds - 1)}
+                  disabled={currentPageGuilds === 1}
+                >
+                  <FontAwesomeIcon icon={faCaretLeft} />
+                </button>
+              </section>
+              <div className="pagination_buttons">
+                {Array.from({ length: totalPagesGuilds }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChangeGuilds(page)}
+                      className={currentPageGuilds === page ? "active" : ""}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}{" "}
+              </div>
+              <section className="flex">
+                {" "}
+                <button
+                  onClick={() => handlePageChangeGuilds(currentPageGuilds + 1)}
+                  disabled={currentPageGuilds === totalPagesGuilds}
+                >
+                  <FontAwesomeIcon icon={faCaretRight} />
+                </button>{" "}
+                <button
+                  onClick={() => {
+                    handlePageChangeGuilds(totalPagesGuilds);
+                  }}
+                  disabled={currentPageGuilds === totalPagesGuilds}
+                >
+                  <FontAwesomeIcon icon={faAnglesRight} />{" "}
+                </button>
+              </section>
+            </div>
+          </div>
+        </div>{" "}
+        {/* Pagination Controls */}
+      </div>
+    );
+  };
 
   // Render the dynamic leaderboard table
-
   const renderTableGuild = () => {
     const tableConfig =
       playerTableConfigs[selectedTypePlayer] || playerTableConfigs.default;
@@ -790,6 +989,63 @@ const LeaderboardComponent = () => {
     navigate(`/`);
   };
 
+  /* SEARCH INPUT FUCNTIONS */
+  const handleSearchFetch = async () => {
+    if (!searchInput || typeof searchInput !== "string") {
+      setError("Invalid search input. Please enter a valid query.");
+      return;
+    }
+
+    setSearchResults({ players: [], guilds: [] }); // Reset results
+    const url = `https://api.wynncraft.com/v3/search/${searchInput}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log("SEARCH QUERY: ", result);
+
+      // Extract player nicknames (default to empty array if players is undefined)
+      const players = Object.values(result.players || {});
+
+      // Extract guild names and prefixes (default to empty array if guilds is undefined)
+      const guilds = Object.values(result.guilds || {}).map((guild) => ({
+        name: guild.name,
+        prefix: guild.prefix,
+      }));
+
+      // Extract guild prefixes (default to empty array if guildsPrefix is undefined)
+      const guildPrefixes = Object.values(result.guildsPrefix || {}).map(
+        (guild) => ({
+          name: guild.name,
+          prefix: guild.prefix,
+        })
+      );
+
+      // Combine guilds and guildPrefixes (remove duplicates)
+      const allGuilds = [...new Set([...guilds, ...guildPrefixes])];
+
+      // Log the combined data for debugging
+      console.log("COMBINED DATA: ", { players, guilds: allGuilds });
+
+      // Set the grouped data to state
+      setSearchResults({
+        players,
+        guilds: allGuilds,
+      });
+    } catch (error) {
+      console.error("Search fetch error:", error);
+      setError("Failed to fetch search results. Please try again.");
+    }
+  };
+  const debouncedSearchFetch = debounce(handleSearchFetch, 300);
+
+  useEffect(() => {
+    if (searchInput) {
+      debouncedSearchFetch();
+    }
+  }, [searchInput]);
   return (
     <div className="leaderboard_wrapper">
       <div className="leaderboard_inner">
@@ -850,14 +1106,30 @@ const LeaderboardComponent = () => {
             <h4>GAMEMODE</h4>
           </section>
         </div>
+
         <br></br>
         <div className="leaderboard_selection_search_wrapper">
           {" "}
           <div className="leaderboard_selection_search">
             {" "}
-            <h5>Quick search</h5>
-            <input placeholder="Enter playername or guild..."></input>
+            <h5
+              onClick={() => {
+                console.log("TEST ", searchInput);
+              }}
+            >
+              Quick search
+            </h5>
+            <input
+              placeholder="Enter playername or guild... "
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                console.log("SEARCH INPUT: (ENTRIES)", searchInput);
+              }}
+            ></input>
+            <br></br> <br></br>
           </div>
+          {renderSearchResults()}
         </div>
         <br></br>
         <div className="leaderboard_table_wrapper">

@@ -95,6 +95,7 @@
 
 .force-medium {
   font-weight: var(--font-weight-medium);
+  font-weight: bold;
 }
 
 .color-bg-09 {
