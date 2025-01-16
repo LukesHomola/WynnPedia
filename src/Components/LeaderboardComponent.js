@@ -1112,13 +1112,9 @@ const LeaderboardComponent = () => {
           {" "}
           <div className="leaderboard_selection_search">
             {" "}
-            <h5
-              onClick={() => {
-                console.log("TEST ", searchInput);
-              }}
-            >
-              Quick search
-            </h5>
+            <br></br>
+            <h5>Quick search</h5>
+            <br></br>
             <input
               placeholder="Enter playername or guild... "
               value={searchInput}

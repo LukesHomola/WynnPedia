@@ -42,7 +42,7 @@ const GuildPage = () => {
 
   const debounceTimeout = useRef(null);
 
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState(null);
 
   useEffect(() => {
     if (guildDataProfile && guildDataProfile.name) {
@@ -58,6 +58,7 @@ const GuildPage = () => {
   const handleTabClick = (index, guildName) => {
     setActiveTabIndex(index);
     fetchGuildData(guildName);
+    setSearchInput("");
   };
 
   // Fetch data for a specific tab
@@ -272,6 +273,7 @@ const GuildPage = () => {
                   <div>
                     {activeTabIndex !== 0 && (
                       <div className="guild_page_container">
+                        {" "}
                         <section className="guild_page_left">
                           <img
                             src={guild_emblem}
@@ -513,6 +515,132 @@ const GuildPage = () => {
                     className="pR-1-5"
                   />
                 </section>
+                <div className="guild_page_members_search_results">
+                  {searchInput != null && searchInput.length > 0 && (
+                    <section>
+                      {" "}
+                      <h4 className="pB-05">Searched Players:</h4>
+                      {tabGuildData &&
+                        tabGuildData.members &&
+                        Object.entries(tabGuildData.members)
+                          .filter(
+                            ([role, members]) =>
+                              searchInput != null && searchInput.length > 0
+                          )
+                          .map(([role, members]) => {
+                            return Object.entries(members)
+                              .filter(([memberName, memberData]) => {
+                                return memberName
+                                  .toLowerCase()
+                                  .includes(searchInput);
+                              })
+                              .map(([memberName, memberData]) => (
+                                <div
+                                  key={memberData.uuid}
+                                  className="guild_page_memebers_search_results_row"
+                                  onClick={() => {
+                                    handleMemberClick(memberName);
+                                  }}
+                                >
+                                  <section className=" flex align-center">
+                                    {" "}
+                                    <img
+                                      src={`https://crafatar.com/avatars/${memberData.uuid}`}
+                                      style={{ maxWidth: "1.5rem" }}
+                                      className="pR-05"
+                                    />
+                                    <section className="flex-col">
+                                      <strong style={{ color: "lime" }}>
+                                        {memberName}
+                                      </strong>{" "}
+                                      <section className="guild_page_members_item_joined">
+                                        Joined:&nbsp;
+                                        {(() => {
+                                          const joinedDate = memberData.joined;
+
+                                          if (joinedDate) {
+                                            // Create a Date object from the joined date string
+                                            const date = new Date(joinedDate);
+                                            // Convert to CET format
+                                            const cetFormattedDate =
+                                              date.toLocaleString("en-GB", {
+                                                timeZone: "CET", // Set the time zone to CET
+                                                year: "numeric",
+                                                month: "long", // Full month name
+                                              });
+
+                                            // Calculate time ago
+                                            const now = new Date();
+                                            const seconds = Math.floor(
+                                              (now - date) / 1000
+                                            );
+                                            const minutes = Math.floor(
+                                              seconds / 60
+                                            );
+                                            const hours = Math.floor(
+                                              minutes / 60
+                                            );
+                                            const days = Math.floor(hours / 24);
+                                            const months = Math.floor(
+                                              days / 30.44
+                                            ); // Average month length
+                                            const years = Math.floor(
+                                              days / 365
+                                            );
+
+                                            let timeAgo = "";
+                                            if (years > 0) {
+                                              timeAgo = `${years} year${
+                                                years > 1 ? "s" : ""
+                                              } ago`;
+                                            } else if (months > 0) {
+                                              timeAgo = `${months} month${
+                                                months > 1 ? "s" : ""
+                                              } ago`;
+                                            } else if (days > 0) {
+                                              timeAgo = `${days} day${
+                                                days > 1 ? "s" : ""
+                                              } ago`;
+                                            } else if (hours > 0) {
+                                              timeAgo = `${hours} hour${
+                                                hours > 1 ? "s" : ""
+                                              } ago`;
+                                            } else if (minutes > 0) {
+                                              timeAgo = `${minutes} minute${
+                                                minutes > 1 ? "s" : ""
+                                              } ago`;
+                                            } else {
+                                              timeAgo = `${seconds} second${
+                                                seconds > 1 ? "s" : ""
+                                              } ago`;
+                                            }
+
+                                            return (
+                                              <span>
+                                                {cetFormattedDate} ({timeAgo})
+                                              </span>
+                                            );
+                                          }
+                                          return 0; // Fallback if no date is available
+                                        })()}
+                                      </section>
+                                    </section>
+                                  </section>
+                                  <section className="guild_page_members_item_contributed">
+                                    Contributed:&nbsp;
+                                    <strong>{memberData.contributed}</strong>xp
+                                  </section>
+                                  <section className="flex-center justify-end">
+                                    {memberData.online
+                                      ? memberData.server
+                                      : "Offline"}
+                                  </section>{" "}
+                                </div>
+                              ));
+                          })}
+                    </section>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -635,6 +763,7 @@ const GuildPage = () => {
                   </li>
                 </ul>
               </div>
+
               {Object.entries(tabGuildData.members).map(([role, members]) => {
                 if (
                   role === "total" ||

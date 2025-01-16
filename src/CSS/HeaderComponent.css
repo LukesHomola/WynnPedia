@@ -30,13 +30,15 @@
 
 .nav {
   z-index: 1000;
+  overflow: hidden;
   top: 0;
   position: fixed;
-  width: 100%;
+  width: 100svw;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 1rem;
+  width: calc(100% - 30px);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
     rgba(0, 0, 0, 0.05) 0px 5px 10px;
   background-color: #0a0909;
@@ -46,7 +48,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .nav_btns_section {
