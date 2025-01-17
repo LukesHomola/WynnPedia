@@ -89,6 +89,8 @@ a {
   --color-primary-05: rgb(83, 9, 9, 0.5);
   --color-secondary-09: rgb(43, 112, 121, 0.9);
 
+  --color-disabled: rgb(80, 78, 78);
+
   --color-bg-900: #141212; /* Dark background */
   --color-bg-800: #0a0909; /* Light background */
   --color-bg-700: #100e0e; /* Accent background color */

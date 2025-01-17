@@ -1,0 +1,56 @@
+.settings_wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.settings_popup_container {
+  padding: 2rem;
+  border-radius: 8px;
+  /*   width: 70%;
+ */
+  max-width: 90%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: var(--color-bg-600);
+}
+
+.settings_popup_btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings_btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1rem;
+  height: 40px !important;
+}
+
+.settings_btn:hover {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  transform: scale(1.001);
+}
+
+.settings_close {
+  background: var(--color-primary);
+  color: white;
+}
+.settings_apply {
+  background-color: var(--color-disabled);
+}
+.settings_reset {
+  background-color: var(--color-disabled);
+}

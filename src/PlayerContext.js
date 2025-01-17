@@ -22,6 +22,11 @@ export const PlayerProvider = ({ children }) => {
   const [clickedGuild, setClickedGuild] = useState(null);
   const [clickedPlayer, setClickedPlayer] = useState(null);
 
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const openSettings = () => setIsSettingsOpen(true);
+  const closeSettings = () => setIsSettingsOpen(false);
+
   const fetchPlayerData = async (name) => {
     try {
       setLoading(true);
@@ -139,6 +144,10 @@ export const PlayerProvider = ({ children }) => {
         setClickedGuild,
         clickedPlayer,
         setClickedPlayer,
+        isSettingsOpen,
+        setIsSettingsOpen,
+        openSettings,
+        closeSettings,
       }}
     >
       {children}

@@ -20,6 +20,10 @@ const Header = () => {
     setGuildNameProfile,
     guildDataProfile,
     setGuildDataProfile,
+    isSettingsOpen,
+    setIsSettingsOpen,
+    openSettings,
+    closeSettings,
   } = useContext(PlayerContext);
 
   const handleInputChange = (e) => {
@@ -31,6 +35,10 @@ const Header = () => {
     const newGuildName = e.target.value;
     setGuildNameProfile(newGuildName); // Update playerName in context
     localStorage.setItem("guildName", newGuildName); // Save to local storage
+  };
+
+  const handleSettingsClick = () => {
+    setIsSettingsOpen(true);
   };
 
   return (
@@ -82,11 +90,22 @@ const Header = () => {
           <NavLink to="/leaderboard" className="link">
             <h5>Leaderboard</h5>
           </NavLink>{" "}
-          <NavLink to="/settings" className="link">
-            <h5>Settings</h5>
+          <NavLink to="/achievements" className="link">
+            <h5>Achievements</h5>
+          </NavLink>{" "}
+          <NavLink to="/warDashboard" className="link">
+            <h5>War dashboard</h5>
+          </NavLink>{" "}
+          <NavLink to="/items" className="link">
+            <h5>Items</h5>
           </NavLink>
-          <h5>Credits</h5>
-        </section>
+          <NavLink to="/news" className="link">
+            <h5>News</h5>
+          </NavLink>{" "}
+          <NavLink to="/map" className="link">
+            <h5>Map</h5>
+          </NavLink>
+        </section>{" "}
         <section className="nav_socials_section">
           <a
             href="#"
@@ -104,14 +123,15 @@ const Header = () => {
           >
             <FontAwesomeIcon icon={faQuestion} />
           </a>
-          <a
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Join us on Discord"
+          <button
+            onClick={() => {
+              handleSettingsClick();
+              console.log(isSettingsOpen);
+            }}
           >
+            {" "}
             <FontAwesomeIcon icon={faGear} />
-          </a>
+          </button>
         </section>
       </nav>
     </header>

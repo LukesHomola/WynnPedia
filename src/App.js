@@ -1,14 +1,22 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useFetcher,
+} from "react-router-dom";
 import Header from "./Components/HeaderComponent.js";
 import Profile from "./Components/ProfileComponent.js";
 import Footer from "./Components/FooterComponent.js";
 import GuildPage from "./Components/GuildProfileComponent.js";
 import ActivityCheck from "./Components/ActivityCheckComponent.js";
 import LeaderboardComponent from "./Components/LeaderboardComponent.js";
-import SettingsComponent from "./Components/SettingsComponent.js";
 
-import { PlayerProvider } from "./PlayerContext.js";
+import { PlayerContext, PlayerProvider } from "./PlayerContext.js";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {} from "@fortawesome/free-brands-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import "./CSS/App.css";
 import "./CSS/Classes.css";
@@ -20,22 +28,75 @@ import "./CSS/GuildPageComponent.css";
 import "./CSS/SettingsComponent.css";
 import "./CSS/LeaderboardComponent.css";
 
+function SettingsMenu() {
+  const { isSettingsOpen, setIsSettingsOpen, openSettings, closeSettings } =
+    useContext(PlayerContext);
+
+  return (
+    <div>
+      {" "}
+      {isSettingsOpen === true && (
+        <div className="settings_wrapper">
+          <div className="settings_popup_container">
+            <section className="settings_popup_btns">
+              <button
+                className="settings_btn settings_close"
+                onClick={() => {
+                  closeSettings();
+                }}
+              >
+                CANCEL{" "}
+              </button>{" "}
+              <button
+                className="settings_btn settings_apply"
+                disabled
+                onClick={() => {}}
+              >
+                APPLY{" "}
+              </button>{" "}
+              <button
+                className="settings_btn settings_reset"
+                onClick={() => {}}
+              >
+                RESTORE DEFAULT
+              </button>
+            </section>
+
+            <div className="settings_content"></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function App() {
+  const { isSettingsOpen, setIsSettingsOpen, openSettings, closeSettings } =
+    useContext(PlayerContext);
+
+  useEffect(() => {
+    console.log("Settings changes:", isSettingsOpen);
+  }, [isSettingsOpen]);
+
+  console.log("isSettingsOpen:", isSettingsOpen);
+
   return (
     <PlayerProvider>
+      {" "}
       <Router>
         <div className="App">
+          {/* Settings Popup */}
+          <SettingsMenu />
           <Header />
           <Routes>
             <Route path="/" element={<Profile />} />
             <Route path="/guild" element={<GuildPage />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
             <Route path="/leaderboard" element={<LeaderboardComponent />} />
-            <Route path="/settings" element={<SettingsComponent />} />
           </Routes>
           <Footer />
         </div>
-      </Router>
+      </Router>{" "}
     </PlayerProvider>
   );
 }
