@@ -11,6 +11,7 @@ import Footer from "./Components/FooterComponent.js";
 import GuildPage from "./Components/GuildProfileComponent.js";
 import ActivityCheck from "./Components/ActivityCheckComponent.js";
 import LeaderboardComponent from "./Components/LeaderboardComponent.js";
+import AchievementsComponent from "./Components/AchievementsComponent.js";
 
 import { PlayerContext, PlayerProvider } from "./PlayerContext.js";
 
@@ -27,8 +28,9 @@ import "./CSS/ActivityCheckComponent.css";
 import "./CSS/GuildPageComponent.css";
 import "./CSS/SettingsComponent.css";
 import "./CSS/LeaderboardComponent.css";
+import "./CSS/AchievementsComponent.css";
 
-function SettingsMenu() {
+/* function SettingsMenu() {
   const { isSettingsOpen, setIsSettingsOpen, openSettings, closeSettings } =
     useContext(PlayerContext);
 
@@ -38,6 +40,13 @@ function SettingsMenu() {
       {isSettingsOpen === true && (
         <div className="settings_wrapper">
           <div className="settings_popup_container">
+            <div className="settings_content">
+              <h5>Options</h5>
+              <div className="settings_content_inner">
+                <section>General</section>
+              </div>
+            </div>
+
             <section className="settings_popup_btns">
               <button
                 className="settings_btn settings_close"
@@ -61,14 +70,12 @@ function SettingsMenu() {
                 RESTORE DEFAULT
               </button>
             </section>
-
-            <div className="settings_content"></div>
           </div>
         </div>
       )}
     </div>
   );
-}
+} */
 
 function App() {
   const { isSettingsOpen, setIsSettingsOpen, openSettings, closeSettings } =
@@ -86,13 +93,15 @@ function App() {
       <Router>
         <div className="App">
           {/* Settings Popup */}
-          <SettingsMenu />
+          {/*           <SettingsMenu />
+           */}{" "}
           <Header />
           <Routes>
             <Route path="/" element={<Profile />} />
             <Route path="/guild" element={<GuildPage />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
             <Route path="/leaderboard" element={<LeaderboardComponent />} />
+            <Route path="/achievements" element={<AchievementsComponent />} />
           </Routes>
           <Footer />
         </div>
