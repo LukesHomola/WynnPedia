@@ -492,43 +492,41 @@ const CharacterInfo = ({
               </div>
               {/*  */}
               <div className="character_detail_body_item_professions">
-                <h2 className="force-regular pL-1">Professions</h2>
-                {isProfessionsVisible && playerData && extendedPlayerData && (
-                  <div className="character_detail_body_item_professions_inner">
-                    {Object.entries(currentCharacter.professions).map(
-                      ([professionKey, professionData]) => {
-                        const formattedProfession =
-                          professionKey.charAt(0).toUpperCase() +
-                          professionKey.slice(1).toLowerCase(); // Format the profession name
-                        const level = professionData.level; // Get the level from the profession data
+                <h2 className="force-regular pL-1">Professions</h2>{" "}
+                <div className="character_detail_body_item_professions_inner">
+                  {Object.entries(currentCharacter.professions).map(
+                    ([professionKey, professionData]) => {
+                      const formattedProfession =
+                        professionKey.charAt(0).toUpperCase() +
+                        professionKey.slice(1).toLowerCase(); // Format the profession name
+                      const level = professionData.level; // Get the level from the profession data
 
-                        return (
-                          <div
-                            key={professionKey}
-                            className="character_detail_ranking_item"
-                          >
-                            <img
-                              className="character_ranking_item_img"
-                              src={
-                                professionImages[formattedProfession] ||
-                                "https://via.placeholder.com/150" // Fallback to a placeholder image
-                              }
-                              alt={formattedProfession}
-                            />
-                            <section className="flex-col">
-                              <h5>{formattedProfession}</h5>
-                              <h6>
-                                {" "}
-                                Level<strong> {level}</strong>{" "}
-                              </h6>{" "}
-                              <progress value={level} max={100} />
-                            </section>
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                )}
+                      return (
+                        <div
+                          key={professionKey}
+                          className="character_detail_ranking_item"
+                        >
+                          <img
+                            className="character_ranking_item_img"
+                            src={
+                              professionImages[formattedProfession] ||
+                              "https://via.placeholder.com/150" // Fallback to a placeholder image
+                            }
+                            alt={formattedProfession}
+                          />
+                          <section className="flex-col">
+                            <h5>{formattedProfession}</h5>
+                            <h6>
+                              {" "}
+                              Level<strong> {level}</strong>{" "}
+                            </h6>{" "}
+                            <progress value={level} max={100} />
+                          </section>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
               </div>
               <br></br>
               {/*  */}

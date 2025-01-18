@@ -10,11 +10,41 @@ import {
   faHammer,
 } from "@fortawesome/free-solid-svg-icons";
 
+import combat from "../Assests_components/NEW/ICONS/combat.png";
+import quests from "../Assests_components/NEW/ICONS/quest.png";
+import profs from "../Assests_components/NEW/ICONS/proffesion.png";
+
 import { PlayerContext } from "../PlayerContext.js";
 
 const achievements = [
   {
     id: 1,
+    name: "COMBAT LVL 10",
+    description: "Get lvl 10 for the first time.",
+    conditions: [
+      {
+        type: "level",
+        value: 10,
+      },
+    ],
+    unlocked: false,
+    category: "Levels",
+  },
+  {
+    id: 2,
+    name: "COMBAT LVL 20",
+    description: "Get lvl 20 for the first time.",
+    conditions: [
+      {
+        type: "level",
+        value: 20,
+      },
+    ],
+    unlocked: false,
+    category: "Levels",
+  },
+  {
+    id: 3,
     name: "COMBAT LVL 50",
     description: "Get lvl 50 for the first time.",
     conditions: [
@@ -24,9 +54,23 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Levels",
   },
   {
-    id: 2,
+    id: 4,
+    name: "COMBAT LVL 75",
+    description: "Get lvl 75 for the first time.",
+    conditions: [
+      {
+        type: "level",
+        value: 75,
+      },
+    ],
+    unlocked: false,
+    category: "Levels",
+  },
+  {
+    id: 5,
     name: "COMBAT LVL 100",
     description: "Get lvl 100 for the first time.",
     conditions: [
@@ -36,9 +80,10 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Levels",
   },
   {
-    id: 3,
+    id: 6,
     name: "COMBAT LVL 105",
     description: "Get lvl 105 for the first time.",
     conditions: [
@@ -48,9 +93,10 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Levels",
   },
   {
-    id: 4,
+    id: 7,
     name: "COMBAT LVL 106",
     description: "Get lvl 106 for the first time.",
     conditions: [
@@ -60,6 +106,98 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Levels",
+  },
+  {
+    id: 25,
+    name: "TOTAL LVL 100",
+    description: "Get 100 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 100,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 26,
+    name: "TOTAL LVL 500",
+    description: "Get 500 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 500,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 27,
+    name: "TOTAL LVL 1000",
+    description: "Get 1000 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 1000,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 28,
+    name: "TOTAL LVL 5000",
+    description: "Get 5000 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 5000,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 29,
+    name: "TOTAL LVL 10000",
+    description: "Get 10000 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 10000,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 30,
+    name: "TOTAL LVL 15000",
+    description: "Get 15000 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 15000,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
+  },
+  {
+    id: 31,
+    name: "TOTAL LVL 20000",
+    description: "Get 20000 levels in total for the first time.",
+    conditions: [
+      {
+        type: "level_total",
+        value: 20000,
+      },
+    ],
+    unlocked: false,
+    category: "Total Levels",
   },
   {
     id: 5,
@@ -72,6 +210,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 6,
@@ -84,6 +223,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 7,
@@ -96,6 +236,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 8,
@@ -108,6 +249,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 9,
@@ -120,6 +262,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 10,
@@ -132,6 +275,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 11,
@@ -144,6 +288,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 12,
@@ -156,6 +301,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 13,
@@ -168,6 +314,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 14,
@@ -180,6 +327,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 15,
@@ -192,6 +340,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Quests",
   },
   {
     id: 16,
@@ -204,6 +353,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
     id: 17,
@@ -216,6 +366,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
     id: 18,
@@ -228,6 +379,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
     id: 19,
@@ -240,6 +392,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
     id: 20,
@@ -252,6 +405,7 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
     id: 21,
@@ -264,9 +418,10 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
   {
-    id: 21,
+    id: 22,
     name: "WynnLord Gatherer",
     description: "Reach 10000 total levels in the professions",
     conditions: [
@@ -276,19 +431,47 @@ const achievements = [
       },
     ],
     unlocked: false,
+    category: "Professions",
   },
-  // Add more achievements here
+  {
+    id: 23,
+    name: "WynnElder Gatherer",
+    description: "Reach 15000 total levels in the professions",
+    conditions: [
+      {
+        type: "professions",
+        value: "15000",
+      },
+    ],
+    unlocked: false,
+    category: "Professions",
+  },
+  {
+    id: 24,
+    name: "WynnEmperor Gatherer",
+    description: "Reach 20000 total levels in the professions",
+    conditions: [
+      {
+        type: "professions",
+        value: "20000",
+      },
+    ],
+    unlocked: false,
+    category: "Professions",
+  },
 ];
 
 /* ACHIEVEMENT ICONS */
 const renderIcon = (type) => {
   switch (type) {
     case "level":
-      return faSkull;
+      return combat;
+    case "level_total":
+      return combat;
     case "quest":
-      return faBookOpen;
-    case "profession":
-      return faHammer;
+      return quests;
+    case "professions":
+      return profs;
     default:
       return faQuestion;
   }
@@ -301,7 +484,8 @@ const AchievementsComponent = () => {
 
   const [playerData, setPlayerData] = useState({
     level: 0,
-    quests: [],
+    level_total: 0,
+    quests: 0,
     professions: 0,
   });
   const [achievementsState, setAchievementsState] = useState(achievements);
@@ -348,6 +532,11 @@ const AchievementsComponent = () => {
             switch (condition.type) {
               case "level":
                 return playerData.level >= condition.value;
+
+              case "level_total":
+                return (
+                  fetchedPlayerData.globalData.totalLevel >= condition.value
+                );
               case "quest":
                 return (
                   fetchedPlayerData.globalData.completedQuests >=
@@ -400,39 +589,110 @@ const AchievementsComponent = () => {
     }
   }, [characters]);
 
+  /* GROUPING ACHIEVEMENTS */
+  const groupedAchievements = achievementsState.reduce((acc, achievement) => {
+    const category = achievement.category; // assuming achievement has a category property
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(achievement);
+    return acc;
+  }, {});
+
+  const calculateProgress = (playerData, condition) => {
+    if (condition.value === 0 || condition.value === undefined) {
+      return 0;
+    }
+    switch (condition.type) {
+      case "level":
+        return (playerData.level / condition.value) * 100;
+      case "level_total":
+        return (playerData.level_total / condition.value) * 100;
+      case "quest":
+        return (playerData.quests / condition.value) * 100;
+      case "professions":
+        return (playerData.professions / condition.value) * 100;
+      default:
+        return 0;
+    }
+  };
+
   return (
     <div className="achievments_background">
-      <h1>Achievements</h1>
-      <p>This is the Achievements component.</p>
-      <br></br>
+      <br></br>{" "}
       <div className="achievments_wrapper">
-        {achievementsState.map((achievement) => (
-          <section
-            key={achievement.id}
-            className={`achievments_items ${
-              achievement.unlocked ? "achievment_unlocked" : "achievment_locked"
-            }`}
-          >
-            <section className="achievments_items_inner">
-              <FontAwesomeIcon
-                icon={renderIcon(achievement.conditions[0].type)}
-              />
-              <section>
-                <h5>{achievement.name}</h5>
-                <p>{achievement.description}</p>
+        {Object.keys(groupedAchievements).map((category) => (
+          <section key={category} className="achievments_items_container">
+            <h5 id={category}>{category}</h5>
+            {groupedAchievements[category].map((achievement) => (
+              <section
+                key={achievement.id}
+                className={`achievments_items ${
+                  achievement.unlocked
+                    ? "achievment_unlocked"
+                    : "achievment_locked"
+                }`}
+              >
+                <section className="achievments_items_inner">
+                  <img
+                    src={renderIcon(achievement.conditions[0].type)}
+                    className="achievments_items_type_icon"
+                  ></img>
+
+                  <section>
+                    <h5>{achievement.name}</h5>
+                    <p>{achievement.description}</p>
+                    <p>
+                      {achievement.conditions[0].type === "quest" &&
+                      fetchedPlayerData &&
+                      fetchedPlayerData.globalData &&
+                      fetchedPlayerData.globalData.completedQuests !== undefined
+                        ? fetchedPlayerData.globalData.completedQuests
+                        : achievement.conditions[0].type === "level_total" &&
+                          fetchedPlayerData &&
+                          fetchedPlayerData.globalData &&
+                          fetchedPlayerData.globalData.totalLevel !== undefined
+                        ? fetchedPlayerData.globalData.totalLevel
+                        : playerData[achievement.conditions[0].type]}
+                    </p>
+                    <p>
+                      {calculateProgress(playerData, achievement.conditions[0])}
+                      %
+                    </p>
+                    <progress
+                      style={{ width: "100%" }}
+                      value={
+                        achievement.conditions[0].type === "quest" &&
+                        fetchedPlayerData &&
+                        fetchedPlayerData.globalData &&
+                        fetchedPlayerData.globalData.completedQuests !==
+                          undefined
+                          ? fetchedPlayerData.globalData.completedQuests
+                          : achievement.conditions[0].type === "level_total" &&
+                            fetchedPlayerData &&
+                            fetchedPlayerData.globalData &&
+                            fetchedPlayerData.globalData.totalLevel !==
+                              undefined
+                          ? fetchedPlayerData.globalData.totalLevel
+                          : playerData[achievement.conditions[0].type]
+                      }
+                      max={achievement.conditions[0].value}
+                    />
+                  </section>
+                </section>
+                {achievement.unlocked ? (
+                  <FontAwesomeIcon
+                    icon={faCircleCheck}
+                    className="achievments_items_icon achievments_items_icon_unlocked"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faLock}
+                    className="achievments_items_icon"
+                  />
+                )}
               </section>
-            </section>
-            {achievement.unlocked ? (
-              <FontAwesomeIcon
-                icon={faCircleCheck}
-                className="achievments_items_icon"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faLock}
-                className="achievments_items_icon"
-              />
-            )}
+            ))}
           </section>
         ))}
       </div>
