@@ -69,3 +69,34 @@
 .achievments_items_icon_unlocked * {
   color: var(--color-unlock) !important;
 }
+.achievements_difficulty_tag {
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.easy {
+  background-color: darkgreen;
+}
+.medium {
+  background-color: rgb(177, 177, 21);
+  color: rgb(29, 26, 26);
+}
+
+.difficult {
+  background-color: rgb(145, 102, 23);
+  color: black;
+  color: white;
+}
+
+.hard {
+  background-color: red;
+  color: white;
+}
+
+.insane {
+  background-color: darkred;
+  color: white;
+}

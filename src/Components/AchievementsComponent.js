@@ -29,6 +29,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "easy",
   },
   {
     id: 2,
@@ -42,6 +43,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "easy",
   },
   {
     id: 3,
@@ -55,6 +57,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "easy",
   },
   {
     id: 4,
@@ -68,6 +71,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "medium",
   },
   {
     id: 5,
@@ -81,6 +85,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "hard",
   },
   {
     id: 6,
@@ -94,6 +99,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Levels",
+    difficulty: "difficult",
   },
   {
     id: 7,
@@ -103,6 +109,7 @@ const achievements = [
       {
         type: "level",
         value: 106,
+        difficulty: "hard",
       },
     ],
     unlocked: false,
@@ -120,6 +127,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "easy",
   },
   {
     id: 26,
@@ -133,6 +141,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "medium",
   },
   {
     id: 27,
@@ -146,6 +155,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "difficult",
   },
   {
     id: 28,
@@ -159,6 +169,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "hard",
   },
   {
     id: 29,
@@ -172,6 +183,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "insane",
   },
   {
     id: 30,
@@ -185,6 +197,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "insane",
   },
   {
     id: 31,
@@ -198,6 +211,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Total Levels",
+    difficulty: "insane",
   },
   {
     id: 5,
@@ -211,6 +225,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "easy",
   },
   {
     id: 6,
@@ -224,6 +239,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "easy",
   },
   {
     id: 7,
@@ -237,6 +253,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "medium",
   },
   {
     id: 8,
@@ -250,6 +267,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "medium",
   },
   {
     id: 9,
@@ -263,6 +281,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "difficult",
   },
   {
     id: 10,
@@ -276,6 +295,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "difficult",
   },
   {
     id: 11,
@@ -289,6 +309,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "hard",
   },
   {
     id: 12,
@@ -302,6 +323,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "hard",
   },
   {
     id: 13,
@@ -315,6 +337,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "insane",
   },
   {
     id: 14,
@@ -328,6 +351,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "insane",
   },
   {
     id: 15,
@@ -341,6 +365,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Quests",
+    difficulty: "insane",
   },
   {
     id: 16,
@@ -354,6 +379,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "easy",
   },
   {
     id: 17,
@@ -367,6 +393,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "easy",
   },
   {
     id: 18,
@@ -380,6 +407,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "medium",
   },
   {
     id: 19,
@@ -393,6 +421,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "difficult",
   },
   {
     id: 20,
@@ -406,6 +435,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "hard",
   },
   {
     id: 21,
@@ -419,6 +449,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "insane",
   },
   {
     id: 22,
@@ -432,6 +463,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "insane",
   },
   {
     id: 23,
@@ -445,6 +477,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "insane",
   },
   {
     id: 24,
@@ -458,6 +491,7 @@ const achievements = [
     ],
     unlocked: false,
     category: "Professions",
+    difficulty: "insane",
   },
 ];
 
@@ -640,25 +674,29 @@ const AchievementsComponent = () => {
                   ></img>
 
                   <section>
-                    <h5>{achievement.name}</h5>
+                    <section className="flex gap-05 pB-05">
+                      {" "}
+                      <h5>{achievement.name}</h5>
+                      <h6
+                        className={`achievements_difficulty_tag ${
+                          achievement.difficulty === "easy"
+                            ? "easy"
+                            : achievement.difficulty === "medium"
+                            ? "medium"
+                            : achievement.difficulty === "difficult"
+                            ? "difficult"
+                            : achievement.difficulty === "hard"
+                            ? "hard"
+                            : achievement.difficulty === "insane"
+                            ? "insane"
+                            : ""
+                        }`}
+                      >
+                        {achievement.difficulty}
+                      </h6>
+                    </section>
                     <p>{achievement.description}</p>
-                    <p>
-                      {achievement.conditions[0].type === "quest" &&
-                      fetchedPlayerData &&
-                      fetchedPlayerData.globalData &&
-                      fetchedPlayerData.globalData.completedQuests !== undefined
-                        ? fetchedPlayerData.globalData.completedQuests
-                        : achievement.conditions[0].type === "level_total" &&
-                          fetchedPlayerData &&
-                          fetchedPlayerData.globalData &&
-                          fetchedPlayerData.globalData.totalLevel !== undefined
-                        ? fetchedPlayerData.globalData.totalLevel
-                        : playerData[achievement.conditions[0].type]}
-                    </p>
-                    <p>
-                      {calculateProgress(playerData, achievement.conditions[0])}
-                      %
-                    </p>
+
                     <progress
                       style={{ width: "100%" }}
                       value={
