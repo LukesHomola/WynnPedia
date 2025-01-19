@@ -31,13 +31,13 @@
 }
 .achievments_items_inner {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   gap: 1rem;
   width: 80%;
 }
 .achievments_items_inner section {
-  width: 100%;
+  width: 80%;
 }
 
 /* subtitle */

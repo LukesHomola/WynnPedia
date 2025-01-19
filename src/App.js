@@ -12,6 +12,7 @@ import GuildPage from "./Components/GuildProfileComponent.js";
 import ActivityCheck from "./Components/ActivityCheckComponent.js";
 import LeaderboardComponent from "./Components/LeaderboardComponent.js";
 import AchievementsComponent from "./Components/AchievementsComponent.js";
+import NewsComponent from "./Components/NewsComponent.js";
 
 import { PlayerContext, PlayerProvider } from "./PlayerContext.js";
 
@@ -29,6 +30,7 @@ import "./CSS/GuildPageComponent.css";
 import "./CSS/SettingsComponent.css";
 import "./CSS/LeaderboardComponent.css";
 import "./CSS/AchievementsComponent.css";
+import "./CSS/NewsComponent.css";
 
 /* function SettingsMenu() {
   const { isSettingsOpen, setIsSettingsOpen, openSettings, closeSettings } =
@@ -101,7 +103,11 @@ function App() {
             <Route path="/guild" element={<GuildPage />} />
             <Route path="/activity-check" element={<ActivityCheck />} />
             <Route path="/leaderboard" element={<LeaderboardComponent />} />
-            <Route path="/achievements" element={<AchievementsComponent />} />
+            <Route
+              path="/achievements"
+              element={<AchievementsComponent />}
+            />{" "}
+            <Route path="/news" element={<NewsComponent />} />
           </Routes>
           <Footer />
         </div>
