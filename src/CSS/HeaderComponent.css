@@ -1,5 +1,4 @@
 /* 
-
 ============================================
 
         Left side - selected profile
@@ -19,7 +18,6 @@
 }
 
 /* 
-
 ============================================
 
         NAVBAR
@@ -27,18 +25,29 @@
 ============================================
 
 */
+.no-drag {
+  -webkit-app-region: no-drag;
+}
 
 .nav {
   z-index: 1000;
   overflow: hidden;
   top: 0;
+  right: 0;
+  left: 0;
   position: fixed;
-  width: 100svw;
   display: flex;
   align-items: center;
+  overflow-x: auto;
+  flex-wrap: wrap;
+  max-width: 100svw;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
-  width: calc(100% - 30px);
+  padding: 0.5rem 2rem;
+  -webkit-app-region: drag;
+
+  /*   width: calc(100% - 30px);
+ */
+
   box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
     rgba(0, 0, 0, 0.05) 0px 5px 10px;
   background-color: #0a0909;
@@ -48,14 +57,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 3rem;
 }
 
 .nav_btns_section {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 .nav_btns_profile_search_section {
   display: flex;
@@ -85,8 +96,17 @@
 
 .nav_socials_section {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 .nav_socials_section a {
   font-size: var(--font-size-h5);
 }
+
+.nav_custom_controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/*  */

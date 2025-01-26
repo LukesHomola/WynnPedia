@@ -1,12 +1,15 @@
-import { contextBridge, ipcRenderer }  from("electron");
-console.log("Preload script is loaded");
+const { contextBridge, ipcRenderer } = require("electron");
 
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM Content Loaded in Preload");
-});
-
-contextBridge.exposeInMainWorld('electron', {
-  minimize: () => ipcRenderer.send('minimize'),
-  maximize: () => ipcRenderer.send('maximize'),
-  close: () => ipcRenderer.send('close'),
+contextBridge.exposeInMainWorld("electron", {
+  ipcRenderer: {
+    send: (channel, data) => {
+      ipcRenderer.send(channel, data);
+    },
+    on: (channel, func) => {
+      ipcRenderer.on(channel, (event, ...args) => func(...args));
+    },
+  },
+  close: () => ipcRenderer.send("close"),
+  maximize: () => ipcRenderer.send("maximize"),
+  minimize: () => ipcRenderer.send("minimize"),
 });
