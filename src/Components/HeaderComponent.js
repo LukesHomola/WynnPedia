@@ -93,9 +93,6 @@ const Header = () => {
           <NavLink to="/achievements" className="link">
             <h5>Achievements</h5>
           </NavLink>{" "}
-          <NavLink to="/warDashboard" className="link">
-            <h5>War dashboard</h5>
-          </NavLink>{" "}
           <NavLink to="/items" className="link">
             <h5>Items</h5>
           </NavLink>
