@@ -80,6 +80,16 @@ a {
   --color-accent: #dfe221;
   --color-unlock: #35bd35;
 
+  /* Item rarity based colors */
+  --color-describe-dark: #727272;
+  --color-describe: #aaaaaa;
+  --color-set: #38e525;
+  --color-unique: #fcfc54;
+  --color-rare: #ff50e8;
+  --color-legendary: #50fdff;
+  --color-fabled: #f63e3e;
+  --color-mythic: #aa39c0;
+
   /* COLORS WITH OPACITY */
   --color-bg-09: rgb(20, 18, 18, 0.7);
   --color-bg-05: rgb(20, 18, 18, 0.5);

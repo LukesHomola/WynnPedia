@@ -60,13 +60,17 @@
 /* RIGHT - BOTTOM PAGINATION */
 .item_database_results_output {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-template-rows: repeat(3, 1fr);
   grid-row-gap: 20px;
   grid-column-gap: 20px;
 }
 .item_database_results_output_item {
-  border: 1px solid red;
+  padding: 1rem;
+  background-color: #110711;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  border-radius: 5px;
 }
 /* RIGHT - BOTTOM PAGINATION */
 .item_database_pagination {

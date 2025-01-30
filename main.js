@@ -15,7 +15,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     minWidth: 1800,
     minHeight: 950,
-    frame: false,
+    frame: true,
     autoHideMenuBar: false,
     webPreferences: {
       preload: correctedPath, // Use the manually corrected path
