@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  isValidElement,
+} from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -49,7 +55,7 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [searchInput, setSearchInput] = useState("fire relic");
+  const [searchInput, setSearchInput] = useState("an");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
 
   // Debounce logic: Update debouncedSearchInput after a delay
@@ -117,7 +123,7 @@ const ItemsComponent = () => {
 
   const getRarityColor = (rarity) => {
     switch (rarity) {
-      case "common":
+      case "normal":
         return "var(--color-text)";
       case "set":
         return "var(--color-set)";
@@ -181,9 +187,8 @@ const ItemsComponent = () => {
         </section>
 
         <section className="items_inner_conainer items_item_database">
+          <h3>Results</h3>
           <div className="item_database_results">
-            <h3>Results</h3>
-            <br></br>
             <div className="item_database_results_output">
               {fetchedItems && Object.keys(fetchedItems).length > 0 ? (
                 Object.entries(fetchedItems).map(([key, item]) => (
@@ -444,17 +449,59 @@ const ItemsComponent = () => {
                         {item.identifications &&
                           Object.entries(item.identifications).map(
                             ([key, value]) => {
-                              // Function to get the correct raw value (for both numbers and objects)
-                              const getRawValue = (value) =>
-                                typeof value === "object" ? value.raw : value;
+                              // Function to get the correct display value (for both numbers and objects)
+                              const getDisplayValue = (value) => {
+                                if (
+                                  typeof value === "object" &&
+                                  value !== null
+                                ) {
+                                  if (
+                                    value.min !== undefined &&
+                                    value.max !== undefined
+                                  ) {
+                                    return `${value.min} to ${value.max}`;
+                                  }
+                                  return value.raw !== undefined
+                                    ? value.raw
+                                    : value;
+                                }
+                                return value;
+                              };
 
-                              const rawValue = getRawValue(value); // Get the value (either raw number or object raw value)
-                              const isPositive = rawValue >= 0; // Determine if the value is positive
-                              const displayValue = isPositive
-                                ? `+${rawValue}`
-                                : rawValue; // Format the value with '+' if positive
+                              const displayValue = getDisplayValue(value); // Get the display value
+                              console.log("DISPLAY VALUE: ", displayValue);
 
-                              // Define labels for known keys
+                              const isPositive = (() => {
+                                if (typeof displayValue === "number") {
+                                  return displayValue >= 0; // ✅ Handles single numbers correctly
+                                }
+
+                                if (
+                                  typeof displayValue === "string" &&
+                                  displayValue.includes(" to ")
+                                ) {
+                                  const [min, max] = displayValue
+                                    .split(" to ")
+                                    .map(Number);
+                                  return min >= 0 && max >= 0; // ✅ Checks both min and max
+                                }
+
+                                if (
+                                  typeof value === "object" &&
+                                  value !== null
+                                ) {
+                                  if ("min" in value && "max" in value) {
+                                    return value.min >= 0 && value.max >= 0; // ✅ Handles `{ min, max }` case
+                                  }
+                                  if ("raw" in value) {
+                                    return value.raw >= 0; // ✅ If there's a raw value, check that
+                                  }
+                                }
+
+                                return true; // Default (assume positive if unknown)
+                              })();
+
+                              // Determine the label based on the key (dynamically)
                               const keyLabels = {
                                 baseHealth: "Health",
                                 baseEarthDefence: "Earth Defence",
@@ -586,38 +633,43 @@ const ItemsComponent = () => {
                                 criticalDamageBonus: "Critical Damage Bonus",
                               };
                               // Fallback to the key itself if no label is found in the `keyLabels` object
-                              const label = keyLabels[key] || key;
+                              const label =
+                                keyLabels[key] ||
+                                key.replace(/([a-z])([A-Z])/g, "$1 $2");
 
-                              // For values that represent ranges (e.g., "min to max"), we will need to handle those specifically
-                              const handleRangeValues = (key, value) => {
-                                // Check for specific range keys (e.g., spell costs, thorns, stealing, etc.)
-                                if (key.includes("SpellCost")) {
-                                  const min = Math.min(...value); // Get the minimum value from the range
-                                  const max = Math.max(...value); // Get the maximum value from the range
-                                  return `${min} to ${max} ${label}`; // Format range as "min to max"
-                                } else if (
-                                  Array.isArray(value) &&
-                                  value.length === 2
-                                ) {
-                                  const min = value[0]; // Min value
-                                  const max = value[1]; // Max value
-                                  return `${min} to ${max} ${label}`; // Format range as "min to max"
-                                }
-                                return displayValue; // Default display for single values
-                              };
-
-                              // Check for a range value and handle it
-                              const rangeDisplayValue = handleRangeValues(
-                                key,
-                                value
-                              );
-
-                              // Check if the key is a spell cost modifier or other specific logic
+                              // Check if the key is a spell cost modifier
                               const isSpellCostModifier =
                                 key.includes("SpellCost");
 
+                              console.log(isPositive);
+
+                              const formatDisplayValue = (displayValue) => {
+                                if (typeof displayValue === "number") {
+                                  return displayValue >= 0
+                                    ? `+${displayValue}`
+                                    : `${displayValue}`;
+                                }
+
+                                if (
+                                  typeof displayValue === "string" &&
+                                  displayValue.includes(" to ")
+                                ) {
+                                  const [min, max] = displayValue
+                                    .split(" to ")
+                                    .map(Number);
+                                  const formattedMin =
+                                    min >= 0 ? `+${min}` : `${min}`;
+                                  const formattedMax =
+                                    max >= 0 ? `+${max}` : `${max}`;
+                                  return `${formattedMin} to ${formattedMax}`;
+                                }
+
+                                return displayValue; // Default return if not a number or range
+                              };
+
                               return (
                                 <div key={key} className="requirement_item">
+                                  {/* Render the value and label dynamically */}
                                   <span>
                                     <span
                                       style={{
@@ -630,8 +682,7 @@ const ItemsComponent = () => {
                                           : "var(--color-fabled)", // Apply color based on value
                                       }}
                                     >
-                                      {rangeDisplayValue}{" "}
-                                      {/* Render the formatted value */}
+                                      {formatDisplayValue(displayValue)}{" "}
                                     </span>{" "}
                                     <span
                                       style={{ color: "var(--color-describe)" }}
@@ -649,12 +700,32 @@ const ItemsComponent = () => {
 
                     <br></br>
 
+                    {item.powderSlots && (
+                      <p
+                        style={{
+                          color: "var(--color-describe)",
+                        }}
+                      >
+                        [{item.powderSlots}] Powder slots
+                      </p>
+                    )}
                     <p
                       style={{
                         color: getRarityColor(item.rarity),
                       }}
                     >
-                      {item.rarity && `${formatItems(item.rarity)} `}
+                      {item.rarity && `${formatItems(item.rarity)} Item`}
+                    </p>
+                    <p>
+                      {item.lore && (
+                        <p
+                          style={{
+                            color: "var(--color-describe-dark)",
+                          }}
+                        >
+                          {item.lore}
+                        </p>
+                      )}
                     </p>
                   </div>
                 ))
@@ -663,7 +734,6 @@ const ItemsComponent = () => {
               )}
             </div>
           </div>
-
           <div className="item_database_pagination">PAGINATION</div>
         </section>
       </div>
