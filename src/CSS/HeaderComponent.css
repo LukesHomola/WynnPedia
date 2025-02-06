@@ -101,6 +101,7 @@
 }
 .nav_socials_section a {
   font-size: var(--font-size-h5);
+  color: var(--color-text);
 }
 
 .nav_custom_controls {

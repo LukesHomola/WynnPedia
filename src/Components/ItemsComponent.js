@@ -13,6 +13,7 @@ import {
   faLeaf,
   faDroplet,
   faTornado,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSlack } from "@fortawesome/free-brands-svg-icons";
 
@@ -32,6 +33,8 @@ const damageColors = {
   Fire: "#FF5555",
   Air: "#FFFFFF",
 };
+import testImg from "../Assests_components/game_textures/armour/diamond/chestplate.webp";
+import testTTT from "../Assests_components/game_textures/armour/diamond/chestplate.webp";
 
 import weaponsmithingIcon from "../Assests_components/professions_crafting/crafting/weaponsmithing.png";
 import woodworkingIcon from "../Assests_components/professions_crafting/crafting/woodworking.png";
@@ -55,7 +58,7 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [searchInput, setSearchInput] = useState("an");
+  const [searchInput, setSearchInput] = useState("chestplate");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
 
   // Debounce logic: Update debouncedSearchInput after a delay
@@ -75,7 +78,6 @@ const ItemsComponent = () => {
 
       if (!debouncedSearchInput || debouncedSearchInput.trim() === "") {
         url = "https://api.wynncraft.com/v3/item/database?result"; // Fetch all items
-        console.log("FETCHING ALL ITEMS", url);
       } else {
         url = `https://api.wynncraft.com/v3/item/search/${debouncedSearchInput}?fullResult`; // Search-specific items
       }
@@ -96,8 +98,6 @@ const ItemsComponent = () => {
       if (debouncedSearchInput.trim() === "") {
         setFetchedItems(data.results); // Access the results property
       }
-      console.log("SEARCHED FOR: ", debouncedSearchInput);
-      console.log("FETCHED ITEMS: ", data);
     } catch (error) {
       console.error("Error during item fetch:", error);
     }
@@ -189,90 +189,136 @@ const ItemsComponent = () => {
         <section className="items_inner_conainer items_item_database">
           <h3>Results</h3>
           <div className="item_database_results">
-            <div className="item_database_results_output">
-              {fetchedItems && Object.keys(fetchedItems).length > 0 ? (
-                Object.entries(fetchedItems).map(([key, item]) => (
-                  <div key={key} className="item_database_results_output_item">
-                    {/* ITEM NAME */}
-                    <h4
-                      key={key}
-                      style={{
-                        color: getRarityColor(item.rarity),
-                        textAlign: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {item.internalName || key}
-                    </h4>
-                    {/* SUB TITLE */}
+            {fetchedItems && Object.keys(fetchedItems).length > 0 ? (
+              Object.entries(fetchedItems).map(([key, item]) => {
+                const imagePathArmour = `../Assests_components/game_textures/${item.type}/${item.armourMaterial}/${item.armourType}.webp`;
+                const imagePathWeapon = `../Assests_components/game_textures/${item.type}/${item.weaponType}.png`;
+                const imagePathAccessory = `../Assests_components/game_textures/${item.type}/${item.accessoryType}.png`;
+
+                return (
+                  <div key={key} className="item_database_results_output_item ">
+                    {/* IMG, TITLE AND SUB CONTENT */}
                     <section
-                      style={{
-                        color: "var(--color-describe)",
-                        textAlign: "center",
-                      }}
+                      style={{ margin: "0 auto" }}
+                      className="item_database_stats_title item_database_fit_height"
                     >
-                      {" "}
-                      {item.attackSpeed &&
-                        `${formatItems(item.attackSpeed)} Attack Speed`}
-                      {item.armourType && `${formatItems(item.armourType)} `}
-                      {item.accessoryType &&
-                        `${formatItems(item.accessoryType)} `}
-                      {item.tomeType && `${formatItems(item.tomeType)} `}
-                      {item.type === "charm" && "Charm"}
-                      {item.toolType &&
-                        `${
-                          item.toolType === "rod"
-                            ? "Fishing Rod"
-                            : formatItems(item.toolType)
-                        } `}
-                      {item.type === "material" && "Crafting Material"}
-                      {item.type === "ingredient" && "Crafting ingredient"}
+                      <section className="item_database_img">
+                        {item.armourType && (
+                          <img
+                            src={imagePathArmour}
+                            alt="Armor"
+                            className="item_database_icon"
+                          />
+                        )}{" "}
+                        {item.weaponType && (
+                          <img
+                            src={imagePathWeapon}
+                            alt="Weapon"
+                            className="item_database_icon"
+                          />
+                        )}{" "}
+                        {item.accessoryType && (
+                          <img
+                            src={imagePathAccessory}
+                            alt="Weapon"
+                            className="item_database_icon"
+                          />
+                        )}
+                      </section>
+
+                      {/* ITEM NAME */}
+                      <section>
+                        {" "}
+                        <h4
+                          key={key}
+                          style={{
+                            color: getRarityColor(item.rarity),
+                            textAlign: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {item.internalName || key}
+                        </h4>
+                      </section>
+                      {/* SUB TITLE */}
+                      {(item.attackSpeed ||
+                        item.tomeType ||
+                        item.type === "charm" ||
+                        item.toolType ||
+                        item.type === "material" ||
+                        item.type === "ingredient") && (
+                        <section
+                          className="item_database_sub_title"
+                          style={{
+                            color: "var(--color-describe)",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.attackSpeed &&
+                            `${formatItems(item.attackSpeed)} Attack Speed`}
+                          {item.tomeType && `${formatItems(item.tomeType)}`}
+                          {item.type === "charm" && "Charm"}
+                          {item.toolType &&
+                            `${
+                              item.toolType === "rod"
+                                ? "Fishing Rod"
+                                : formatItems(item.toolType)
+                            }`}
+                          {item.type === "material" && "Crafting Material"}
+                          {item.type === "ingredient" && "Crafting Ingredient"}
+                        </section>
+                      )}
                     </section>
-                    {/*  */}
-                    <br></br>
-                    {/* DAMAGE */}
-                    <section>
+                    {/* DAMAGE, REQUIREMENTS  */}
+                    <section className="item_database_stats_damage item_database_fit_height">
                       {item.base && (
                         <div className="item_base">
                           {Object.entries(item.base).map(([key, value]) => {
-                            // ✅ Handle Neutral Damage separately
+                            // Handle Neutral Damage separately
                             if (key === "baseDamage") {
                               return (
                                 <div key={key} className="item_base_stat">
                                   <p style={{ color: damageColors["Neutral"] }}>
-                                    <FontAwesomeIcon
-                                      icon={damageIcons["Neutral"]}
-                                      className="icon_dmg"
-                                      style={{
-                                        marginRight: "5px",
-                                        color: "red",
-                                      }}
-                                    />
-                                    Neutral Damage: {value.min} - {value.max}
+                                    <FontAwesomeIcon icon={faSlack} /> Neutral
+                                    Damage: {value.min} - {value.max}
                                   </p>
                                 </div>
                               );
                             }
-
-                            // ✅ Handle base elemental damage attributes (Earth, Fire, etc.)
+                            if (key === "baseHealth") {
+                              return (
+                                <div key={key} className="item_base_stat">
+                                  <p style={{ color: "darkRed" }}>
+                                    <FontAwesomeIcon icon={faHeart} /> Health:{" "}
+                                    {value}
+                                  </p>
+                                </div>
+                              );
+                            }
+                            // Handle base elemental damage attributes (Earth, Fire, etc.)
                             const elementalDamageKeys = [
                               "baseEarthDamage",
                               "baseWaterDamage",
                               "baseThunderDamage",
                               "baseFireDamage",
                               "baseAirDamage",
+                              "baseEarthDefence",
+                              "baseWaterDefence",
+                              "baseThunderDefence",
+                              "baseFireDefence",
+                              "baseAirDefence",
                             ];
 
                             if (elementalDamageKeys.includes(key)) {
-                              // ✅ Remove "base" prefix (e.g., "baseEarthDamage" → "Earth Damage")
+                              // Remove "base" prefix (e.g., "baseEarthDamage" → "Earth Damage")
                               const formattedKey = key
                                 .replace(/^base/, "")
                                 .replace(/([a-z])([A-Z])/g, "$1 $2");
 
-                              // ✅ Extract only the elemental part ("Earth" from "Earth Damage")
+                              // Extract only the elemental part ("Earth" from "Earth Damage")
                               const element = formattedKey.split(" ")[0];
 
-                              // ✅ Ensure capitalization for correct key lookup
+                              // Ensure capitalization for correct key lookup
                               const capitalizedElement =
                                 element.charAt(0).toUpperCase() +
                                 element.slice(1);
@@ -286,20 +332,28 @@ const ItemsComponent = () => {
                                         "inherit",
                                     }}
                                   >
-                                    {/* ✅ Ensure the icon is found before rendering */}
+                                    {/* Ensure the icon is found before rendering */}
                                     {damageIcons[capitalizedElement] && (
-                                      <FontAwesomeIcon
-                                        icon={damageIcons[capitalizedElement]}
-                                        style={{ marginRight: "5px" }}
-                                      />
+                                      <span className="item_base_stat_dmg">
+                                        <FontAwesomeIcon
+                                          icon={damageIcons[capitalizedElement]}
+                                          style={{
+                                            marginRight: "5px",
+                                            color:
+                                              damageColors[capitalizedElement],
+                                          }}
+                                        />
+                                      </span>
                                     )}
-                                    {formattedKey}: {value.min} - {value.max}
+                                    {typeof value === "object" && value !== null
+                                      ? `${formattedKey}: ${value.min} - ${value.max}` // Damage fix
+                                      : `${formattedKey}: ${value}`}
                                   </p>
                                 </div>
                               );
                             }
 
-                            // ✅ For other base attributes (e.g., armor), just display the value without special formatting
+                            // For other base attributes (e.g., armor), just display the value without special formatting
                             const formattedKey = key
                               .replace(/^base/, "")
                               .replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -307,7 +361,7 @@ const ItemsComponent = () => {
                             return (
                               <div key={key} className="item_base_stat">
                                 <p>
-                                  {formattedKey}:{" "}
+                                  {formattedKey}:
                                   {value.min
                                     ? `${value.min} - ${value.max}`
                                     : value}
@@ -333,119 +387,121 @@ const ItemsComponent = () => {
                           </span>
                         </p>
                       )}
-                    </section>
-                    {/*  */}
-                    <br></br>
-                    {/* requirements */}
-                    <section>
-                      {item.type !== "ingredient" && item.requirements && (
-                        <div className="item_requirements">
-                          {Object.entries(item.requirements)
-                            .sort(([keyA], [keyB]) => {
-                              const order = [
-                                "classRequirement", // Ensure "Class Req" appears first
-                                "level", // "Combat Lvl. Min" appears after "Class Req"
-                                "strength",
-                                "dexterity",
-                                "intelligence",
-                                "defence",
-                                "agility",
-                              ];
-                              return order.indexOf(keyA) - order.indexOf(keyB);
-                            })
-                            .map(([key, value]) => {
-                              // Class name mappings
-                              const classNames = {
-                                mage: "Mage/Dark Wizard",
-                                assassin: "Assassin/Ninja",
-                                warrior: "Warrior/Knight",
-                                shaman: "Shaman/Skyseer",
-                                archer: "Archer/Hunter",
-                              };
+                      <section className="item_database_stats_requirements">
+                        {item.type !== "ingredient" && item.requirements && (
+                          <div className="item_requirements">
+                            {Object.entries(item.requirements)
+                              .sort(([keyA], [keyB]) => {
+                                const order = [
+                                  "classRequirement", // Ensure "Class Req" appears first
+                                  "level", // "Combat Lvl. Min" appears after "Class Req"
+                                  "strength",
+                                  "dexterity",
+                                  "intelligence",
+                                  "defence",
+                                  "agility",
+                                ];
+                                return (
+                                  order.indexOf(keyA) - order.indexOf(keyB)
+                                );
+                              })
+                              .map(([key, value]) => {
+                                // Class name mappings
+                                const classNames = {
+                                  mage: "Mage/Dark Wizard",
+                                  assassin: "Assassin/Ninja",
+                                  warrior: "Warrior/Knight",
+                                  shaman: "Shaman/Skyseer",
+                                  archer: "Archer/Hunter",
+                                };
 
-                              // If the key is classRequirement, get the mapped class name
-                              const displayValue =
-                                key === "classRequirement" && classNames[value]
-                                  ? classNames[value]
-                                  : value;
+                                // If the key is classRequirement, get the mapped class name
+                                const displayValue =
+                                  key === "classRequirement" &&
+                                  classNames[value]
+                                    ? classNames[value]
+                                    : value;
 
-                              return (
-                                <div key={key} className="requirement_item">
-                                  <strong
-                                    style={{
-                                      color: "var(--color-describe-dark)",
-                                    }}
-                                  >
-                                    {key === "classRequirement" && "Class Req:"}
-                                    {key === "level" && "Lvl. Min:"}
-                                    {key === "strength" && "Strength Min:"}
-                                    {key === "dexterity" && "Dexterity Min:"}
-                                    {key === "intelligence" &&
-                                      "Intelligence Min:"}
-                                    {key === "defence" && "Defence Min:"}
-                                    {key === "agility" && "Agility Min:"}
-                                  </strong>{" "}
-                                  <span
-                                    style={{ color: "var(--color-describe)" }}
-                                  >
-                                    {displayValue}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                        </div>
-                      )}
-                      {item.type === "ingredient" &&
-                        Object.entries(item.requirements).map(
-                          ([key, value]) => {
-                            if (Array.isArray(value) && key === "skills") {
-                              return (
-                                <div
-                                  key={key}
-                                  className="requirement_item_ingredient"
-                                >
-                                  {/* Display "Crafting Lv. Min:" once for the skills array */}
-                                  <div
-                                    style={{ color: "var(--color-describe)" }}
-                                  >
-                                    Crafting Lv. Min: {item.requirements.level}
-                                  </div>
-
-                                  {value.map((skill, index) => (
-                                    <div
-                                      key={index}
+                                return (
+                                  <div key={key} className="requirement_item">
+                                    <strong
                                       style={{
-                                        color: "var(--color-describe)",
-                                        marginLeft: "10px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "5px",
+                                        color: "var(--color-describe-dark)",
                                       }}
                                     >
-                                      {skillIcons[skill] && (
-                                        <img
-                                          src={skillIcons[skill]}
-                                          alt={skill}
-                                          style={{
-                                            width: "20px",
-                                            height: "20px",
-                                          }}
-                                        />
-                                      )}
-                                      {skill}
-                                    </div>
-                                  ))}
-                                </div>
-                              );
-                            }
-                          }
+                                      {key === "classRequirement" &&
+                                        "Class Req:"}
+                                      {key === "quest" && "Quest Req:"}
+                                      {key === "level" && "Lvl. Min:"}
+                                      {key === "strength" && "Strength Min:"}
+                                      {key === "dexterity" && "Dexterity Min:"}
+                                      {key === "intelligence" &&
+                                        "Intelligence Min:"}
+                                      {key === "defence" && "Defence Min:"}
+                                      {key === "agility" && "Agility Min:"}
+                                    </strong>{" "}
+                                    <span
+                                      style={{ color: "var(--color-describe)" }}
+                                    >
+                                      {displayValue}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                          </div>
                         )}
-                    </section>
-                    {/*  */}
-                    <br></br>
+                        {item.type === "ingredient" &&
+                          Object.entries(item.requirements).map(
+                            ([key, value]) => {
+                              if (Array.isArray(value) && key === "skills") {
+                                return (
+                                  <div
+                                    key={key}
+                                    className="requirement_item_ingredient"
+                                  >
+                                    {/* Display "Crafting Lv. Min:" once for the skills array */}
+                                    <div
+                                      style={{ color: "var(--color-describe)" }}
+                                    >
+                                      Crafting Lv. Min:{" "}
+                                      {item.requirements.level}
+                                    </div>
+
+                                    {value.map((skill, index) => (
+                                      <div
+                                        key={index}
+                                        style={{
+                                          color: "var(--color-describe)",
+                                          marginLeft: "10px",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        {skillIcons[skill] && (
+                                          <img
+                                            src={skillIcons[skill]}
+                                            alt={skill}
+                                            style={{
+                                              width: "20px",
+                                              height: "20px",
+                                            }}
+                                          />
+                                        )}
+                                        {skill}
+                                      </div>
+                                    ))}
+                                  </div>
+                                );
+                              }
+                            }
+                          )}
+                      </section>
+                    </section>{" "}
+                    {/* requirements */}
                     {/* IDENTIFICATIONS RAW STATS*/}
-                    <section>
-                      <section>
+                    {item.identifications && (
+                      <section className="item_database_stats_identifications item_database_fit_height">
                         {item.identifications &&
                           Object.entries(item.identifications).map(
                             ([key, value]) => {
@@ -685,7 +741,9 @@ const ItemsComponent = () => {
                                       {formatDisplayValue(displayValue)}{" "}
                                     </span>{" "}
                                     <span
-                                      style={{ color: "var(--color-describe)" }}
+                                      style={{
+                                        color: "var(--color-describe)",
+                                      }}
                                     >
                                       {label}{" "}
                                       {/* Dynamically display the label */}
@@ -696,45 +754,45 @@ const ItemsComponent = () => {
                             }
                           )}
                       </section>
-                    </section>
-
-                    <br></br>
-
-                    {item.powderSlots && (
-                      <p
-                        style={{
-                          color: "var(--color-describe)",
-                        }}
-                      >
-                        [{item.powderSlots}] Powder slots
-                      </p>
                     )}
-                    <p
-                      style={{
-                        color: getRarityColor(item.rarity),
-                      }}
-                    >
-                      {item.rarity && `${formatItems(item.rarity)} Item`}
-                    </p>
-                    <p>
-                      {item.lore && (
+                    {/* BOTTOM */}
+                    <section className="item_database_stats_bottom item_database_fit_height">
+                      {" "}
+                      {item.powderSlots && (
                         <p
                           style={{
-                            color: "var(--color-describe-dark)",
+                            color: "var(--color-describe)",
                           }}
                         >
-                          {item.lore}
+                          [{item.powderSlots}] Powder slots
                         </p>
                       )}
-                    </p>
+                      <p
+                        style={{
+                          color: getRarityColor(item.rarity),
+                        }}
+                      >
+                        {item.rarity && `${formatItems(item.rarity)} Item`}
+                      </p>
+                      <p>
+                        {item.lore && (
+                          <p
+                            style={{
+                              color: "var(--color-describe-dark)",
+                            }}
+                          >
+                            {item.lore}
+                          </p>
+                        )}
+                      </p>
+                    </section>
                   </div>
-                ))
-              ) : (
-                <p>No items found or invalid response.</p>
-              )}
-            </div>
+                );
+              })
+            ) : (
+              <p>No items found</p>
+            )}
           </div>
-          <div className="item_database_pagination">PAGINATION</div>
         </section>
       </div>
     </div>
