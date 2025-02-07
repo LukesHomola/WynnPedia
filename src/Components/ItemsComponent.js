@@ -5,6 +5,7 @@ import React, {
   useCallback,
   isValidElement,
 } from "react";
+import { CSSTransition } from "react-transition-group";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,6 +15,8 @@ import {
   faDroplet,
   faTornado,
   faHeart,
+  faStar,
+  faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSlack } from "@fortawesome/free-brands-svg-icons";
 
@@ -58,9 +61,23 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [searchInput, setSearchInput] = useState("chestplate");
+  const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
+  const [isSearchTypeVisible, setIsSearchTypeVisible] = useState(false);
+  const [isTypeSelected, setIsTypeSelected] = useState(false);
+  const [isSearchAdvancedVisible, setIsSearchAdvancedVisible] = useState(false);
+  const [isSearchRarityVisible, setIsSearchRarityVisible] = useState(false);
+  const [isSearchLevelVisible, setIsSearchLevelVisible] = useState(false);
+  const [isSearchIdentificationsVisible, setIsSearchIdentificationsVisible] =
+    useState(false);
 
+  const [filterVisibility, setFilterVisibility] = useState({
+    type: false,
+    advanced: false,
+    rarity: false,
+    level: false,
+    identifications: false,
+  });
   // Debounce logic: Update debouncedSearchInput after a delay
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -77,7 +94,7 @@ const ItemsComponent = () => {
       let url;
 
       if (!debouncedSearchInput || debouncedSearchInput.trim() === "") {
-        url = "https://api.wynncraft.com/v3/item/database?result"; // Fetch all items
+        url = "https://api.wynncraft.com/v3/item/database"; // Fetch all items
       } else {
         url = `https://api.wynncraft.com/v3/item/search/${debouncedSearchInput}?fullResult`; // Search-specific items
       }
@@ -142,13 +159,59 @@ const ItemsComponent = () => {
     }
   };
 
+  /* Handeling visiblity (expanding) of item database */
+
+  const handleSearchType = () => {
+    if (isSearchTypeVisible) {
+      setIsSearchTypeVisible(false);
+    } else {
+      setIsSearchTypeVisible(true);
+    }
+  };
+  const handleSearchAdvanced = () => {
+    if (isSearchAdvancedVisible) {
+      setIsSearchAdvancedVisible(false);
+    } else {
+      setIsSearchAdvancedVisible(true);
+    }
+  };
+  const handleSearchRarity = () => {
+    if (isSearchRarityVisible) {
+      setIsSearchRarityVisible(false);
+    } else {
+      setIsSearchRarityVisible(true);
+    }
+  };
+  const handleSearchLevel = () => {
+    if (isSearchLevelVisible) {
+      setIsSearchLevelVisible(false);
+    } else {
+      setIsSearchLevelVisible(true);
+    }
+  };
+  const handleSearchIdentifications = () => {
+    if (isSearchIdentificationsVisible) {
+      setIsSearchIdentificationsVisible(false);
+    } else {
+      setIsSearchIdentificationsVisible(true);
+    }
+  };
+
+  // Universal function to toggle filters
+  const toggleFilter = (filterKey) => {
+    setFilterVisibility((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+
   return (
     <div className="items_wrapper">
       <br></br>
       <div className="items_container">
         <section className="items_inner_conainer items_item_settings">
           <div className="item_inner_title">
-            <h1>Item settings</h1>
+            <h5>Item Settings</h5>
             <br></br>
             <div className="item_inner_search">
               <input
@@ -156,27 +219,181 @@ const ItemsComponent = () => {
                 onChange={(event) => {
                   setSearchInput(event.target.value);
                 }}
-                placeholder="Search for item"
+                placeholder="Search for item name..."
               />
+              <h6
+                style={{
+                  fontSize: "var(--font-size-small)",
+                  marginLeft: "0.2rem",
+                  marginTop: "0.2rem",
+                  color: "gray",
+                }}
+              >
+                Results will be searched after selected input.
+              </h6>
             </div>
           </div>
 
           <div className="item_inner_filtering">
-            <label>Filtering options</label>
+            <h5>Filtering options</h5>
+            <br></br>
             <br></br>
             <div className="item_inner_filtering_inner">
-              <section>
-                <h6>Type</h6>
+              {/* TYPE FILTER */}
+              <section className="item_inner_filtering_section_container">
+                <div
+                  className="flex space-between"
+                  onClick={() => toggleFilter("type")}
+                >
+                  <h6>Type</h6>
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    className={`filtering_arrow ${
+                      filterVisibility.type ? "rotated" : ""
+                    }`}
+                  />
+                </div>
+
+                <CSSTransition
+                  in={filterVisibility.type}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="item_inner_filtering_section_grid">
+                    <section>
+                      <img />
+                      <h5>Weapon</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Armour</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Accessory</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Tome</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Charm</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Tool</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Ingredient</h5>
+                    </section>
+                    <section>
+                      <img />
+                      <h5>Material</h5>
+                    </section>
+                  </div>
+                </CSSTransition>
               </section>
-              <section>
-                <h6>Rarity</h6>
+
+              {/* ADVANCED FILTERS */}
+              <section className="item_inner_filtering_section_container">
+                <div
+                  className="flex space-between"
+                  onClick={() => toggleFilter("advanced")}
+                >
+                  <h6>Advanced filters</h6>
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    className={`filtering_arrow ${
+                      filterVisibility.type ? "rotated" : ""
+                    }`}
+                  />
+                </div>{" "}
+                <CSSTransition
+                  in={filterVisibility.advanced}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="item_inner_filtering_section_grid"></div>
+                </CSSTransition>
               </section>
-              <section>
-                <h6>Level range</h6>
+
+              {/* RARITY FILTER */}
+              <section className="item_inner_filtering_section_container">
+                <div
+                  className="flex space-between"
+                  onClick={() => toggleFilter("rarity")}
+                >
+                  <h6>Rarity</h6>
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    className={`filtering_arrow ${
+                      filterVisibility.rarity ? "rotated" : ""
+                    }`}
+                  />
+                </div>{" "}
+                <CSSTransition
+                  in={filterVisibility.rarity}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="item_inner_filtering_section_grid"></div>
+                </CSSTransition>
               </section>
-              <section>
-                <h6>Identifications</h6>
+
+              {/* LEVEL FILTER */}
+              <section className="item_inner_filtering_section_container">
+                <div
+                  className="flex space-between"
+                  onClick={() => toggleFilter("level")}
+                >
+                  <h6>Level range</h6>
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    className={`filtering_arrow ${
+                      filterVisibility.level ? "rotated" : ""
+                    }`}
+                  />
+                </div>{" "}
+                <CSSTransition
+                  in={filterVisibility.level}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="item_inner_filtering_section_grid"></div>
+                </CSSTransition>
               </section>
+
+              {/* IDENTIFICATIONS FILTER */}
+              <section className="item_inner_filtering_section_container">
+                <div
+                  className="flex space-between"
+                  onClick={() => toggleFilter("identifications")}
+                >
+                  <h6>identifications</h6>
+                  <FontAwesomeIcon
+                    icon={faCaretUp}
+                    className={`filtering_arrow ${
+                      filterVisibility.identifications ? "rotated" : ""
+                    }`}
+                  />
+                </div>{" "}
+                <CSSTransition
+                  in={filterVisibility.identifications}
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div className="item_inner_filtering_section_grid"></div>
+                </CSSTransition>
+              </section>
+
+              <br></br>
             </div>
           </div>
 
@@ -187,7 +404,7 @@ const ItemsComponent = () => {
         </section>
 
         <section className="items_inner_conainer items_item_database">
-          <h3>Results</h3>
+          <h5>Results</h5>
           <div className="item_database_results">
             {fetchedItems && Object.keys(fetchedItems).length > 0 ? (
               Object.entries(fetchedItems).map(([key, item]) => {
@@ -225,20 +442,80 @@ const ItemsComponent = () => {
                           />
                         )}
                       </section>
-
+                      <br></br>
                       {/* ITEM NAME */}
-                      <section>
+                      <section
+                        className="flex-center gap-05"
+                        style={{ paddingBottom: "0.5rem" }}
+                      >
                         {" "}
                         <h4
                           key={key}
                           style={{
                             color: getRarityColor(item.rarity),
-                            textAlign: "center",
-                            fontWeight: "bold",
                           }}
                         >
-                          {item.internalName || key}
+                          {item.type === "material"
+                            ? item.internalName
+                                .split(" ")
+                                .slice(0, -1)
+                                .join(" ")
+                            : item.internalName || key}{" "}
                         </h4>
+                        {item.tier === 1 && (
+                          <div className="flex-center">
+                            [
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "gray" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "gray" }}
+                            />
+                            ]
+                          </div>
+                        )}{" "}
+                        {item.tier === 2 && (
+                          <div className="flex-center">
+                            [
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "gray" }}
+                            />
+                            ]
+                          </div>
+                        )}{" "}
+                        {item.tier === 3 && (
+                          <div className="flex-center">
+                            [
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            <FontAwesomeIcon
+                              icon={faStar}
+                              style={{ color: "#fcfc54" }}
+                            />
+                            ]
+                          </div>
+                        )}
                       </section>
                       {/* SUB TITLE */}
                       {(item.attackSpeed ||
@@ -387,6 +664,7 @@ const ItemsComponent = () => {
                           </span>
                         </p>
                       )}
+                      <br></br>
                       <section className="item_database_stats_requirements">
                         {item.type !== "ingredient" && item.requirements && (
                           <div className="item_requirements">
@@ -525,7 +803,6 @@ const ItemsComponent = () => {
                               };
 
                               const displayValue = getDisplayValue(value); // Get the display value
-                              console.log("DISPLAY VALUE: ", displayValue);
 
                               const isPositive = (() => {
                                 if (typeof displayValue === "number") {
@@ -696,8 +973,6 @@ const ItemsComponent = () => {
                               // Check if the key is a spell cost modifier
                               const isSpellCostModifier =
                                 key.includes("SpellCost");
-
-                              console.log(isPositive);
 
                               const formatDisplayValue = (displayValue) => {
                                 if (typeof displayValue === "number") {

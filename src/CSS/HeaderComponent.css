@@ -99,15 +99,19 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
-.nav_socials_section a {
+.nav_socials_section * {
   font-size: var(--font-size-h5);
-  color: var(--color-text);
+  color: var(--color-text) !important;
 }
 
 .nav_custom_controls {
   display: flex;
   align-items: center;
   gap: 1rem;
+  color: var(--color-text) !important;
 }
 
+.nav_custom_controls * {
+  color: var(--color-text) !important;
+}
 /*  */

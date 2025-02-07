@@ -17,7 +17,8 @@ h4,
 h5,
 h6,
 input,
-section {
+section,
+button {
   color: var(--color-text);
 }
 
@@ -87,8 +88,9 @@ a {
 :root {
   /* Base Colors */
   --color-text: #efe8e8;
+  --color-text-800: #bbbaba;
   --color-bg: #141212;
-  --color-primary: #821313;
+  --color-primary: #050404;
   --color-secondary: #45bacc;
   --color-accent: #dfe221;
   --color-unlock: #35bd35;
