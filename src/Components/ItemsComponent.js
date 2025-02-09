@@ -205,6 +205,34 @@ const ItemsComponent = () => {
     }));
   };
 
+  const [weapons, setWeapons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchWeapons = async () => {
+    try {
+      const response = await fetch("https://api.wynncraft.com/v3/item/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: "",
+          type: ["weapon"],
+        }),
+      });
+      const text = await response.json();
+      console.log("Raw response:", text);
+      if (!response.ok) throw new Error("Failed to fetch weapons");
+      const data = JSON.parse(text);
+      setWeapons(data.items || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="items_wrapper">
       <br></br>
@@ -1069,7 +1097,18 @@ const ItemsComponent = () => {
             )}
           </div>
         </section>
-      </div>
+      </div>{" "}
+      <h1>TEST</h1>
+      <button
+        onClick={() => {
+          fetchWeapons();
+        }}
+      >
+        START
+      </button>
+      {weapons.map((weapon, index) => (
+        <li key={index}>{weapon.name}</li>
+      ))}
     </div>
   );
 };

@@ -50,14 +50,9 @@ const NewsComponent = () => {
               <br></br>
               <p>{sanitizeHTML(news.content)}</p>
               <br></br>
-              <a>{news.forumThread}</a>
-              <button
-                href={news.forumThread}
-                target="_blank"
-                className="news_btn"
-              >
+              <a href={news.forumThread} target="_blank" className="news_btn">
                 See full post
-              </button>
+              </a>
               <br></br>
               <br></br>
             </div>

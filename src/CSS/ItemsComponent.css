@@ -144,26 +144,50 @@
   border-radius: 5px;
 }
 
+.item_inner_filtering_inner section:hover,
+.item_inner_options button:hover {
+  cursor: pointer;
+  animation: shadowPulse 1.5s infinite;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.item_inner_search input:hover {
+  animation: shadowPulse 1.5s infinite;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes shadowPulse {
+  0% {
+    filter: drop-shadow(0 0 0 var(--color-primary));
+  }
+  50% {
+    filter: drop-shadow(0 0 0.75rem var(--color-primary));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 var(--color-primary));
+  }
+}
+
 /* RIGHT - DATABASE */
 .items_item_database {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 0.1fr 1fr;
   grid-row-gap: 20px;
+
+  overflow: auto;
 }
 .item_database_results {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-  overflow-y: auto;
 }
-.item_database_results::-webkit-scrollbar {
+.items_item_database::-webkit-scrollbar {
   padding-left: 5rem;
   width: 10px;
   background-color: var(--color-bg-600);
 }
-.item_database_results::-webkit-scrollbar-thumb {
+.items_item_database::-webkit-scrollbar-thumb {
   background-color: var(--color-primary-900);
   border-radius: 10px;
 }
