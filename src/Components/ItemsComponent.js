@@ -70,7 +70,8 @@ const ItemsComponent = () => {
   const [isSearchLevelVisible, setIsSearchLevelVisible] = useState(false);
   const [isSearchIdentificationsVisible, setIsSearchIdentificationsVisible] =
     useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filterVisibility, setFilterVisibility] = useState({
     type: false,
     advanced: false,
@@ -78,6 +79,26 @@ const ItemsComponent = () => {
     level: false,
     identifications: false,
   });
+  const [filters, setFilters] = useState({
+    query: searchInput || "a",
+    type: [],
+    tier: [],
+    attackSpeed: [],
+    levelRange: [],
+    professions: [],
+    identifications: [],
+    majorIds: [],
+  });
+  const [nextUrl, setNextUrl] = useState(null); // For pagination
+
+  // Whenever searchInput changes, update filters.query
+  useEffect(() => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      query: searchInput,
+    }));
+  }, [searchInput]);
+
   // Debounce logic: Update debouncedSearchInput after a delay
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -89,46 +110,102 @@ const ItemsComponent = () => {
     };
   }, [searchInput]);
 
-  const fetchItems = useCallback(async () => {
-    try {
-      let url;
+  /* fetching items*/
+  const fetchItems = useCallback(
+    async (isInitial = false) => {
+      try {
+        if (loading || (!isInitial && !nextUrl)) return; // Prevent unnecessary calls
 
-      if (!debouncedSearchInput || debouncedSearchInput.trim() === "") {
-        url = "https://api.wynncraft.com/v3/item/database"; // Fetch all items
-      } else {
-        url = `https://api.wynncraft.com/v3/item/search/${debouncedSearchInput}?fullResult`; // Search-specific items
+        setLoading(true);
+        setError(null);
+
+        const requestBody = {};
+
+        // Ensure the requestBody is not empty
+        if (filters.query) requestBody.query = filters.query;
+        if (filters.type.length) requestBody.type = filters.type;
+        if (filters.tier.length) requestBody.tier = filters.tier;
+        if (filters.attackSpeed.length)
+          requestBody.attackSpeed = filters.attackSpeed;
+        if (filters.levelRange.length)
+          requestBody.levelRange = filters.levelRange;
+        if (filters.professions.length)
+          requestBody.professions = filters.professions;
+        if (filters.identifications.length)
+          requestBody.identifications = filters.identifications;
+        if (filters.majorIds.length) requestBody.majorIds = filters.majorIds;
+
+        if (Object.keys(requestBody).length === 0) {
+          requestBody.query = ""; // Prevent empty payload
+        }
+
+        // Use nextUrl if available (for pagination), otherwise use default API URL
+        const requestUrl = isInitial
+          ? "https://api.wynncraft.com/v3/item/search"
+          : nextUrl;
+
+        const response = await fetch(requestUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody), // Send filters in the body
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("API Error Response:", errorText);
+          throw new Error("Failed to fetch items");
+        }
+
+        const data = await response.json();
+        console.log("Fetched Data:", data);
+
+        // Append new results instead of replacing them
+        setFetchedItems((prevItems) => [
+          ...prevItems,
+          ...Object.values(data.results),
+        ]);
+
+        // Set the next page URL, if available
+        setNextUrl(data.controller?.links?.next || null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
+    },
+    [filters, nextUrl, loading]
+  );
 
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        console.error(
-          "API response error:",
-          response.status,
-          response.statusText
-        );
-        return;
-      }
-
-      const data = await response.json();
-      setFetchedItems(data);
-      if (debouncedSearchInput.trim() === "") {
-        setFetchedItems(data.results); // Access the results property
-      }
-    } catch (error) {
-      console.error("Error during item fetch:", error);
+  // Scroll event listener for pagination
+  const handleScroll = (event) => {
+    const container = event.target;
+    if (
+      container.scrollHeight - container.scrollTop <=
+        container.clientHeight + 10 && // Detect bottom
+      nextUrl &&
+      !loading
+    ) {
+      fetchItems(false); // Fetch next page
     }
-  }, [debouncedSearchInput]);
+  };
 
-  // Fetch items whenever debouncedSearchInput changes
+  // Attach scroll event listener
   useEffect(() => {
-    if (!debouncedSearchInput || debouncedSearchInput.trim() === "") {
-      fetchItems();
-    }
-    if (debouncedSearchInput.trim() !== "") {
-      fetchItems();
-    }
-  }, [debouncedSearchInput, fetchItems]);
+    const container = document.querySelector(".items_item_database");
+    container?.addEventListener("scroll", handleScroll);
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
+  // Initial fetch when search input changes
+  useEffect(() => {
+    setFetchedItems([]); // Reset items on new search
+    setNextUrl(null); // Reset pagination
+    fetchItems(true); // Initial fetch
+  }, [debouncedSearchInput, filters]);
 
   /* Formatting for item values */
   const formatItems = (speed) => {
@@ -160,77 +237,12 @@ const ItemsComponent = () => {
   };
 
   /* Handeling visiblity (expanding) of item database */
-
-  const handleSearchType = () => {
-    if (isSearchTypeVisible) {
-      setIsSearchTypeVisible(false);
-    } else {
-      setIsSearchTypeVisible(true);
-    }
-  };
-  const handleSearchAdvanced = () => {
-    if (isSearchAdvancedVisible) {
-      setIsSearchAdvancedVisible(false);
-    } else {
-      setIsSearchAdvancedVisible(true);
-    }
-  };
-  const handleSearchRarity = () => {
-    if (isSearchRarityVisible) {
-      setIsSearchRarityVisible(false);
-    } else {
-      setIsSearchRarityVisible(true);
-    }
-  };
-  const handleSearchLevel = () => {
-    if (isSearchLevelVisible) {
-      setIsSearchLevelVisible(false);
-    } else {
-      setIsSearchLevelVisible(true);
-    }
-  };
-  const handleSearchIdentifications = () => {
-    if (isSearchIdentificationsVisible) {
-      setIsSearchIdentificationsVisible(false);
-    } else {
-      setIsSearchIdentificationsVisible(true);
-    }
-  };
-
   // Universal function to toggle filters
   const toggleFilter = (filterKey) => {
     setFilterVisibility((prev) => ({
       ...prev,
       [filterKey]: !prev[filterKey],
     }));
-  };
-
-  const [weapons, setWeapons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchWeapons = async () => {
-    try {
-      const response = await fetch("https://api.wynncraft.com/v3/item/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: "",
-          type: ["weapon"],
-        }),
-      });
-      const text = await response.json();
-      console.log("Raw response:", text);
-      if (!response.ok) throw new Error("Failed to fetch weapons");
-      const data = JSON.parse(text);
-      setWeapons(data.items || []);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -331,7 +343,10 @@ const ItemsComponent = () => {
                   className="flex space-between"
                   onClick={() => toggleFilter("advanced")}
                 >
-                  <h6>Advanced filters</h6>
+                  <span>
+                    {" "}
+                    <h6>Advanced filters</h6>
+                  </span>
                   <FontAwesomeIcon
                     icon={faCaretUp}
                     className={`filtering_arrow ${
@@ -1102,13 +1117,31 @@ const ItemsComponent = () => {
       <button
         onClick={() => {
           fetchWeapons();
+          console.log("Weapons fetched", weapons);
         }}
       >
         START
+      </button>{" "}
+      <button
+        onClick={() => {
+          console.log("RESULTS 2: ", fetchedItems);
+        }}
+      >
+        RESULTS
       </button>
-      {weapons.map((weapon, index) => (
-        <li key={index}>{weapon.name}</li>
-      ))}
+      <h2>Wynncraft Weapons</h2>
+      <button
+        onClick={() => setFilters((prev) => ({ ...prev, tier: ["Legendary"] }))}
+      >
+        Filter Legendary
+      </button>
+      <button
+        onClick={() =>
+          setFilters((prev) => ({ ...prev, attackSpeed: ["Fast"] }))
+        }
+      >
+        Filter Fast Attack Speed
+      </button>
     </div>
   );
 };
