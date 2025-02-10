@@ -236,6 +236,94 @@ const ItemsComponent = () => {
     }
   };
 
+  const getRarityStyle = (rarity) => {
+    switch (rarity) {
+      case "normal":
+        return { color: "var(--color-text)", filter: "none" };
+      case "set":
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-set))",
+        };
+      case "unique":
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-unique))",
+        };
+      case "rare":
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-rare))",
+        };
+      case "legendary":
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-legendary))",
+        };
+      case "fabled":
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-fabled))",
+        };
+      case "mythic":
+        return {
+          filter: "drop-shadow(0 0 1rem var(--color-mythic))",
+        };
+      default:
+        return { color: "var(--color-text)", filter: "none" }; // Default style
+    }
+  };
+
+  const getRarityStyleMaterials = (rarity) => {
+    switch (rarity) {
+      case 2:
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-unique))",
+        };
+      case 3:
+        return {
+          filter: "drop-shadow(0 0 0.75rem var(--color-fabled))",
+        };
+      default:
+        return { filter: "none" }; // Default style
+    }
+  };
+
+  /* ITEM USEAGE FUNCS. */
+  const getMaterialDescription = (type) => {
+    const descriptions = {
+      ingot:
+        "Use this material to purchase blocks in Housing, or to craft spears, daggers, boots, leggings, helmets & chestplates.",
+      gem: "Use this material to purchase blocks in Housing, or to craft rings, bracelets & necklaces.",
+      wood: "Use this material to purchase blocks in Housing, or to craft spears, daggers, bows & wands.",
+      paper:
+        "Use this material to purchase blocks in Housing, or to craft scrolls, helmets & chestplates.",
+      string:
+        "Use this material to purchase blocks in Housing, or to craft boots, leggings, bows & wands.",
+      grain:
+        "Use this material to purchase blocks in Housing, or to craft potions & food.",
+      oil: "Use this material to purchase blocks in Housing, or to craft scrolls, rings, bracelets, necklaces & potions.",
+      meat: "Use this material to purchase blocks in Housing, or to craft food.",
+    };
+
+    return (
+      descriptions[type] ||
+      "This material is used for crafting and housing purchases."
+    );
+  };
+  const materials = [
+    "gem",
+    "grain",
+    "ingot",
+    "meat",
+    "oil",
+    "paper",
+    "string",
+    "wood",
+  ];
+
+  function getMaterialType(item) {
+    const lowerName = item.internalName.toLowerCase();
+    return (
+      materials.find((material) => lowerName.includes(material)) || "unknown"
+    );
+  }
+
   /* Handeling visiblity (expanding) of item database */
   // Universal function to toggle filters
   const toggleFilter = (filterKey) => {
@@ -454,6 +542,31 @@ const ItemsComponent = () => {
                 const imagePathArmour = `../Assests_components/game_textures/${item.type}/${item.armourMaterial}/${item.armourType}.webp`;
                 const imagePathWeapon = `../Assests_components/game_textures/${item.type}/${item.weaponType}.png`;
                 const imagePathAccessory = `../Assests_components/game_textures/${item.type}/${item.accessoryType}.png`;
+                const imagePathTome = `../Assests_components/game_textures/${item.type}/tome.png`;
+                const imagePathIngredient = `../Assests_components/game_textures/${item.type}/ingredient.png`;
+                const imagePathTools = `../Assests_components/game_textures/${item.type}/${item.toolType}.png`;
+
+                /* GETTING IMAGES FOR MATERIALS */
+                const materials = [
+                  "gem",
+                  "grain",
+                  "ingot",
+                  "meat",
+                  "oil",
+                  "paper",
+                  "string",
+                  "wood",
+                ];
+                function getMaterialImagePath(item) {
+                  const itemName = item.internalName.toLowerCase(); // Normalize for comparison
+                  const foundMaterial = materials.find((material) =>
+                    itemName.includes(material)
+                  );
+                  if (foundMaterial) {
+                    console.log();
+                    return `../Assests_components/game_textures/material/${foundMaterial}.png`;
+                  }
+                }
 
                 return (
                   <div key={key} className="item_database_results_output_item ">
@@ -466,8 +579,9 @@ const ItemsComponent = () => {
                         {item.armourType && (
                           <img
                             src={imagePathArmour}
-                            alt="Armor"
+                            alt="Armour"
                             className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
                           />
                         )}{" "}
                         {item.weaponType && (
@@ -475,14 +589,48 @@ const ItemsComponent = () => {
                             src={imagePathWeapon}
                             alt="Weapon"
                             className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
                           />
                         )}{" "}
                         {item.accessoryType && (
                           <img
                             src={imagePathAccessory}
-                            alt="Weapon"
+                            alt="Accessory"
                             className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
                           />
+                        )}
+                        {item.type === "material" && (
+                          <img
+                            src={getMaterialImagePath(item)}
+                            alt="material"
+                            className="item_database_icon"
+                            style={getRarityStyleMaterials(item.tier)}
+                          ></img>
+                        )}{" "}
+                        {item.type === "tool" && (
+                          <img
+                            src={imagePathTools}
+                            alt="tool"
+                            className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
+                          ></img>
+                        )}
+                        {item.type === "ingredient" && (
+                          <img
+                            src={imagePathIngredient}
+                            alt="ingredient"
+                            className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
+                          ></img>
+                        )}
+                        {item.type === "tome" && (
+                          <img
+                            src={imagePathTome}
+                            alt="tome"
+                            className="item_database_icon"
+                            style={getRarityStyle(item.rarity)}
+                          ></img>
                         )}
                       </section>
                       <br></br>
@@ -498,6 +646,7 @@ const ItemsComponent = () => {
                             color: getRarityColor(item.rarity),
                           }}
                         >
+                          {/* REMOVING TIERS (NUMBERS) */}
                           {item.type === "material"
                             ? item.internalName
                                 .split(" ")
@@ -505,60 +654,64 @@ const ItemsComponent = () => {
                                 .join(" ")
                             : item.internalName || key}{" "}
                         </h4>
-                        {item.tier === 1 && (
-                          <div className="flex-center">
-                            [
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "gray" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "gray" }}
-                            />
-                            ]
-                          </div>
-                        )}{" "}
-                        {item.tier === 2 && (
-                          <div className="flex-center">
-                            [
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "gray" }}
-                            />
-                            ]
-                          </div>
-                        )}{" "}
-                        {item.tier === 3 && (
-                          <div className="flex-center">
-                            [
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              style={{ color: "#fcfc54" }}
-                            />
-                            ]
-                          </div>
-                        )}
+                        <div className="flex-center">
+                          {" "}
+                          {item.tier === 1 && (
+                            <div className="flex-center">
+                              <h4>
+                                {" "}
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />{" "}
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "gray" }}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "gray" }}
+                                />
+                              </h4>
+                            </div>
+                          )}{" "}
+                          {item.tier === 2 && (
+                            <div className="flex-center">
+                              <h4>
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "gray" }}
+                                />
+                              </h4>
+                            </div>
+                          )}{" "}
+                          {item.tier === 3 && (
+                            <div className="flex-center">
+                              <h4>
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faStar}
+                                  style={{ color: "#fcfc54" }}
+                                />
+                              </h4>
+                            </div>
+                          )}
+                        </div>
                       </section>
                       {/* SUB TITLE */}
                       {(item.attackSpeed ||
@@ -1073,6 +1226,14 @@ const ItemsComponent = () => {
                           )}
                       </section>
                     )}
+                    {/* ITEM GUIDE FOR MATERIALS */}{" "}
+                    {item.type === "material" && (
+                      <section className="material_info">
+                        <p style={{ color: "var(--color-describe)" }}>
+                          {getMaterialDescription(getMaterialType(item))}
+                        </p>
+                      </section>
+                    )}
                     {/* BOTTOM */}
                     <section className="item_database_stats_bottom item_database_fit_height">
                       {" "}
@@ -1113,6 +1274,8 @@ const ItemsComponent = () => {
           </div>
         </section>
       </div>{" "}
+      <br></br>
+      <br></br>
       <h1>TEST</h1>
       <button
         onClick={() => {
