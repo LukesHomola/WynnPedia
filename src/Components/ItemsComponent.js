@@ -36,8 +36,6 @@ const damageColors = {
   Fire: "#FF5555",
   Air: "#FFFFFF",
 };
-import testImg from "../Assests_components/game_textures/armour/diamond/chestplate.webp";
-import testTTT from "../Assests_components/game_textures/armour/diamond/chestplate.webp";
 
 import weaponsmithingIcon from "../Assests_components/professions_crafting/crafting/weaponsmithing.png";
 import woodworkingIcon from "../Assests_components/professions_crafting/crafting/woodworking.png";
@@ -61,7 +59,7 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState("charm of the");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
   const [isSearchTypeVisible, setIsSearchTypeVisible] = useState(false);
   const [isTypeSelected, setIsTypeSelected] = useState(false);
@@ -366,11 +364,12 @@ const ItemsComponent = () => {
             <h5>Filtering options</h5>
             <br></br>
             <br></br>
+            {/* FILTERING OPTIONS */}
             <div className="item_inner_filtering_inner">
               {/* TYPE FILTER */}
               <section className="item_inner_filtering_section_container">
                 <div
-                  className="flex space-between"
+                  className="flex space-between pB-1"
                   onClick={() => toggleFilter("type")}
                 >
                   <h6>Type</h6>
@@ -379,7 +378,7 @@ const ItemsComponent = () => {
                     className={`filtering_arrow ${
                       filterVisibility.type ? "rotated" : ""
                     }`}
-                  />
+                  />{" "}
                 </div>
 
                 <CSSTransition
@@ -390,35 +389,59 @@ const ItemsComponent = () => {
                 >
                   <div className="item_inner_filtering_section_grid">
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/weapon/spear.png"
+                        alt="Weapon"
+                      />
                       <h5>Weapon</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
+                        alt="Armour"
+                      />
                       <h5>Armour</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/accessory/necklace.png"
+                        alt="Accessory"
+                      />
                       <h5>Accessory</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/tome/tome.png"
+                        alt="Tome"
+                      />
                       <h5>Tome</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/charm/charm.png"
+                        alt="Charm"
+                      />
                       <h5>Charm</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/tool/pickaxe.png"
+                        alt="Tool"
+                      />
                       <h5>Tool</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/ingredient/ingredient.png"
+                        alt="Ingredient"
+                      />
                       <h5>Ingredient</h5>
                     </section>
                     <section>
-                      <img />
+                      <img
+                        src="/Assests_components/game_textures/material/gem.png"
+                        alt="Material"
+                      />
                       <h5>Material</h5>
                     </section>
                   </div>
@@ -742,16 +765,83 @@ const ItemsComponent = () => {
                         </section>
                       )}
                     </section>
-                    {/* DAMAGE, REQUIREMENTS  */}
+                    {/* DAMAGE, REQUIREMENTS, BASE  */}
                     <section className="item_database_stats_damage item_database_fit_height">
-                      {item.base && (
+                      {/* CHARM SPECIAL */}
+                      {item.type === "charm" && (
+                        <div className="charm_item">
+                          {/* LVL MIN */}
+                          {item.requirements.level && (
+                            <strong
+                              style={{ color: "var(--color-describe-dark)" }}
+                            >
+                              Lvl. Min:
+                              <span style={{ color: "var(--color-describe)" }}>
+                                {" "}
+                                {item.requirements.level}
+                              </span>
+                            </strong>
+                          )}
+                          <br></br>
+                          <br></br>
+                          {/* BASE STATS */}
+                          {item.base && (
+                            <div style={{ color: "var(--color-describe)" }}>
+                              {item.base.leveledXpBonus && (
+                                <p style={{ color: "var(--color-describe)" }}>
+                                  <span style={{ color: "var(--color-set)" }}>
+                                    {" "}
+                                    +{item.base.leveledXpBonus.min}% to +
+                                    {item.base.leveledXpBonus.max}%{" "}
+                                  </span>
+                                  XP from Lvl.{" "}
+                                  {item.requirements.levelRange.min}-
+                                  {item.requirements.levelRange.max} content
+                                </p>
+                              )}
+
+                              {item.base.damageFromMobs && (
+                                <p style={{ color: "var(--color-describe)" }}>
+                                  <span
+                                    style={{ color: "var(--color-fabled)" }}
+                                  >
+                                    +{item.base.damageFromMobs.min}% to +
+                                    {item.base.damageFromMobs.max}%{" "}
+                                  </span>
+                                  Damage taken from mobs
+                                </p>
+                              )}
+
+                              {item.base.leveledLootBonus && (
+                                <p style={{ color: "var(--color-describe)" }}>
+                                  <span style={{ color: "var(--color-set)" }}>
+                                    {" "}
+                                    +{item.base.leveledLootBonus.min}% to +
+                                    {item.base.leveledLootBonus.max}%{" "}
+                                  </span>
+                                  Loot from Lvl.{" "}
+                                  {item.requirements.levelRange.min}-
+                                  {item.requirements.levelRange.max} content
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/*  */}
+                      {item.base && item.type !== "charm" && (
                         <div className="item_base">
                           {Object.entries(item.base).map(([key, value]) => {
                             // Handle Neutral Damage separately
                             if (key === "baseDamage") {
                               return (
                                 <div key={key} className="item_base_stat">
-                                  <p style={{ color: damageColors["Neutral"] }}>
+                                  <p
+                                    style={{
+                                      color: damageColors["Neutral"],
+                                    }}
+                                  >
                                     <FontAwesomeIcon icon={faSlack} /> Neutral
                                     Damage: {value.min} - {value.max}
                                   </p>
@@ -861,69 +951,76 @@ const ItemsComponent = () => {
                         </p>
                       )}
                       <br></br>
+
+                      {/*  */}
                       <section className="item_database_stats_requirements">
-                        {item.type !== "ingredient" && item.requirements && (
-                          <div className="item_requirements">
-                            {Object.entries(item.requirements)
-                              .sort(([keyA], [keyB]) => {
-                                const order = [
-                                  "classRequirement", // Ensure "Class Req" appears first
-                                  "level", // "Combat Lvl. Min" appears after "Class Req"
-                                  "strength",
-                                  "dexterity",
-                                  "intelligence",
-                                  "defence",
-                                  "agility",
-                                ];
-                                return (
-                                  order.indexOf(keyA) - order.indexOf(keyB)
-                                );
-                              })
-                              .map(([key, value]) => {
-                                // Class name mappings
-                                const classNames = {
-                                  mage: "Mage/Dark Wizard",
-                                  assassin: "Assassin/Ninja",
-                                  warrior: "Warrior/Knight",
-                                  shaman: "Shaman/Skyseer",
-                                  archer: "Archer/Hunter",
-                                };
+                        {item.type !== "ingredient" &&
+                          item.requirements &&
+                          item.type !== "charm" && (
+                            <div className="item_requirements">
+                              {Object.entries(item.requirements)
+                                .sort(([keyA], [keyB]) => {
+                                  const order = [
+                                    "classRequirement", // Ensure "Class Req" appears first
+                                    "level", // "Combat Lvl. Min" appears after "Class Req"
+                                    "strength",
+                                    "dexterity",
+                                    "intelligence",
+                                    "defence",
+                                    "agility",
+                                  ];
+                                  return (
+                                    order.indexOf(keyA) - order.indexOf(keyB)
+                                  );
+                                })
+                                .map(([key, value]) => {
+                                  // Class name mappings
+                                  const classNames = {
+                                    mage: "Mage/Dark Wizard",
+                                    assassin: "Assassin/Ninja",
+                                    warrior: "Warrior/Knight",
+                                    shaman: "Shaman/Skyseer",
+                                    archer: "Archer/Hunter",
+                                  };
 
-                                // If the key is classRequirement, get the mapped class name
-                                const displayValue =
-                                  key === "classRequirement" &&
-                                  classNames[value]
-                                    ? classNames[value]
-                                    : value;
+                                  // If the key is classRequirement, get the mapped class name
+                                  const displayValue =
+                                    key === "classRequirement" &&
+                                    classNames[value]
+                                      ? classNames[value]
+                                      : value;
 
-                                return (
-                                  <div key={key} className="requirement_item">
-                                    <strong
-                                      style={{
-                                        color: "var(--color-describe-dark)",
-                                      }}
-                                    >
-                                      {key === "classRequirement" &&
-                                        "Class Req:"}
-                                      {key === "quest" && "Quest Req:"}
-                                      {key === "level" && "Lvl. Min:"}
-                                      {key === "strength" && "Strength Min:"}
-                                      {key === "dexterity" && "Dexterity Min:"}
-                                      {key === "intelligence" &&
-                                        "Intelligence Min:"}
-                                      {key === "defence" && "Defence Min:"}
-                                      {key === "agility" && "Agility Min:"}
-                                    </strong>{" "}
-                                    <span
-                                      style={{ color: "var(--color-describe)" }}
-                                    >
-                                      {displayValue}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        )}
+                                  return (
+                                    <div key={key} className="requirement_item">
+                                      <strong
+                                        style={{
+                                          color: "var(--color-describe-dark)",
+                                        }}
+                                      >
+                                        {key === "classRequirement" &&
+                                          "Class Req:"}
+                                        {key === "quest" && "Quest Req:"}
+                                        {key === "level" && "Lvl. Min:"}
+                                        {key === "strength" && "Strength Min:"}
+                                        {key === "dexterity" &&
+                                          "Dexterity Min:"}
+                                        {key === "intelligence" &&
+                                          "Intelligence Min:"}
+                                        {key === "defence" && "Defence Min:"}
+                                        {key === "agility" && "Agility Min:"}
+                                      </strong>{" "}
+                                      <span
+                                        style={{
+                                          color: "var(--color-describe)",
+                                        }}
+                                      >
+                                        {displayValue}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                            </div>
+                          )}
                         {item.type === "ingredient" &&
                           Object.entries(item.requirements).map(
                             ([key, value]) => {
@@ -1251,6 +1348,11 @@ const ItemsComponent = () => {
                           color: getRarityColor(item.rarity),
                         }}
                       >
+                        {item.type === "charm" && (
+                          <p style={{ color: "var(--color-fabled)" }}>
+                            Fabled Raid Reward
+                          </p>
+                        )}
                         {item.rarity && `${formatItems(item.rarity)} Item`}
                       </p>
                       <p>

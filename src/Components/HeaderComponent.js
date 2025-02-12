@@ -111,9 +111,6 @@ const Header = () => {
               <NavLink to="/news" className="link">
                 <h5>News</h5>
               </NavLink>{" "}
-              <NavLink to="/map" className="link">
-                <h5>Map</h5>
-              </NavLink>
             </section>{" "}
             <section className="nav_socials_section">
               <a

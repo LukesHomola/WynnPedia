@@ -85,12 +85,27 @@
 /* FILTEIRNG OPTIONS */
 .item_inner_filtering_section_grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   grid-template-rows: 0.3fr 1fr 0.5fr;
   grid-row-gap: 20px;
   grid-column-gap: 20px;
   width: 100%;
 }
+.item_inner_filtering_section_grid section {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 2px;
+  box-shadow: rgba(105, 100, 100, 0.35) 0px 5px 15px;
+  background-color: var(--color-bg-500);
+}
+.item_inner_filtering_section_grid section > img {
+  width: 1.5rem;
+  max-width: 2rem;
+}
+
 .filtering_arrow.rotated {
   transform: rotate(180deg);
 }
@@ -136,22 +151,34 @@
   background-color: var(--color-bg-700);
 }
 .item_inner_search input {
-  padding: 0.5rem 0rem;
+  padding: 0.5rem 0.2rem;
   width: 95%;
   font-size: var(--font-size-h6);
   color: var(--color-text-800);
-  border: 5px solid var(--color-bg-900);
+  border: 3px solid var(--color-bg-900);
   border-radius: 5px;
 }
 
-.item_inner_filtering_inner section:hover,
-.item_inner_options button:hover {
-  cursor: pointer;
-  animation: shadowPulse 1.5s infinite;
+.item_inner_filtering_inner section {
+  border: 3px solid var(--color-bg-900);
+}
+.item_inner_filtering_section_grid section {
+  border: 0;
+}
+.item_inner_filtering_section_grid section:hover {
+  background-color: var(--color-primary);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+.item_inner_filtering_inner section:hover {
+  cursor: pointer;
+  animation: borderPulse 1.5s infinite ease-in-out;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+/*  */
 .item_inner_search input:hover {
-  animation: shadowPulse 1.5s infinite;
+  cursor: pointer;
+  animation: borderPulse 1.5s infinite ease-in-out;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -164,6 +191,18 @@
   }
   100% {
     filter: drop-shadow(0 0 0 var(--color-primary));
+  }
+}
+
+@keyframes borderPulse {
+  0% {
+    border-color: var(--color-primary);
+  }
+  50% {
+    border-color: var(--color-primary-800);
+  }
+  100% {
+    border-color: var(--color-primary);
   }
 }
 

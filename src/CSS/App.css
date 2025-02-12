@@ -26,6 +26,17 @@ body {
   background-color: var(--color-bg);
   overflow-x: hidden;
 }
+
+body::-webkit-scrollbar {
+  padding-left: 5rem;
+  width: 10px;
+  background-color: var(--color-bg-600);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-900);
+  border-radius: 10px;
+}
+
 /* Padding for heading to avoid overflow */
 .App {
   padding-top: 5rem;
