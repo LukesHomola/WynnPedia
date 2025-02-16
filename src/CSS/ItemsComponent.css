@@ -106,6 +106,10 @@
   max-width: 2rem;
 }
 
+.typeFilterIsActive {
+  background-color: var(--color-primary) !important;
+}
+
 .filtering_arrow.rotated {
   transform: rotate(180deg);
 }

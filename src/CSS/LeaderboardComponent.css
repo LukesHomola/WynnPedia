@@ -3,6 +3,7 @@
   padding-top: 2rem;
   background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
   height: 100svh /* TEMP */;
+  color: var(--color-text);
 }
 .leaderboard_inner {
   padding: 1rem;

@@ -17,6 +17,7 @@ import {
   faHeart,
   faStar,
   faCaretUp,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSlack } from "@fortawesome/free-brands-svg-icons";
 
@@ -46,6 +47,10 @@ import jewelingIcon from "../Assests_components/professions_crafting/crafting/je
 import scribingIcon from "../Assests_components/professions_crafting/crafting/scribing.png";
 import tailoringIcon from "../Assests_components/professions_crafting/crafting/tailoring.png";
 
+import slowAttackSpeed from "../Assests_components/attack_speed/slow.png";
+import mediumAttackSpeed from "../Assests_components/attack_speed/medium.png";
+import fastAttackSpeed from "../Assests_components/attack_speed/fast.png";
+
 const skillIcons = {
   weaponsmithing: weaponsmithingIcon,
   woodworking: woodworkingIcon,
@@ -59,7 +64,7 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [searchInput, setSearchInput] = useState("charm of the");
+  const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
   const [isSearchTypeVisible, setIsSearchTypeVisible] = useState(false);
   const [isTypeSelected, setIsTypeSelected] = useState(false);
@@ -81,6 +86,7 @@ const ItemsComponent = () => {
     query: searchInput || "a",
     type: [],
     tier: [],
+    rarity: [],
     attackSpeed: [],
     levelRange: [],
     professions: [],
@@ -123,6 +129,7 @@ const ItemsComponent = () => {
         if (filters.query) requestBody.query = filters.query;
         if (filters.type.length) requestBody.type = filters.type;
         if (filters.tier.length) requestBody.tier = filters.tier;
+        if (filters.rarity.length) requestBody.rarity = filters.rarity;
         if (filters.attackSpeed.length)
           requestBody.attackSpeed = filters.attackSpeed;
         if (filters.levelRange.length)
@@ -331,6 +338,14 @@ const ItemsComponent = () => {
     }));
   };
 
+  /* HANDLE TYPE FILTER SWITCHING */
+  const handleTypeFilterSwitch = (newType) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      type: [newType],
+    }));
+  };
+
   return (
     <div className="items_wrapper">
       <br></br>
@@ -388,56 +403,132 @@ const ItemsComponent = () => {
                   unmountOnExit
                 >
                   <div className="item_inner_filtering_section_grid">
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("weapon")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("weapon");
+                      }}
+                    >
                       <img
                         src="/Assests_components/game_textures/weapon/spear.png"
                         alt="Weapon"
                       />
                       <h5>Weapon</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("armour")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("armour");
+                      }}
+                    >
                       <img
                         src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
                         alt="Armour"
                       />
                       <h5>Armour</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("accessory")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("accessory");
+                      }}
+                    >
                       <img
                         src="/Assests_components/game_textures/accessory/necklace.png"
                         alt="Accessory"
                       />
                       <h5>Accessory</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("tome")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("tome");
+                      }}
+                    >
                       <img
                         src="/Assests_components/game_textures/tome/tome.png"
                         alt="Tome"
                       />
                       <h5>Tome</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("charm")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("charm");
+                      }}
+                    >
+                      {" "}
                       <img
                         src="/Assests_components/game_textures/charm/charm.png"
                         alt="Charm"
                       />
                       <h5>Charm</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("tool")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("tool");
+                      }}
+                    >
+                      {" "}
                       <img
                         src="/Assests_components/game_textures/tool/pickaxe.png"
                         alt="Tool"
                       />
                       <h5>Tool</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("ingredient")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("ingredient");
+                      }}
+                    >
+                      {" "}
                       <img
                         src="/Assests_components/game_textures/ingredient/ingredient.png"
                         alt="Ingredient"
                       />
                       <h5>Ingredient</h5>
                     </section>
-                    <section>
+                    <section
+                      className={
+                        filters.type.includes("material")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTypeFilterSwitch("material");
+                      }}
+                    >
+                      {" "}
                       <img
                         src="/Assests_components/game_textures/material/gem.png"
                         alt="Material"
@@ -449,36 +540,165 @@ const ItemsComponent = () => {
               </section>
 
               {/* ADVANCED FILTERS */}
-              <section className="item_inner_filtering_section_container">
+              <section
+                className={`item_inner_filtering_section_container ${
+                  filters.type.length === 0 ? "disabled" : ""
+                }`}
+              >
                 <div
-                  className="flex space-between"
+                  className="flex align-center space-between pB-1"
                   onClick={() => toggleFilter("advanced")}
+                  style={{
+                    cursor:
+                      filters.type.length === 0 ? "not-allowed" : "pointer",
+                    opacity: filters.type.length === 0 ? 0.5 : 1,
+                  }}
                 >
-                  <span>
-                    {" "}
-                    <h6>Advanced filters</h6>
-                  </span>
+                  <h6>Advanced Options</h6>
+                  <p
+                    style={{
+                      fontSize: "var(--font-size-small)",
+                      color: "gray",
+                    }}
+                  >
+                    (Please, select type filtering)
+                  </p>
                   <FontAwesomeIcon
                     icon={faCaretUp}
                     className={`filtering_arrow ${
-                      filterVisibility.type ? "rotated" : ""
+                      filterVisibility.advanced ? "rotated" : ""
                     }`}
                   />
                 </div>{" "}
                 <CSSTransition
-                  in={filterVisibility.advanced}
+                  in={
+                    filterVisibility.advanced && filters.type.includes("weapon")
+                  }
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="item_inner_filtering_section_grid"></div>
+                  <div className="item_inner_filtering_section_grid">
+                    <section
+                      className={
+                        filters.attackSpeed.includes("super_slow")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["super_slow"],
+                        }))
+                      }
+                    >
+                      <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Super slow</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("very_slow")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["very_slow"],
+                        }))
+                      }
+                    >
+                      <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Very slow</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("slow")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["slow"],
+                        }))
+                      }
+                    >
+                      <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Slow</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("normal")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["normal"],
+                        }))
+                      }
+                    >
+                      <img src={mediumAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Normal</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("fast")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["fast"],
+                        }))
+                      }
+                    >
+                      <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Fast</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("very_fast")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["very_fast"],
+                        }))
+                      }
+                    >
+                      <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Very fast</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.attackSpeed.includes("super_fast")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          attackSpeed: ["super_fast"],
+                        }))
+                      }
+                    >
+                      <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                      <h5>Super fast</h5>
+                    </section>{" "}
+                  </div>
                 </CSSTransition>
               </section>
 
               {/* RARITY FILTER */}
               <section className="item_inner_filtering_section_container">
                 <div
-                  className="flex space-between"
+                  className="flex space-between pB-1"
                   onClick={() => toggleFilter("rarity")}
                 >
                   <h6>Rarity</h6>
@@ -487,15 +707,130 @@ const ItemsComponent = () => {
                     className={`filtering_arrow ${
                       filterVisibility.rarity ? "rotated" : ""
                     }`}
-                  />
-                </div>{" "}
+                  />{" "}
+                </div>
+
                 <CSSTransition
                   in={filterVisibility.rarity}
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="item_inner_filtering_section_grid"></div>
+                  <div className="item_inner_filtering_section_grid">
+                    <section
+                      className={
+                        filters.tier.includes("Common")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Common"] }))
+                      }
+                    >
+                      <FontAwesomeIcon icon={faCircle} />
+                      <h5>Normal</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Unique")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Unique"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-unique)" }}
+                      />
+                      <h5>Unique</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Rare")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Rare"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-rare)" }}
+                      />
+                      <h5>Rare</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Legendary")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Legendary"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-legendary)" }}
+                      />
+                      <h5>Legendary</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Fabled")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Fabled"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-fabled)" }}
+                      />
+                      <h5>Fabled</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Set") ? "typeFilterIsActive" : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Set"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-set)" }}
+                      />
+                      <h5>Set</h5>
+                    </section>{" "}
+                    <section
+                      className={
+                        filters.tier.includes("Mythic")
+                          ? "typeFilterIsActive"
+                          : ""
+                      }
+                      onClick={() =>
+                        setFilters((prev) => ({ ...prev, tier: ["Mythic"] }))
+                      }
+                    >
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircle}
+                        style={{ color: "var(--color-mythic)" }}
+                      />
+                      <h5>Mythic</h5>
+                    </section>
+                  </div>
                 </CSSTransition>
               </section>
 
@@ -552,7 +887,26 @@ const ItemsComponent = () => {
           </div>
 
           <div className="item_inner_options">
-            <button>RESET FILTERS</button>
+            <button
+              onClick={() => {
+                /* RESETING FILTERS */
+                setFilters((prevFilters) => {
+                  return {
+                    ...prevFilters,
+                    type: [],
+                    tier: [],
+                    rarity: [],
+                    attackSpeed: [],
+                    levelRange: [],
+                    professions: [],
+                    identifications: [],
+                    majorIds: [],
+                  };
+                });
+              }}
+            >
+              RESET FILTERS
+            </button>
             <button>APPLY FILTERS</button>
           </div>
         </section>
@@ -1134,7 +1488,7 @@ const ItemsComponent = () => {
                                 baseThunderDefence: "Thunder Defence",
                                 dexterity: "Dexterity",
                                 intelligence: "Intelligence",
-                                rawIntelligence: "Raw Intelligence",
+                                rawIntelligence: "Intelligence",
                                 spellDamage: "Spell Damage",
                                 thunderDamage: "Thunder Damage",
                                 waterDamage: "Water Damage",
@@ -1142,7 +1496,7 @@ const ItemsComponent = () => {
                                 baseAirDefence: "Air Defence",
                                 agility: "Agility",
                                 mainAttackDamage: "Main Attack Damage",
-                                rawMainAttackDamage: "Raw Main Attack Damage",
+                                rawMainAttackDamage: "Main Attack Damage",
                                 walkSpeed: "Walk Speed",
                                 xpBonus: "XP Bonus",
                                 airDamage: "Air Damage",
@@ -1396,7 +1750,7 @@ const ItemsComponent = () => {
       </button>
       <h2>Wynncraft Weapons</h2>
       <button
-        onClick={() => setFilters((prev) => ({ ...prev, tier: ["Legendary"] }))}
+        onClick={() => setFilters((prev) => ({ ...prev, tier: ["Unique"] }))}
       >
         Filter Legendary
       </button>
