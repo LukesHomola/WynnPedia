@@ -86,7 +86,7 @@
 .item_inner_filtering_section_grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  grid-template-rows: 0.3fr 1fr 0.5fr;
+  grid-auto-rows: auto;
   grid-row-gap: 20px;
   grid-column-gap: 20px;
   width: 100%;
@@ -108,6 +108,9 @@
 
 .typeFilterIsActive {
   background-color: var(--color-primary) !important;
+}
+.disabled_type {
+  background-color: var(--color-bg-600-05);
 }
 
 .filtering_arrow.rotated {
