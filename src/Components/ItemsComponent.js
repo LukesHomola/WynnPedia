@@ -239,6 +239,8 @@ const ItemsComponent = () => {
 
         const data = await response.json();
         console.log("Fetched Data:", data);
+        console.log("Fetched Items:", fetchedItems);
+        console.log("Applied Tome Filters:", filters.tome);
 
         // Append new results instead of replacing them
         setFetchedItems((prevItems) => [
@@ -414,10 +416,28 @@ const ItemsComponent = () => {
 
   /* HANDLE TYPE FILTER SWITCHING */
   const handleTypeFilterSwitch = (newType) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      type: [newType],
-    }));
+    setFilters((prevFilters) => {
+      const isAlreadySelected = prevFilters.type.includes(newType);
+
+      return {
+        ...prevFilters,
+        type: isAlreadySelected
+          ? prevFilters.type.filter((type) => type != newType) // remove already selected filter
+          : [...prevFilters.type, newType], // add if not selected
+      };
+    });
+  };
+  /* Handle filtering for advanced */
+  const toggleFilterSelection = (filterCategory, value) => {
+    setFilters((prev) => {
+      const isAlreadySelected = prev[filterCategory]?.includes(value);
+      return {
+        ...prev,
+        [filterCategory]: isAlreadySelected
+          ? prev[filterCategory].filter((item) => item !== value) //remove if selected
+          : [...prev[filterCategory], value], // add if not selected
+      };
+    });
   };
 
   return (
@@ -616,7 +636,7 @@ const ItemsComponent = () => {
               {/* ADVANCED FILTERS */}
               <section
                 className={`item_inner_filtering_section_container ${
-                  filters.type.length === 0 ? "disabled_type" : ""
+                  filters.type.length === 0 ? " disabled_type" : ""
                 }`}
               >
                 <div
@@ -665,10 +685,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["super_slow"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "super_slow")
                         }
                       >
                         <img src={slowAttackSpeed} alt="attack_speed" />{" "}
@@ -681,10 +698,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["very_slow"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "very_slow")
                         }
                       >
                         <img src={slowAttackSpeed} alt="attack_speed" />{" "}
@@ -697,10 +711,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["slow"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "slow")
                         }
                       >
                         <img src={slowAttackSpeed} alt="attack_speed" />{" "}
@@ -713,10 +724,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["normal"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "normal")
                         }
                       >
                         <img src={mediumAttackSpeed} alt="attack_speed" />{" "}
@@ -729,10 +737,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["fast"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "fast")
                         }
                       >
                         <img src={fastAttackSpeed} alt="attack_speed" />{" "}
@@ -745,10 +750,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["very_fast"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "very_fast")
                         }
                       >
                         <img src={fastAttackSpeed} alt="attack_speed" />{" "}
@@ -761,10 +763,7 @@ const ItemsComponent = () => {
                             : ""
                         }
                         onClick={() =>
-                          setFilters((prev) => ({
-                            ...prev,
-                            attackSpeed: ["super_fast"],
-                          }))
+                          toggleFilterSelection("attackSpeed", "super_fast")
                         }
                       >
                         <img src={fastAttackSpeed} alt="attack_speed" />{" "}
@@ -773,7 +772,6 @@ const ItemsComponent = () => {
                     </div>
                   </div>
                 </CSSTransition>
-                <br></br>
                 {/* Armour types */}
                 <CSSTransition
                   in={
@@ -794,12 +792,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            armour: ["helmet"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("armour", "helmet")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/helmet.webp"
@@ -813,12 +808,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            armour: ["chestplate"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("armour", "chestplate")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
@@ -832,12 +824,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            armour: ["leggings"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("armour", "leggings")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/leggings.webp"
@@ -851,12 +840,7 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            armour: ["boots"],
-                          }));
-                        }}
+                        onClick={() => toggleFilterSelection("armour", "boots")}
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/boots.webp"
@@ -867,7 +851,6 @@ const ItemsComponent = () => {
                     </div>{" "}
                   </div>
                 </CSSTransition>{" "}
-                <br></br>
                 {/* Accessory types */}
                 <CSSTransition
                   in={
@@ -889,12 +872,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            accessory: ["necklace"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("accessory", "necklace")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/necklace.png"
@@ -908,12 +888,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            accessory: ["ring"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("accessory", "ring")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/ring.png"
@@ -927,12 +904,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            accessory: ["bracelet"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("accessory", "bracelet")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/bracelet.png"
@@ -943,7 +917,6 @@ const ItemsComponent = () => {
                     </div>{" "}
                   </div>
                 </CSSTransition>{" "}
-                <br></br>
                 {/* Tomes types */}
                 <CSSTransition
                   in={
@@ -960,16 +933,13 @@ const ItemsComponent = () => {
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
-                          filters.accessory?.includes("weaponTome")
+                          filters.tome?.includes("weaponTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["weaponTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "weaponTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -979,16 +949,13 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.accessory?.includes("armourTome")
+                          filters.tome?.includes("armourTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["armourTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "armourTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -998,16 +965,13 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.accessory?.includes("guildTome")
+                          filters.tome?.includes("guildTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["guildTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "guildTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1017,16 +981,13 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.accessory?.includes("expertiseTome")
+                          filters.tome?.includes("expertiseTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["expertiseTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "expertiseTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1036,16 +997,13 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.accessory?.includes("mysticismTome")
+                          filters.tome?.includes("mysticismTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["mysticismTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "mysticismTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1055,16 +1013,13 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.accessory?.includes("marathonTome")
+                          filters.tome?.includes("marathonTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["marathonTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "marathonTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1074,27 +1029,23 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.accessory?.includes("lootrunTome")
+                          filters.tome?.includes("lootrunTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tome: ["lootrunTome"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("tome", "lootrunTome")
+                        }
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
                           alt="tome"
                         />
-                        <h5>lootrunTome Tome</h5>
+                        <h5>Lootrun Tome</h5>
                       </section>
                     </div>{" "}
                   </div>
                 </CSSTransition>{" "}
-                <br></br>
                 {/* Tools types */}
                 <CSSTransition
                   in={
@@ -1105,7 +1056,7 @@ const ItemsComponent = () => {
                   unmountOnExit
                 >
                   <div>
-                    <label className="pB-05">Tomes</label>
+                    <label className="pB-05">Tools</label>
                     <br></br>
                     <br></br>
                     <div className="item_inner_filtering_section_grid">
@@ -1115,12 +1066,7 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tool: ["axe"],
-                          }));
-                        }}
+                        onClick={() => toggleFilterSelection("tool", "axe")}
                       >
                         <img
                           src="/Assests_components/game_textures/tool/axe.png"
@@ -1134,12 +1080,7 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tool: ["pickaxe"],
-                          }));
-                        }}
+                        onClick={() => toggleFilterSelection("tool", "pickaxe")}
                       >
                         <img
                           src="/Assests_components/game_textures/tool/pickaxe.png"
@@ -1153,12 +1094,7 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tool: ["rod"],
-                          }));
-                        }}
+                        onClick={() => toggleFilterSelection("tool", "rod")}
                       >
                         <img
                           src="/Assests_components/game_textures/tool/rod.png"
@@ -1172,15 +1108,10 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            tool: ["scythe"],
-                          }));
-                        }}
+                        onClick={() => toggleFilterSelection("tool", "scythe")}
                       >
                         <img
-                          src="/Assests_components/game_textures/tome/scythe.png"
+                          src="/Assests_components/game_textures/tool/scythe.png"
                           alt="scythe"
                         />
                         <h5>Gathering Scythe</h5>
@@ -1188,7 +1119,6 @@ const ItemsComponent = () => {
                     </div>{" "}
                   </div>
                 </CSSTransition>{" "}
-                <br></br>
                 {/* Ingredients types */}
                 <CSSTransition
                   in={
@@ -1210,12 +1140,9 @@ const ItemsComponent = () => {
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => {
-                          setFilters((prev) => ({
-                            ...prev,
-                            Crafting: ["alchemism"],
-                          }));
-                        }}
+                        onClick={() =>
+                          toggleFilterSelection("crafting", "alchemism")
+                        }
                       >
                         <img
                           src="/Assests_components/professions/alchemism.webp"

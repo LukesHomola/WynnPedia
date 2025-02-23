@@ -74,6 +74,7 @@
 
 /* FILTEIRNG OPTIONS */
 .item_inner_filtering_section_container {
+  height: fit-content;
   width: 90%;
   border-radius: 10px;
   padding: 1rem;
@@ -110,7 +111,7 @@
   background-color: var(--color-primary) !important;
 }
 .disabled_type {
-  background-color: var(--color-bg-600-05);
+  background-color: var(--color-bg-600-05) !important;
 }
 
 .filtering_arrow.rotated {
@@ -269,7 +270,7 @@
   height: fit-content !important;
 }
 
-/* * {
-  outline: 1px solid;
-}
+* {
+  /*   outline: 1px solid;
  */
+}
