@@ -89,7 +89,6 @@ const ItemsComponent = () => {
     attackSpeed: [],
     armour: [],
     tome: [],
-    crafting: [],
     tool: [],
     levelRange: [],
     professions: [],
@@ -141,6 +140,13 @@ const ItemsComponent = () => {
         if (filters.type.length > 0) {
           requestBody.type = filters.type.filter(
             (type) => type !== "accessory"
+          ); // Send only the selected type
+        }
+
+        // Handle ingredients type filter
+        if (filters.type.length > 0) {
+          requestBody.type = filters.type.filter(
+            (type) => type !== "ingredient"
           ); // Send only the selected type
         }
 
@@ -460,6 +466,60 @@ const ItemsComponent = () => {
       return {
         ...prevFilters,
         type: updatedTypeFilter,
+      };
+    });
+  };
+
+  const [isMaterialMenuOpen, setIsMaterialMenuOpen] = useState(true);
+
+  const handleProfessionFilterSwitch = (profession) => {
+    setFilters((prevFilters) => {
+      // Ensure professions is always an array
+      const currentProfessionFilters = Array.isArray(prevFilters.professions)
+        ? prevFilters.professions
+        : [];
+
+      const isAlreadySelected = currentProfessionFilters.includes(profession);
+      let updatedProfessionFilter = [...currentProfessionFilters];
+
+      // Toggle the selected profession
+      updatedProfessionFilter = isAlreadySelected
+        ? updatedProfessionFilter.filter((type) => type !== profession)
+        : [...updatedProfessionFilter, profession];
+
+      // Update type filter
+      let updatedTypeFilter = [...prevFilters.type];
+
+      // If any profession related to materials is selected, add "material" to the type filter
+      const materialProfessions = [
+        "mining",
+        "fishing",
+        "farming",
+        "woodcutting",
+      ];
+      const selectedMaterials = updatedProfessionFilter.filter((profession) =>
+        materialProfessions.includes(profession)
+      );
+
+      if (
+        selectedMaterials.length > 0 &&
+        !updatedTypeFilter.includes("material")
+      ) {
+        updatedTypeFilter.push("material");
+      } else {
+        // If no material-related professions are selected, remove "material" from the type filter
+        updatedTypeFilter = updatedTypeFilter.filter(
+          (type) => type !== "material"
+        );
+      }
+
+      // Automatically close the material section when any profession is selected
+      setIsMaterialMenuOpen(false); // Close the material section
+
+      return {
+        ...prevFilters,
+        professions: updatedProfessionFilter, // Update the professions filter
+        type: updatedTypeFilter, // Update the type filter (adding/removing "material" as needed)
       };
     });
   };
@@ -1176,7 +1236,7 @@ const ItemsComponent = () => {
                 <CSSTransition
                   in={
                     filterVisibility.advanced &&
-                    filters.type.includes("crafting")
+                    filters.type.includes("ingredient")
                   }
                   timeout={300}
                   classNames="fade"
@@ -1189,12 +1249,12 @@ const ItemsComponent = () => {
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
-                          filters.crafting?.includes("alchemism")
+                          filters.professions?.includes("alchemism")
                             ? "typeFilterIsActive"
                             : ""
                         }
                         onClick={() =>
-                          toggleFilterSelection("crafting", "alchemism")
+                          handleProfessionFilterSwitch("alchemism")
                         }
                       >
                         <img
@@ -1202,6 +1262,202 @@ const ItemsComponent = () => {
                           alt="alchemism"
                         />
                         <h5>Alchemism</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("armouring")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() =>
+                          handleProfessionFilterSwitch("armouring")
+                        }
+                      >
+                        <img
+                          src="/Assests_components/professions/armouring.webp"
+                          alt="armouring"
+                        />
+                        <h5>Armouring</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("cooking")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("cooking")}
+                      >
+                        <img
+                          src="/Assests_components/professions/cooking.webp"
+                          alt="cooking"
+                        />
+                        <h5>Cooking</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("jeweling")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("jeweling")}
+                      >
+                        <img
+                          src="/Assests_components/professions/jeweling.webp"
+                          alt="jeweling"
+                        />
+                        <h5>Jeweling</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("scribing")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("scribing")}
+                      >
+                        <img
+                          src="/Assests_components/professions/scribing.webp"
+                          alt="scribing"
+                        />
+                        <h5>Scribing</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("tailoring")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() =>
+                          handleProfessionFilterSwitch("tailoring")
+                        }
+                      >
+                        <img
+                          src="/Assests_components/professions/tailoring.webp"
+                          alt="tailoring"
+                        />
+                        <h5>Tailoring</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("weaponsmithing")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() =>
+                          handleProfessionFilterSwitch("weaponsmithing")
+                        }
+                      >
+                        <img
+                          src="/Assests_components/professions/weaponsmithing.webp"
+                          alt="weaponsmithing"
+                        />
+                        <h5>Weaponsmithing</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("woodworking")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() =>
+                          handleProfessionFilterSwitch("woodworking")
+                        }
+                      >
+                        <img
+                          src="/Assests_components/professions/woodworking.webp"
+                          alt="woodworking"
+                        />
+                        <h5>Woodworking</h5>
+                      </section>
+                    </div>{" "}
+                  </div>
+                </CSSTransition>
+                {/* Materials types */}
+                <CSSTransition
+                  in={
+                    (filterVisibility.advanced &&
+                      filters.type.includes("material")) ||
+                    filters.professions.includes("mining") ||
+                    filters.professions.includes("fishing") ||
+                    filters.professions.includes("farming") ||
+                    filters.professions.includes("woodcutting")
+                  }
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div>
+                    <label className="pB-05">Gathering</label>
+                    <br></br>
+                    <br></br>
+                    <div className="item_inner_filtering_section_grid">
+                      <section
+                        className={
+                          filters.professions?.includes("mining")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("mining")}
+                      >
+                        <img
+                          src="/Assests_components/professions/mining.webp"
+                          alt="mining"
+                        />
+                        <h5>Mining</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("fishing")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("fishing")}
+                      >
+                        <img
+                          src="/Assests_components/professions/fishing.webp"
+                          alt="fishing"
+                        />
+                        <h5>Fishing</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("farming")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => handleProfessionFilterSwitch("farming")}
+                      >
+                        <img
+                          src="/Assests_components/professions/farming.webp"
+                          alt="farming"
+                        />
+                        <h5>Farming</h5>
+                      </section>
+
+                      <section
+                        className={
+                          filters.professions?.includes("woodcutting")
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() =>
+                          handleProfessionFilterSwitch("woodcutting")
+                        }
+                      >
+                        <img
+                          src="/Assests_components/professions/woodcutting.webp"
+                          alt="woodcutting"
+                        />
+                        <h5>Woodcutting</h5>
                       </section>
                     </div>{" "}
                   </div>
