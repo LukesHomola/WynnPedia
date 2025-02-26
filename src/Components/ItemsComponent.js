@@ -144,22 +144,9 @@ const ItemsComponent = () => {
           ); // Send only the selected type
         }
 
-        if (filters.type.includes("tome")) {
-          if (filters.tome.length > 0) {
-            requestBody.type = filters.tome; // Send only the selected armourType
-          } else {
-            requestBody.type = [
-              "weaponTome",
-              "armourTome",
-              "guildTome",
-              "expertiseTome",
-              "mysticismTome",
-              "marathonTome",
-              "lootrunTome",
-            ]; // Default to all armour types if none is selected
-          }
-        } else if (filters.type.length > 0) {
-          requestBody.type = filters.type; // Send normal type filter for non-armour
+        // Handle tome type filter
+        if (filters.type.length > 0) {
+          requestBody.type = filters.type.filter((type) => type !== "tome"); // Send only the selected type
         }
 
         if (filters.type.includes("tool")) {
@@ -399,33 +386,47 @@ const ItemsComponent = () => {
 
       const armourItems = ["helmet", "chestplate", "leggings", "boots"];
       const accessoryItems = ["bracelet", "ring", "necklace"];
+      const tomeItems = [
+        "weaponTome",
+        "armourTome",
+        "guildTome",
+        "expertiseTome",
+        "mysticismTome",
+        "marathonTome",
+        "lootrunTome",
+      ];
 
       if (armourItems.includes(newType)) {
-        // Toggle individual armour items
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== newType)
           : [...updatedTypeFilter, newType];
 
-        // If selecting any specific armour item, remove "armour"
         if (updatedTypeFilter.some((type) => armourItems.includes(type))) {
           updatedTypeFilter = updatedTypeFilter.filter(
             (type) => type !== "armour"
           );
         }
       } else if (accessoryItems.includes(newType)) {
-        // Toggle individual accessory items
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== newType)
           : [...updatedTypeFilter, newType];
 
-        // If selecting any specific accessory item, remove "accessory"
         if (updatedTypeFilter.some((type) => accessoryItems.includes(type))) {
           updatedTypeFilter = updatedTypeFilter.filter(
             (type) => type !== "accessory"
           );
         }
+      } else if (tomeItems.includes(newType)) {
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+
+        if (updatedTypeFilter.some((type) => tomeItems.includes(type))) {
+          updatedTypeFilter = updatedTypeFilter.filter(
+            (type) => type !== "tome"
+          );
+        }
       } else if (newType === "armour") {
-        // Toggle "armour" and remove individual armour types
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== "armour")
           : [
@@ -435,7 +436,6 @@ const ItemsComponent = () => {
               "armour",
             ];
       } else if (newType === "accessory") {
-        // Toggle "accessory" and remove individual accessory types
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== "accessory")
           : [
@@ -444,8 +444,14 @@ const ItemsComponent = () => {
               ),
               "accessory",
             ];
+      } else if (newType === "tome") {
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== "tome")
+          : [
+              ...updatedTypeFilter.filter((type) => !tomeItems.includes(type)),
+              "tome",
+            ];
       } else {
-        // General toggle for other filters
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== newType)
           : [...updatedTypeFilter, newType];
@@ -593,7 +599,18 @@ const ItemsComponent = () => {
                     </section>
                     <section
                       className={
-                        filters.type.includes("tome")
+                        filters.type.some((type) =>
+                          [
+                            "tome",
+                            "weaponTome",
+                            "armourTome",
+                            "guildTome",
+                            "expertiseTome",
+                            "mysticismTome",
+                            "marathonTome",
+                            "lootrunTome",
+                          ].includes(type)
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -962,7 +979,15 @@ const ItemsComponent = () => {
                 {/* Tomes types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced && filters.type.includes("tome")
+                    (filterVisibility.advanced &&
+                      filters.type.includes("tome")) ||
+                    filters.type.includes("weaponTome") ||
+                    filters.type.includes("armourTome") ||
+                    filters.type.includes("guildTome") ||
+                    filters.type.includes("expertiseTome") ||
+                    filters.type.includes("mysticismTome") ||
+                    filters.type.includes("marathonTome") ||
+                    filters.type.includes("lootrunTome")
                   }
                   timeout={300}
                   classNames="fade"
@@ -975,13 +1000,11 @@ const ItemsComponent = () => {
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
-                          filters.tome?.includes("weaponTome")
+                          filters.type?.includes("weaponTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "weaponTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("weaponTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -991,13 +1014,11 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.tome?.includes("armourTome")
+                          filters.type?.includes("armourTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "armourTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("armourTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1007,13 +1028,11 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.tome?.includes("guildTome")
+                          filters.type?.includes("guildTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "guildTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("guildTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1023,13 +1042,11 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.tome?.includes("expertiseTome")
+                          filters.type?.includes("expertiseTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "expertiseTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("expertiseTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1039,13 +1056,11 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.tome?.includes("mysticismTome")
+                          filters.type?.includes("mysticismTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "mysticismTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("mysticismTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1055,13 +1070,11 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.tome?.includes("marathonTome")
+                          filters.type?.includes("marathonTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "marathonTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("marathonTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
@@ -1071,13 +1084,11 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.tome?.includes("lootrunTome")
+                          filters.type?.includes("lootrunTome")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("tome", "lootrunTome")
-                        }
+                        onClick={() => handleTypeFilterSwitch("lootrunTome")}
                       >
                         <img
                           src="/Assests_components/game_textures/tome/tome.png"
