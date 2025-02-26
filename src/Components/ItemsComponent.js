@@ -66,13 +66,6 @@ const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
-  const [isSearchTypeVisible, setIsSearchTypeVisible] = useState(false);
-  const [isTypeSelected, setIsTypeSelected] = useState(false);
-  const [isSearchAdvancedVisible, setIsSearchAdvancedVisible] = useState(false);
-  const [isSearchRarityVisible, setIsSearchRarityVisible] = useState(false);
-  const [isSearchLevelVisible, setIsSearchLevelVisible] = useState(false);
-  const [isSearchIdentificationsVisible, setIsSearchIdentificationsVisible] =
-    useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterVisibility, setFilterVisibility] = useState({
@@ -81,6 +74,13 @@ const ItemsComponent = () => {
     rarity: false,
     level: false,
     identifications: false,
+    armour: false,
+    accessory: false,
+    attackSpeed: false,
+    tomes: false,
+    tools: false,
+    crafting: false,
+    gathering: false,
   });
   const [filters, setFilters] = useState({
     query: searchInput || "a",
@@ -201,10 +201,10 @@ const ItemsComponent = () => {
         }
 
         const data = await response.json();
-        console.log("Fetched Data:", data);
+        /*         console.log("Fetched Data:", data);
         console.log("Fetched Items:", fetchedItems);
         console.log("Filters: ", JSON.stringify(filters, null, 2));
-        console.log("Final API Request:", JSON.stringify(requestBody, null, 2));
+        console.log("Final API Request:", JSON.stringify(requestBody, null, 2)); */
 
         // Append new results instead of replacing them
         setFetchedItems((prevItems) => [
@@ -525,17 +525,33 @@ const ItemsComponent = () => {
   };
 
   /* Handle filtering for advanced */
-  const toggleFilterSelection = (filterCategory, value) => {
-    setFilters((prev) => {
-      const isAlreadySelected = prev[filterCategory]?.includes(value);
+  const toggleFilterSelection = (category, value) => {
+    setFilters((prevFilters) => {
+      const isSelected = prevFilters[category].includes(value);
+
       return {
-        ...prev,
-        [filterCategory]: isAlreadySelected
-          ? prev[filterCategory].filter((item) => item !== value) //remove if selected
-          : [...prev[filterCategory], value], // add if not selected
+        ...prevFilters,
+        [category]: isSelected
+          ? prevFilters[category].filter((item) => item !== value)
+          : [...prevFilters[category], value],
       };
     });
+
+    // Ensure the submenu remains open
+    setFilterVisibility((prev) => ({
+      ...prev,
+      [category]: true, // Keep the submenu open after selection
+    }));
   };
+  useEffect(() => {
+    if (filters.attackSpeed.length > 0) {
+      setFilterVisibility((prev) => ({
+        ...prev,
+        attackSpeed: true, // Ensure submenu remains open
+      }));
+    }
+  }, [filters.attackSpeed]);
+
   /*  */
   return (
     <div className="items_wrapper">
@@ -758,7 +774,7 @@ const ItemsComponent = () => {
 
               {/* ADVANCED FILTERS */}
               <section
-                className={`item_inner_filtering_section_container ${
+                className={`item_inner_filtering_section_container item_inner_filtering_section_container_advanced${
                   filters.type.length === 0 ? " disabled_type" : ""
                 }`}
               >
@@ -796,103 +812,117 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Attack Speed</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.attackSpeed.includes("super_slow")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "super_slow")
-                        }
-                      >
-                        <img src={slowAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Super slow</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("very_slow")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "very_slow")
-                        }
-                      >
-                        <img src={slowAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Very slow</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("slow")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "slow")
-                        }
-                      >
-                        <img src={slowAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Slow</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("normal")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "normal")
-                        }
-                      >
-                        <img src={mediumAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Normal</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("fast")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "fast")
-                        }
-                      >
-                        <img src={fastAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Fast</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("very_fast")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "very_fast")
-                        }
-                      >
-                        <img src={fastAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Very fast</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.attackSpeed.includes("super_fast")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          toggleFilterSelection("attackSpeed", "super_fast")
-                        }
-                      >
-                        <img src={fastAttackSpeed} alt="attack_speed" />{" "}
-                        <h5>Super fast</h5>
-                      </section>{" "}
-                    </div>
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of armour filters
+                      toggleFilter("attackSpeed");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Attack Speed</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.attackSpeed ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {filterVisibility.attackSpeed && filters.attackSpeed && (
+                      // Show submenu if it’s visible or any armour type is selected
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.attackSpeed.includes("super_slow")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "super_slow")
+                          }
+                        >
+                          <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Super slow</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("very_slow")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "very_slow")
+                          }
+                        >
+                          <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Very slow</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("slow")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "slow")
+                          }
+                        >
+                          <img src={slowAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Slow</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("normal")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "normal")
+                          }
+                        >
+                          <img src={mediumAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Normal</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("fast")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "fast")
+                          }
+                        >
+                          <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Fast</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("very_fast")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "very_fast")
+                          }
+                        >
+                          <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Very fast</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.attackSpeed.includes("super_fast")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            toggleFilterSelection("attackSpeed", "super_fast")
+                          }
+                        >
+                          <img src={fastAttackSpeed} alt="attack_speed" />{" "}
+                          <h5>Super fast</h5>
+                        </section>{" "}
+                      </div>
+                    )}{" "}
                   </div>
                 </CSSTransition>
                 {/* Armour types */}
@@ -909,133 +939,169 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Armour Types</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.type.includes("helmet")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("helmet")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/armour/diamond/helmet.webp"
-                          alt="Helmet"
-                        />
-                        <h5>Helmet</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type.includes("chestplate")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("chestplate")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
-                          alt="Chestplate"
-                        />
-                        <h5>Chestplate</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type.includes("leggings")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("leggings")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/armour/diamond/leggings.webp"
-                          alt="Leggings"
-                        />
-                        <h5>Leggings</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type.includes("boots")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("boots")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/armour/diamond/boots.webp"
-                          alt="Boots"
-                        />
-                        <h5>Boots</h5>
-                      </section>
-                    </div>
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of armour filters
+                      toggleFilter("armour");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Armour Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.armour ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {((filterVisibility.armour && // Show submenu if it’s visible or any armour type is selected
+                      filters.type.includes("armour")) ||
+                      filters.type.includes("helmet") ||
+                      filters.type.includes("chestplate") ||
+                      filters.type.includes("leggings") ||
+                      filters.type.includes("boots")) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.type.includes("helmet")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("helmet")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/armour/diamond/helmet.webp"
+                            alt="Helmet"
+                          />
+                          <h5>Helmet</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("chestplate")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("chestplate")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
+                            alt="Chestplate"
+                          />
+                          <h5>Chestplate</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("leggings")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("leggings")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/armour/diamond/leggings.webp"
+                            alt="Leggings"
+                          />
+                          <h5>Leggings</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("boots")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("boots")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/armour/diamond/boots.webp"
+                            alt="Boots"
+                          />
+                          <h5>Boots</h5>
+                        </section>
+                      </div>
+                    )}
                   </div>
                 </CSSTransition>
                 {/* Accessory types */}
                 <CSSTransition
                   in={
-                    (filterVisibility.advanced &&
-                      filters.type.includes("accessory")) ||
-                    filters.type.includes("bracelet") ||
-                    filters.type.includes("ring") ||
-                    filters.type.includes("necklace")
+                    // Keep the menu open if "accessory" or any of its subtypes (necklace, ring, bracelet) are active
+                    filterVisibility.advanced &&
+                    (filters.type.includes("accessory") ||
+                      filters.type.includes("bracelet") ||
+                      filters.type.includes("ring") ||
+                      filters.type.includes("necklace"))
                   }
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Accessory Types</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.type.includes("necklace")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("necklace")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/accessory/necklace.png"
-                          alt="necklace"
-                        />
-                        <h5>Necklace</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type.includes("ring")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("ring")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/accessory/ring.png"
-                          alt="ring"
-                        />
-                        <h5>Ring</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.type.includes("bracelet")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("bracelet")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/accessory/bracelet.png"
-                          alt="bracelet"
-                        />
-                        <h5>Bracelet</h5>
-                      </section>{" "}
-                    </div>{" "}
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of accessory filters
+                      toggleFilter("accessory");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Accessory Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.accessory ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {((filterVisibility.accessory && // Keep the submenu open if it's visible or any subtype is selected
+                      filters.type.includes("accessory")) ||
+                      filters.type.includes("bracelet") ||
+                      filters.type.includes("ring") ||
+                      filters.type.includes("necklace")) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.type.includes("necklace")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("necklace")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/accessory/necklace.png"
+                            alt="necklace"
+                          />
+                          <h5>Necklace</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("ring")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("ring")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/accessory/ring.png"
+                            alt="ring"
+                          />
+                          <h5>Ring</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("bracelet")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("bracelet")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/accessory/bracelet.png"
+                            alt="bracelet"
+                          />
+                          <h5>Bracelet</h5>
+                        </section>
+                      </div>
+                    )}
                   </div>
-                </CSSTransition>{" "}
+                </CSSTransition>
                 {/* Tomes types */}
                 <CSSTransition
                   in={
@@ -1053,112 +1119,140 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Tomes</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.type?.includes("weaponTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("weaponTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Weapon Tome</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type?.includes("armourTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("armourTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Armour Tome</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.type?.includes("guildTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("guildTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Guild Tome</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.type?.includes("expertiseTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("expertiseTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Expertise Tome</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.type?.includes("mysticismTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("mysticismTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Mysticism Tome</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.type?.includes("marathonTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("marathonTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Marathon Tome</h5>
-                      </section>{" "}
-                      <section
-                        className={
-                          filters.type?.includes("lootrunTome")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleTypeFilterSwitch("lootrunTome")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tome/tome.png"
-                          alt="tome"
-                        />
-                        <h5>Lootrun Tome</h5>
-                      </section>
-                    </div>{" "}
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of tome filters
+                      toggleFilter("tomes");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Tomes Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.tomes ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {(filterVisibility.tomes ||
+                      filters.type.some((t) =>
+                        [
+                          "weaponTome",
+                          "armourTome",
+                          "guildTome",
+                          "expertiseTome",
+                          "mysticismTome",
+                          "marathonTome",
+                          "lootrunTome",
+                        ].includes(t)
+                      )) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.type.includes("weaponTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("weaponTome")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Weapon Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("armourTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("armourTome")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Armour Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("guildTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("guildTome")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Guild Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("expertiseTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleTypeFilterSwitch("expertiseTome")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Expertise Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("mysticismTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleTypeFilterSwitch("mysticismTome")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Mysticism Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("marathonTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("marathonTome")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Marathon Tome</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("lootrunTome")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("lootrunTome")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tome/tome.png"
+                            alt="tome"
+                          />
+                          <h5>Lootrun Tome</h5>
+                        </section>
+                      </div>
+                    )}
                   </div>
-                </CSSTransition>{" "}
+                </CSSTransition>
                 {/* Tools types */}
                 <CSSTransition
                   in={
@@ -1168,10 +1262,21 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Tools</label>
-                    <br></br>
-                    <br></br>
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of tool filters
+                      toggleFilter("tools");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Accessory Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.tools ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
@@ -1200,7 +1305,7 @@ const ItemsComponent = () => {
                           alt="pickaxe"
                         />
                         <h5>Gathering Pickaxe</h5>
-                      </section>{" "}
+                      </section>
                       <section
                         className={
                           filters.tool?.includes("rod")
@@ -1214,7 +1319,7 @@ const ItemsComponent = () => {
                           alt="rod"
                         />
                         <h5>Fishing Rod</h5>
-                      </section>{" "}
+                      </section>
                       <section
                         className={
                           filters.tool?.includes("scythe")
@@ -1229,9 +1334,9 @@ const ItemsComponent = () => {
                         />
                         <h5>Gathering Scythe</h5>
                       </section>
-                    </div>{" "}
+                    </div>
                   </div>
-                </CSSTransition>{" "}
+                </CSSTransition>
                 {/* Ingredients types */}
                 <CSSTransition
                   in={
@@ -1246,7 +1351,7 @@ const ItemsComponent = () => {
                     <label className="pB-05">Crafting</label>
                     <br></br>
                     <br></br>
-                    <div className="item_inner_filtering_section_grid">
+                    <div className="item_inner_filtering_section_grid item_inner_filtering_section_grid_bigger">
                       <section
                         className={
                           filters.professions?.includes("alchemism")
@@ -2499,37 +2604,6 @@ const ItemsComponent = () => {
           </div>
         </section>
       </div>{" "}
-      <br></br>
-      <br></br>
-      <h1>TEST</h1>
-      <button
-        onClick={() => {
-          fetchWeapons();
-          console.log("Weapons fetched", weapons);
-        }}
-      >
-        START
-      </button>{" "}
-      <button
-        onClick={() => {
-          console.log("RESULTS 2: ", fetchedItems);
-        }}
-      >
-        RESULTS
-      </button>
-      <h2>Wynncraft Weapons</h2>
-      <button
-        onClick={() => setFilters((prev) => ({ ...prev, tier: ["Unique"] }))}
-      >
-        Filter Legendary
-      </button>
-      <button
-        onClick={() =>
-          setFilters((prev) => ({ ...prev, attackSpeed: ["Fast"] }))
-        }
-      >
-        Filter Fast Attack Speed
-      </button>
     </div>
   );
 };
