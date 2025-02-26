@@ -389,6 +389,7 @@ const ItemsComponent = () => {
 
   const handleTypeFilterSwitch = (newType) => {
     setFilters((prevFilters) => {
+      // Ensure prevFilters.type is always an array
       const currentFilters = Array.isArray(prevFilters.type)
         ? prevFilters.type
         : [];
@@ -405,12 +406,11 @@ const ItemsComponent = () => {
           ? updatedTypeFilter.filter((type) => type !== newType)
           : [...updatedTypeFilter, newType];
 
-        // If all specific armour items are deselected, check if "armour" should stay
-        const hasOtherArmourSelected = updatedTypeFilter.some((type) =>
-          armourItems.includes(type)
-        );
-        if (!hasOtherArmourSelected && currentFilters.includes("armour")) {
-          updatedTypeFilter.push("armour"); // Keep "armour" if it was selected before
+        // If selecting any specific armour item, remove "armour"
+        if (updatedTypeFilter.some((type) => armourItems.includes(type))) {
+          updatedTypeFilter = updatedTypeFilter.filter(
+            (type) => type !== "armour"
+          );
         }
       } else if (accessoryItems.includes(newType)) {
         // Toggle individual accessory items
@@ -418,15 +418,11 @@ const ItemsComponent = () => {
           ? updatedTypeFilter.filter((type) => type !== newType)
           : [...updatedTypeFilter, newType];
 
-        // If all specific accessory items are deselected, check if "accessory" should stay
-        const hasOtherAccessorySelected = updatedTypeFilter.some((type) =>
-          accessoryItems.includes(type)
-        );
-        if (
-          !hasOtherAccessorySelected &&
-          currentFilters.includes("accessory")
-        ) {
-          updatedTypeFilter.push("accessory"); // Keep "accessory" if it was selected before
+        // If selecting any specific accessory item, remove "accessory"
+        if (updatedTypeFilter.some((type) => accessoryItems.includes(type))) {
+          updatedTypeFilter = updatedTypeFilter.filter(
+            (type) => type !== "accessory"
+          );
         }
       } else if (newType === "armour") {
         // Toggle "armour" and remove individual armour types
