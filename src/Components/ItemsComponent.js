@@ -86,13 +86,11 @@ const ItemsComponent = () => {
     query: searchInput || "a",
     type: [],
     tier: [],
-    rarity: [],
     attackSpeed: [],
     armour: [],
-    accessory: [],
     tome: [],
-    tool: [],
     crafting: [],
+    tool: [],
     levelRange: [],
     professions: [],
     identifications: [],
@@ -134,25 +132,16 @@ const ItemsComponent = () => {
         // Always include query if available
         if (filters.query) requestBody.query = filters.query;
 
-        // ✅ If filtering for armour, send only selected `armourType`
-        if (filters.type.includes("armour")) {
-          if (filters.armour.length > 0) {
-            requestBody.type = filters.armour; // Send only the selected armourType
-          } else {
-            requestBody.type = ["helmet", "chestplate", "leggings", "boots"]; // Default to all armour types if none is selected
-          }
-        } else if (filters.type.length > 0) {
-          requestBody.type = filters.type; // Send normal type filter for non-armour
+        // Handle armour type filter
+        if (filters.type.length > 0) {
+          requestBody.type = filters.type.filter((type) => type !== "armour"); // Send only the selected armourType
         }
 
-        if (filters.type.includes("accessory")) {
-          if (filters.accessory.length > 0) {
-            requestBody.type = filters.accessory; // Send only the selected armourType
-          } else {
-            requestBody.type = ["necklace", "ring", "bracelet"]; // Default to all armour types if none is selected
-          }
-        } else if (filters.type.length > 0) {
-          requestBody.type = filters.type; // Send normal type filter for non-armour
+        // Handle accessory type filter
+        if (filters.type.length > 0) {
+          requestBody.type = filters.type.filter(
+            (type) => type !== "accessory"
+          ); // Send only the selected type
         }
 
         if (filters.type.includes("tome")) {
@@ -178,25 +167,6 @@ const ItemsComponent = () => {
             requestBody.type = filters.tool; // Send only the selected armourType
           } else {
             requestBody.type = ["axe", "pickaxe", "rod", "scythe"]; // Default to all armour types if none is selected
-          }
-        } else if (filters.type.length > 0) {
-          requestBody.type = filters.type; // Send normal type filter for non-armour
-        }
-
-        if (filters.type.includes("crafting")) {
-          if (filters.crafting.length > 0) {
-            requestBody.type = filters.crafting; // Send only the selected armourType
-          } else {
-            requestBody.type = [
-              "alchemism",
-              "armouring",
-              "cooking",
-              "jeweling",
-              "scribing",
-              "tailoring",
-              "weaponsmithing",
-              "woodworking",
-            ];
           }
         } else if (filters.type.length > 0) {
           requestBody.type = filters.type; // Send normal type filter for non-armour
@@ -240,7 +210,8 @@ const ItemsComponent = () => {
         const data = await response.json();
         console.log("Fetched Data:", data);
         console.log("Fetched Items:", fetchedItems);
-        console.log("Applied Tome Filters:", filters.tome);
+        console.log("Filters: ", JSON.stringify(filters, null, 2));
+        console.log("Final API Request:", JSON.stringify(requestBody, null, 2));
 
         // Append new results instead of replacing them
         setFetchedItems((prevItems) => [
@@ -415,18 +386,82 @@ const ItemsComponent = () => {
   };
 
   /* HANDLE TYPE FILTER SWITCHING */
+
   const handleTypeFilterSwitch = (newType) => {
     setFilters((prevFilters) => {
-      const isAlreadySelected = prevFilters.type.includes(newType);
+      const currentFilters = Array.isArray(prevFilters.type)
+        ? prevFilters.type
+        : [];
+
+      const isAlreadySelected = currentFilters.includes(newType);
+      let updatedTypeFilter = [...currentFilters];
+
+      const armourItems = ["helmet", "chestplate", "leggings", "boots"];
+      const accessoryItems = ["bracelet", "ring", "necklace"];
+
+      if (armourItems.includes(newType)) {
+        // Toggle individual armour items
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+
+        // If all specific armour items are deselected, check if "armour" should stay
+        const hasOtherArmourSelected = updatedTypeFilter.some((type) =>
+          armourItems.includes(type)
+        );
+        if (!hasOtherArmourSelected && currentFilters.includes("armour")) {
+          updatedTypeFilter.push("armour"); // Keep "armour" if it was selected before
+        }
+      } else if (accessoryItems.includes(newType)) {
+        // Toggle individual accessory items
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+
+        // If all specific accessory items are deselected, check if "accessory" should stay
+        const hasOtherAccessorySelected = updatedTypeFilter.some((type) =>
+          accessoryItems.includes(type)
+        );
+        if (
+          !hasOtherAccessorySelected &&
+          currentFilters.includes("accessory")
+        ) {
+          updatedTypeFilter.push("accessory"); // Keep "accessory" if it was selected before
+        }
+      } else if (newType === "armour") {
+        // Toggle "armour" and remove individual armour types
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== "armour")
+          : [
+              ...updatedTypeFilter.filter(
+                (type) => !armourItems.includes(type)
+              ),
+              "armour",
+            ];
+      } else if (newType === "accessory") {
+        // Toggle "accessory" and remove individual accessory types
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== "accessory")
+          : [
+              ...updatedTypeFilter.filter(
+                (type) => !accessoryItems.includes(type)
+              ),
+              "accessory",
+            ];
+      } else {
+        // General toggle for other filters
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+      }
 
       return {
         ...prevFilters,
-        type: isAlreadySelected
-          ? prevFilters.type.filter((type) => type != newType) // remove already selected filter
-          : [...prevFilters.type, newType], // add if not selected
+        type: updatedTypeFilter,
       };
     });
   };
+
   /* Handle filtering for advanced */
   const toggleFilterSelection = (filterCategory, value) => {
     setFilters((prev) => {
@@ -439,7 +474,7 @@ const ItemsComponent = () => {
       };
     });
   };
-
+  /*  */
   return (
     <div className="items_wrapper">
       <br></br>
@@ -515,7 +550,15 @@ const ItemsComponent = () => {
                     </section>
                     <section
                       className={
-                        filters.type.includes("armour")
+                        filters.type.some((type) =>
+                          [
+                            "armour",
+                            "helmet",
+                            "chestplate",
+                            "leggings",
+                            "boots",
+                          ].includes(type)
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -531,7 +574,14 @@ const ItemsComponent = () => {
                     </section>
                     <section
                       className={
-                        filters.type.includes("accessory")
+                        filters.type.some((type) =>
+                          [
+                            "accessory",
+                            "bracelet",
+                            "ring",
+                            "necklace",
+                          ].includes(type)
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -775,7 +825,12 @@ const ItemsComponent = () => {
                 {/* Armour types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced && filters.type.includes("armour")
+                    (filterVisibility.advanced &&
+                      filters.type.includes("armour")) ||
+                    filters.type.includes("helmet") ||
+                    filters.type.includes("chestplate") ||
+                    filters.type.includes("leggings") ||
+                    filters.type.includes("boots")
                   }
                   timeout={300}
                   classNames="fade"
@@ -788,13 +843,11 @@ const ItemsComponent = () => {
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
-                          filters.armour?.includes("helmet")
+                          filters.type.includes("helmet")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("armour", "helmet")
-                        }
+                        onClick={() => handleTypeFilterSwitch("helmet")}
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/helmet.webp"
@@ -804,58 +857,57 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.armour?.includes("chestplate")
+                          filters.type.includes("chestplate")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("armour", "chestplate")
-                        }
+                        onClick={() => handleTypeFilterSwitch("chestplate")}
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/chestplate.webp"
-                          alt="Helmet"
+                          alt="Chestplate"
                         />
-                        <h5>chestplate</h5>
-                      </section>{" "}
+                        <h5>Chestplate</h5>
+                      </section>
                       <section
                         className={
-                          filters.armour?.includes("leggings")
+                          filters.type.includes("leggings")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("armour", "leggings")
-                        }
+                        onClick={() => handleTypeFilterSwitch("leggings")}
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/leggings.webp"
-                          alt="Helmet"
+                          alt="Leggings"
                         />
                         <h5>Leggings</h5>
-                      </section>{" "}
+                      </section>
                       <section
                         className={
-                          filters.armour?.includes("boots")
+                          filters.type.includes("boots")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() => toggleFilterSelection("armour", "boots")}
+                        onClick={() => handleTypeFilterSwitch("boots")}
                       >
                         <img
                           src="/Assests_components/game_textures/armour/diamond/boots.webp"
-                          alt="Helmet"
+                          alt="Boots"
                         />
                         <h5>Boots</h5>
                       </section>
-                    </div>{" "}
+                    </div>
                   </div>
-                </CSSTransition>{" "}
+                </CSSTransition>
                 {/* Accessory types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced &&
-                    filters.type.includes("accessory")
+                    (filterVisibility.advanced &&
+                      filters.type.includes("accessory")) ||
+                    filters.type.includes("bracelet") ||
+                    filters.type.includes("ring") ||
+                    filters.type.includes("necklace")
                   }
                   timeout={300}
                   classNames="fade"
@@ -868,13 +920,11 @@ const ItemsComponent = () => {
                     <div className="item_inner_filtering_section_grid">
                       <section
                         className={
-                          filters.accessory?.includes("necklace")
+                          filters.type.includes("necklace")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("accessory", "necklace")
-                        }
+                        onClick={() => handleTypeFilterSwitch("necklace")}
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/necklace.png"
@@ -884,13 +934,11 @@ const ItemsComponent = () => {
                       </section>
                       <section
                         className={
-                          filters.accessory?.includes("ring")
+                          filters.type.includes("ring")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("accessory", "ring")
-                        }
+                        onClick={() => handleTypeFilterSwitch("ring")}
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/ring.png"
@@ -900,13 +948,11 @@ const ItemsComponent = () => {
                       </section>{" "}
                       <section
                         className={
-                          filters.accessory?.includes("bracelet")
+                          filters.type.includes("bracelet")
                             ? "typeFilterIsActive"
                             : ""
                         }
-                        onClick={() =>
-                          toggleFilterSelection("accessory", "bracelet")
-                        }
+                        onClick={() => handleTypeFilterSwitch("bracelet")}
                       >
                         <img
                           src="/Assests_components/game_textures/accessory/bracelet.png"
