@@ -1,5 +1,6 @@
 .activity_checker_container {
   background: url("../Assests_components/svg_backgrounds/Sprinkle.svg");
+  color: var(--color-text);
 }
 /* title section */
 .activity_checker_title_container {

@@ -55,7 +55,7 @@ const skillIcons = {
   weaponsmithing: weaponsmithingIcon,
   woodworking: woodworkingIcon,
   alchemism: alchemismIcon,
-  armoring: armoringIcon,
+  armouring: armoringIcon,
   cooking: cookingIcon,
   jeweling: jewelingIcon,
   scribing: scribingIcon,
@@ -401,6 +401,7 @@ const ItemsComponent = () => {
         "marathonTome",
         "lootrunTome",
       ];
+      const toolItems = ["axe", "pickaxe", "rod", "scythe"];
 
       if (armourItems.includes(newType)) {
         updatedTypeFilter = isAlreadySelected
@@ -422,6 +423,17 @@ const ItemsComponent = () => {
             (type) => type !== "accessory"
           );
         }
+        /*  */
+      } else if (toolItems.includes(newType)) {
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+
+        if (updatedTypeFilter.some((type) => toolItems.includes(type))) {
+          updatedTypeFilter = updatedTypeFilter.filter(
+            (type) => type !== "tool"
+          );
+        }
       } else if (tomeItems.includes(newType)) {
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== newType)
@@ -432,6 +444,7 @@ const ItemsComponent = () => {
             (type) => type !== "tome"
           );
         }
+        /*  */
       } else if (newType === "armour") {
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== "armour")
@@ -456,6 +469,14 @@ const ItemsComponent = () => {
           : [
               ...updatedTypeFilter.filter((type) => !tomeItems.includes(type)),
               "tome",
+            ];
+        /*  */
+      } else if (newType === "tool") {
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== "tool")
+          : [
+              ...updatedTypeFilter.filter((type) => !toolItems.includes(type)),
+              "tool",
             ];
       } else {
         updatedTypeFilter = isAlreadySelected
@@ -551,6 +572,15 @@ const ItemsComponent = () => {
       }));
     }
   }, [filters.attackSpeed]);
+
+  const toggleFilterOption = (section, option) => {
+    setFilters((prev) => ({
+      ...prev,
+      [section]: prev[section].includes(option)
+        ? prev[section].filter((item) => item !== option) // Remove if already selected
+        : [...prev[section], option], // Add to the selected list
+    }));
+  };
 
   /*  */
   return (
@@ -719,7 +749,11 @@ const ItemsComponent = () => {
                     </section>
                     <section
                       className={
-                        filters.type.includes("tool")
+                        filters.type.some((type) =>
+                          ["tool", "pickaxe", "axe", "rod", "scythe"].includes(
+                            type
+                          )
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -736,7 +770,19 @@ const ItemsComponent = () => {
                     </section>
                     <section
                       className={
-                        filters.type.includes("ingredient")
+                        filters.type.some((type) =>
+                          [
+                            "ingredient",
+                            "weaponsmithing",
+                            "woodworking",
+                            "alchemism",
+                            "armoring",
+                            "cooking",
+                            "jeweling",
+                            "scribing",
+                            "tailoring",
+                          ].includes(type)
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -923,6 +969,62 @@ const ItemsComponent = () => {
                         </section>{" "}
                       </div>
                     )}{" "}
+                  </div>
+                </CSSTransition>
+                {/* Weapon types */}
+                <CSSTransition
+                  in={
+                    filterVisibility.advanced &&
+                    (filters.type.includes("weapon") ||
+                      filters.type.includes("spear") ||
+                      filters.type.includes("dagger") ||
+                      filters.type.includes("bow") ||
+                      filters.type.includes("wand") ||
+                      filters.type.includes("relic"))
+                  }
+                  timeout={300}
+                  classNames="fade"
+                  unmountOnExit
+                >
+                  <div
+                    onClick={() => {
+                      // Toggle the visibility of accessory filters
+                      toggleFilter("weapon");
+                    }}
+                  >
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Weapon Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.weapon ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {((filterVisibility.weapon && // Keep the submenu open if it's visible or any subtype is selected
+                      filters.type.includes("weapon")) ||
+                      filters.type.includes("spear") ||
+                      filters.type.includes("dagger") ||
+                      filters.type.includes("bow") ||
+                      filters.type.includes("wand") |
+                        filters.type.includes("relic")) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.type.includes("spear")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("spear")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/accessory/necklace.png"
+                            alt="necklace"
+                          />
+                          <h5>Spear</h5>
+                        </section>
+                      </div>
+                    )}
                   </div>
                 </CSSTransition>
                 {/* Armour types */}
@@ -1126,7 +1228,7 @@ const ItemsComponent = () => {
                     }}
                   >
                     <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
-                      <label className="pB-05">Tomes Types</label>{" "}
+                      <label className="pB-05">Tome Types</label>{" "}
                       <FontAwesomeIcon
                         icon={faCaretUp}
                         className={`filtering_arrow ${
@@ -1256,7 +1358,12 @@ const ItemsComponent = () => {
                 {/* Tools types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced && filters.type.includes("tool")
+                    (filterVisibility.advanced &&
+                      filters.type.includes("tool")) ||
+                    filters.type.includes("pickaxe") ||
+                    filters.type.includes("axe") ||
+                    filters.type.includes("scythe") ||
+                    filters.type.includes("rod")
                   }
                   timeout={300}
                   classNames="fade"
@@ -1269,7 +1376,7 @@ const ItemsComponent = () => {
                     }}
                   >
                     <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
-                      <label className="pB-05">Accessory Types</label>{" "}
+                      <label className="pB-05">Tool Types</label>{" "}
                       <FontAwesomeIcon
                         icon={faCaretUp}
                         className={`filtering_arrow ${
@@ -1277,214 +1384,252 @@ const ItemsComponent = () => {
                         }`}
                       />
                     </section>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.tool?.includes("axe")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => toggleFilterSelection("tool", "axe")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tool/axe.png"
-                          alt="axe"
-                        />
-                        <h5>Gathering Axe</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.tool?.includes("pickaxe")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => toggleFilterSelection("tool", "pickaxe")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tool/pickaxe.png"
-                          alt="pickaxe"
-                        />
-                        <h5>Gathering Pickaxe</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.tool?.includes("rod")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => toggleFilterSelection("tool", "rod")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tool/rod.png"
-                          alt="rod"
-                        />
-                        <h5>Fishing Rod</h5>
-                      </section>
-                      <section
-                        className={
-                          filters.tool?.includes("scythe")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => toggleFilterSelection("tool", "scythe")}
-                      >
-                        <img
-                          src="/Assests_components/game_textures/tool/scythe.png"
-                          alt="scythe"
-                        />
-                        <h5>Gathering Scythe</h5>
-                      </section>
-                    </div>
+                    {((filterVisibility.tools &&
+                      filters.type.includes("tool")) ||
+                      filters.type.includes("pickaxe") ||
+                      filters.type.includes("axe") ||
+                      filters.type.includes("rod") ||
+                      filters.type.includes("scythe")) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.type.includes("axe")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("axe")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tool/axe.png"
+                            alt="axe"
+                          />
+                          <h5>Gathering Axe</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("pickaxe")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("pickaxe")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tool/pickaxe.png"
+                            alt="pickaxe"
+                          />
+                          <h5>Gathering Pickaxe</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("rod")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("rod")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tool/rod.png"
+                            alt="rod"
+                          />
+                          <h5>Fishing Rod</h5>
+                        </section>
+                        <section
+                          className={
+                            filters.type.includes("scythe")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("scythe")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/tool/scythe.png"
+                            alt="scythe"
+                          />
+                          <h5>Gathering Scythe</h5>
+                        </section>
+                      </div>
+                    )}
                   </div>
                 </CSSTransition>
-                {/* Ingredients types */}
+                {/* Crafting types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced &&
-                    filters.type.includes("ingredient")
+                    (filterVisibility.advanced &&
+                      filters.type.includes("ingredient")) ||
+                    filters.type.includes("weaponsmithing") ||
+                    filters.type.includes("woodworking") ||
+                    filters.type.includes("alchemism") ||
+                    filters.type.includes("armouring") ||
+                    filters.type.includes("cooking") ||
+                    filters.type.includes("jeweling") ||
+                    filters.type.includes("scribing") ||
+                    filters.type.includes("tailoring")
                   }
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Crafting</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid item_inner_filtering_section_grid_bigger">
-                      <section
-                        className={
-                          filters.professions?.includes("alchemism")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("alchemism")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/alchemism.webp"
-                          alt="alchemism"
-                        />
-                        <h5>Alchemism</h5>
-                      </section>
+                  <div onClick={() => toggleFilter("crafting")}>
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Crafting Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.crafting ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {((filterVisibility.crafting &&
+                      filters.type.includes("ingredient")) ||
+                      filters.professions?.includes("weaponsmithing") ||
+                      filters.professions?.includes("woodworking") ||
+                      filters.professions?.includes("alchemism") ||
+                      filters.professions?.includes("armouring") ||
+                      filters.professions?.includes("cooking") ||
+                      filters.professions?.includes("jeweling") ||
+                      filters.professions?.includes("scribing") ||
+                      filters.professions?.includes("tailoring")) && (
+                      <div className="item_inner_filtering_section_grid item_inner_filtering_section_grid_bigger">
+                        <section
+                          className={
+                            filters.professions?.includes("alchemism")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("alchemism")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/alchemism.webp"
+                            alt="alchemism"
+                          />
+                          <h5>Alchemism</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("armouring")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("armouring")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/armouring.webp"
-                          alt="armouring"
-                        />
-                        <h5>Armouring</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("armouring")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("armouring")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/armouring.webp"
+                            alt="armouring"
+                          />
+                          <h5>Armouring</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("cooking")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("cooking")}
-                      >
-                        <img
-                          src="/Assests_components/professions/cooking.webp"
-                          alt="cooking"
-                        />
-                        <h5>Cooking</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("cooking")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("cooking")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/cooking.webp"
+                            alt="cooking"
+                          />
+                          <h5>Cooking</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("jeweling")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("jeweling")}
-                      >
-                        <img
-                          src="/Assests_components/professions/jeweling.webp"
-                          alt="jeweling"
-                        />
-                        <h5>Jeweling</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("jeweling")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("jeweling")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/jeweling.webp"
+                            alt="jeweling"
+                          />
+                          <h5>Jeweling</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("scribing")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("scribing")}
-                      >
-                        <img
-                          src="/Assests_components/professions/scribing.webp"
-                          alt="scribing"
-                        />
-                        <h5>Scribing</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("scribing")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("scribing")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/scribing.webp"
+                            alt="scribing"
+                          />
+                          <h5>Scribing</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("tailoring")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("tailoring")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/tailoring.webp"
-                          alt="tailoring"
-                        />
-                        <h5>Tailoring</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("tailoring")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("tailoring")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/tailoring.webp"
+                            alt="tailoring"
+                          />
+                          <h5>Tailoring</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("weaponsmithing")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("weaponsmithing")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/weaponsmithing.webp"
-                          alt="weaponsmithing"
-                        />
-                        <h5>Weaponsmithing</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("weaponsmithing")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("weaponsmithing")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/weaponsmithing.webp"
+                            alt="weaponsmithing"
+                          />
+                          <h5>Weaponsmithing</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("woodworking")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("woodworking")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/woodworking.webp"
-                          alt="woodworking"
-                        />
-                        <h5>Woodworking</h5>
-                      </section>
-                    </div>{" "}
+                        <section
+                          className={
+                            filters.professions?.includes("woodworking")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("woodworking")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/woodworking.webp"
+                            alt="woodworking"
+                          />
+                          <h5>Woodworking</h5>
+                        </section>
+                      </div>
+                    )}{" "}
                   </div>
                 </CSSTransition>
-                {/* Materials types */}
+                {/* Gathering types */}
                 <CSSTransition
                   in={
                     (filterVisibility.advanced &&
@@ -1498,73 +1643,90 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div>
-                    <label className="pB-05">Gathering</label>
-                    <br></br>
-                    <br></br>
-                    <div className="item_inner_filtering_section_grid">
-                      <section
-                        className={
-                          filters.professions?.includes("mining")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("mining")}
-                      >
-                        <img
-                          src="/Assests_components/professions/mining.webp"
-                          alt="mining"
-                        />
-                        <h5>Mining</h5>
-                      </section>
+                  <div onClick={() => toggleFilter("gathering")}>
+                    <section className="item_inner_filtering_section_grid advanced_filtering_toggleing">
+                      <label className="pB-05">Gathering Types</label>{" "}
+                      <FontAwesomeIcon
+                        icon={faCaretUp}
+                        className={`filtering_arrow ${
+                          filterVisibility.gathering ? "rotated" : ""
+                        }`}
+                      />
+                    </section>
+                    {((filterVisibility.gathering &&
+                      filters.type.includes("material")) ||
+                      filters.professions?.includes("mining") ||
+                      filters.professions?.includes("fishing") ||
+                      filters.professions?.includes("farming") ||
+                      filters.professions?.includes("woodcutting")) && (
+                      <div className="item_inner_filtering_section_grid">
+                        <section
+                          className={
+                            filters.professions?.includes("mining")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleProfessionFilterSwitch("mining")}
+                        >
+                          <img
+                            src="/Assests_components/professions/mining.webp"
+                            alt="mining"
+                          />
+                          <h5>Mining</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("fishing")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("fishing")}
-                      >
-                        <img
-                          src="/Assests_components/professions/fishing.webp"
-                          alt="fishing"
-                        />
-                        <h5>Fishing</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("fishing")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("fishing")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/fishing.webp"
+                            alt="fishing"
+                          />
+                          <h5>Fishing</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("farming")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() => handleProfessionFilterSwitch("farming")}
-                      >
-                        <img
-                          src="/Assests_components/professions/farming.webp"
-                          alt="farming"
-                        />
-                        <h5>Farming</h5>
-                      </section>
+                        <section
+                          className={
+                            filters.professions?.includes("farming")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("farming")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/farming.webp"
+                            alt="farming"
+                          />
+                          <h5>Farming</h5>
+                        </section>
 
-                      <section
-                        className={
-                          filters.professions?.includes("woodcutting")
-                            ? "typeFilterIsActive"
-                            : ""
-                        }
-                        onClick={() =>
-                          handleProfessionFilterSwitch("woodcutting")
-                        }
-                      >
-                        <img
-                          src="/Assests_components/professions/woodcutting.webp"
-                          alt="woodcutting"
-                        />
-                        <h5>Woodcutting</h5>
-                      </section>
-                    </div>{" "}
+                        <section
+                          className={
+                            filters.professions?.includes("woodcutting")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() =>
+                            handleProfessionFilterSwitch("woodcutting")
+                          }
+                        >
+                          <img
+                            src="/Assests_components/professions/woodcutting.webp"
+                            alt="woodcutting"
+                          />
+                          <h5>Woodcutting</h5>
+                        </section>
+                      </div>
+                    )}{" "}
                   </div>
                 </CSSTransition>
               </section>
@@ -1591,119 +1753,31 @@ const ItemsComponent = () => {
                   unmountOnExit
                 >
                   <div className="item_inner_filtering_section_grid">
-                    <section
-                      className={
-                        filters.tier.includes("Common")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Common"] }))
-                      }
-                    >
-                      <FontAwesomeIcon icon={faCircle} />
-                      <h5>Normal</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Unique")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Unique"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-unique)" }}
-                      />
-                      <h5>Unique</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Rare")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Rare"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-rare)" }}
-                      />
-                      <h5>Rare</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Legendary")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Legendary"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-legendary)" }}
-                      />
-                      <h5>Legendary</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Fabled")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Fabled"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-fabled)" }}
-                      />
-                      <h5>Fabled</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Set") ? "typeFilterIsActive" : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Set"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-set)" }}
-                      />
-                      <h5>Set</h5>
-                    </section>{" "}
-                    <section
-                      className={
-                        filters.tier.includes("Mythic")
-                          ? "typeFilterIsActive"
-                          : ""
-                      }
-                      onClick={() =>
-                        setFilters((prev) => ({ ...prev, tier: ["Mythic"] }))
-                      }
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faCircle}
-                        style={{ color: "var(--color-mythic)" }}
-                      />
-                      <h5>Mythic</h5>
-                    </section>
+                    {[
+                      { name: "Common", label: "Normal" },
+                      { name: "Unique", color: "var(--color-unique)" },
+                      { name: "Rare", color: "var(--color-rare)" },
+                      { name: "Legendary", color: "var(--color-legendary)" },
+                      { name: "Fabled", color: "var(--color-fabled)" },
+                      { name: "Set", color: "var(--color-set)" },
+                      { name: "Mythic", color: "var(--color-mythic)" },
+                    ].map(({ name, label, color }) => (
+                      <section
+                        key={name}
+                        className={
+                          filters.tier.includes(name)
+                            ? "typeFilterIsActive"
+                            : ""
+                        }
+                        onClick={() => toggleFilterOption("tier", name)}
+                      >
+                        <FontAwesomeIcon
+                          icon={faCircle}
+                          style={color ? { color } : {}}
+                        />
+                        <h5>{label || name}</h5>
+                      </section>
+                    ))}
                   </div>
                 </CSSTransition>
               </section>
