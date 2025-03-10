@@ -402,6 +402,7 @@ const ItemsComponent = () => {
         "lootrunTome",
       ];
       const toolItems = ["axe", "pickaxe", "rod", "scythe"];
+      const weaponItems = ["spear", "dagger", "bow", "wand", "relic"];
 
       if (armourItems.includes(newType)) {
         updatedTypeFilter = isAlreadySelected
@@ -423,7 +424,6 @@ const ItemsComponent = () => {
             (type) => type !== "accessory"
           );
         }
-        /*  */
       } else if (toolItems.includes(newType)) {
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== newType)
@@ -444,7 +444,23 @@ const ItemsComponent = () => {
             (type) => type !== "tome"
           );
         }
-        /*  */
+      } else if (weaponItems.includes(newType)) {
+        updatedTypeFilter = isAlreadySelected
+          ? updatedTypeFilter.filter((type) => type !== newType)
+          : [...updatedTypeFilter, newType];
+
+        // Remove "weapon" if any specific weapon type is selected
+        if (updatedTypeFilter.some((type) => weaponItems.includes(type))) {
+          updatedTypeFilter = updatedTypeFilter.filter(
+            (type) => type !== "weapon"
+          );
+        }
+        // If no specific weapon types are left, re-add "weapon"
+        else if (
+          !updatedTypeFilter.some((type) => weaponItems.includes(type))
+        ) {
+          updatedTypeFilter.push("weapon");
+        }
       } else if (newType === "armour") {
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== "armour")
@@ -470,7 +486,6 @@ const ItemsComponent = () => {
               ...updatedTypeFilter.filter((type) => !tomeItems.includes(type)),
               "tome",
             ];
-        /*  */
       } else if (newType === "tool") {
         updatedTypeFilter = isAlreadySelected
           ? updatedTypeFilter.filter((type) => type !== "tool")
@@ -544,6 +559,10 @@ const ItemsComponent = () => {
       };
     });
   };
+
+  useEffect(() => {
+    console.log("Filter: ", filters);
+  }, [filters]);
 
   /* Handle filtering for advanced */
   const toggleFilterSelection = (category, value) => {
@@ -852,7 +871,13 @@ const ItemsComponent = () => {
                 {/* Attack speed */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced && filters.type.includes("weapon")
+                    filterVisibility.advanced &&
+                    (filters.type.includes("weapon") ||
+                      filters.type.includes("spear") ||
+                      filters.type.includes("dagger") ||
+                      filters.type.includes("bow") ||
+                      filters.type.includes("wand") ||
+                      filters.type.includes("relic"))
                   }
                   timeout={300}
                   classNames="fade"
@@ -974,13 +999,13 @@ const ItemsComponent = () => {
                 {/* Weapon types */}
                 <CSSTransition
                   in={
-                    filterVisibility.advanced &&
-                    (filters.type.includes("weapon") ||
-                      filters.type.includes("spear") ||
-                      filters.type.includes("dagger") ||
-                      filters.type.includes("bow") ||
-                      filters.type.includes("wand") ||
-                      filters.type.includes("relic"))
+                    (filterVisibility.advanced &&
+                      filters.type.includes("weapon")) ||
+                    filters.type.includes("spear") ||
+                    filters.type.includes("dagger") ||
+                    filters.type.includes("bow") ||
+                    filters.type.includes("wand") ||
+                    filters.type.includes("relic")
                   }
                   timeout={300}
                   classNames="fade"
@@ -988,7 +1013,6 @@ const ItemsComponent = () => {
                 >
                   <div
                     onClick={() => {
-                      // Toggle the visibility of accessory filters
                       toggleFilter("weapon");
                     }}
                   >
@@ -1001,13 +1025,13 @@ const ItemsComponent = () => {
                         }`}
                       />
                     </section>
-                    {((filterVisibility.weapon && // Keep the submenu open if it's visible or any subtype is selected
+                    {((filterVisibility.weapon &&
                       filters.type.includes("weapon")) ||
                       filters.type.includes("spear") ||
                       filters.type.includes("dagger") ||
                       filters.type.includes("bow") ||
-                      filters.type.includes("wand") |
-                        filters.type.includes("relic")) && (
+                      filters.type.includes("wand") || // ✅ Fixed OR operator
+                      filters.type.includes("relic")) && ( // ✅ Fixed OR operator
                       <div className="item_inner_filtering_section_grid">
                         <section
                           className={
@@ -1018,15 +1042,72 @@ const ItemsComponent = () => {
                           onClick={() => handleTypeFilterSwitch("spear")}
                         >
                           <img
-                            src="/Assests_components/game_textures/accessory/necklace.png"
-                            alt="necklace"
+                            src="/Assests_components/game_textures/weapon/spear.png"
+                            alt="spear"
                           />
                           <h5>Spear</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.type.includes("dagger")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("dagger")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/weapon/dagger.png"
+                            alt="dagger"
+                          />
+                          <h5>Dagger</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.type.includes("bow")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("bow")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/weapon/bow.png"
+                            alt="bow"
+                          />
+                          <h5>Bow</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.type.includes("wand")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("wand")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/weapon/wand.png"
+                            alt="wand"
+                          />
+                          <h5>Wand</h5>
+                        </section>{" "}
+                        <section
+                          className={
+                            filters.type.includes("relic")
+                              ? "typeFilterIsActive"
+                              : ""
+                          }
+                          onClick={() => handleTypeFilterSwitch("relic")}
+                        >
+                          <img
+                            src="/Assests_components/game_textures/weapon/relic.png"
+                            alt="relic"
+                          />
+                          <h5>Relic</h5>
                         </section>
                       </div>
                     )}
                   </div>
                 </CSSTransition>
+
                 {/* Armour types */}
                 <CSSTransition
                   in={
