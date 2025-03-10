@@ -100,6 +100,31 @@
   grid-column-gap: 20px;
   width: 100%;
 }
+
+.item_inner_filtering_section_grid_level {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 20px;
+}
+
+.item_inner_filtering_section_grid_level_inner {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+  padding: 0.5rem;
+  background-color: var(--color-bg);
+}
+
+.item_inner_filtering_section_grid_level_inner input {
+  border: 0;
+  border-radius: 2px;
+  box-shadow: rgba(105, 100, 100, 0.35) 0px 5px 15px;
+  background-color: var(--color-bg-500);
+}
+
 .item_inner_filtering_section_grid_bigger {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));

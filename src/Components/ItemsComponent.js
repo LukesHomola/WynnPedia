@@ -90,7 +90,7 @@ const ItemsComponent = () => {
     armour: [],
     tome: [],
     tool: [],
-    levelRange: [],
+    levelRange: [1],
     professions: [],
     identifications: [],
     majorIds: [],
@@ -1866,27 +1866,62 @@ const ItemsComponent = () => {
               {/* LEVEL FILTER */}
               <section className="item_inner_filtering_section_container">
                 <div
-                  className="flex space-between"
+                  className="flex space-between pB-1"
                   onClick={() => toggleFilter("level")}
                 >
-                  <h6>Level range</h6>
+                  <h6>Level</h6>
                   <FontAwesomeIcon
                     icon={faCaretUp}
                     className={`filtering_arrow ${
                       filterVisibility.level ? "rotated" : ""
                     }`}
-                  />
-                </div>{" "}
+                  />{" "}
+                </div>
+
                 <CSSTransition
                   in={filterVisibility.level}
                   timeout={300}
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="item_inner_filtering_section_grid"></div>
+                  <div className="item_inner_filtering_section_grid_level">
+                    <section className="item_inner_filtering_section_grid_level_inner">
+                      <label>Min.</label>
+                      <input
+                        type="number"
+                        value={filters.levelRange[0] || ""}
+                        onChange={(e) => {
+                          const minLevel = Number(e.target.value);
+                          setFilters((prev) => ({
+                            ...prev,
+                            levelRange: minLevel
+                              ? [minLevel, prev.levelRange[1] || minLevel]
+                              : [],
+                          }));
+                        }}
+                      ></input>
+                    </section>
+
+                    <section className="item_inner_filtering_section_grid_level_inner">
+                      <label>Max.</label>
+                      <input
+                        type="number"
+                        value={filters.levelRange[1] || "200"}
+                        onChange={(e) => {
+                          const maxLevel = Number(e.target.value);
+                          setFilters((prev) => ({
+                            ...prev,
+                            levelRange:
+                              prev.levelRange.length === 0
+                                ? [maxLevel, maxLevel]
+                                : [prev.levelRange[0], maxLevel],
+                          }));
+                        }}
+                      />
+                    </section>
+                  </div>
                 </CSSTransition>
               </section>
-
               {/* IDENTIFICATIONS FILTER */}
               <section className="item_inner_filtering_section_container">
                 <div
