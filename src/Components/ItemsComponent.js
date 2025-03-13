@@ -90,9 +90,9 @@ const ItemsComponent = () => {
     armour: [],
     tome: [],
     tool: [],
-    levelRange: [1],
+    levelRange: [1, 200],
     professions: [],
-    identifications: [],
+    identifications: ["rawDexterity", "xpBonus"],
     majorIds: [],
   });
   const [nextUrl, setNextUrl] = useState(null); // For pagination
@@ -661,7 +661,16 @@ const ItemsComponent = () => {
                   <div className="item_inner_filtering_section_grid">
                     <section
                       className={
-                        filters.type.includes("weapon")
+                        filters.type.some((type) =>
+                          [
+                            "weapon",
+                            "spear",
+                            "dagger",
+                            "wand",
+                            "bow",
+                            "relic",
+                          ].includes(type)
+                        )
                           ? "typeFilterIsActive"
                           : ""
                       }
@@ -1889,6 +1898,8 @@ const ItemsComponent = () => {
                       <label>Min.</label>
                       <input
                         type="number"
+                        min={1}
+                        max={999}
                         value={filters.levelRange[0] || ""}
                         onChange={(e) => {
                           const minLevel = Number(e.target.value);
@@ -1906,7 +1917,9 @@ const ItemsComponent = () => {
                       <label>Max.</label>
                       <input
                         type="number"
-                        value={filters.levelRange[1] || "200"}
+                        min={1}
+                        max={999}
+                        value={filters.levelRange[1]}
                         onChange={(e) => {
                           const maxLevel = Number(e.target.value);
                           setFilters((prev) => ({
@@ -1942,7 +1955,117 @@ const ItemsComponent = () => {
                   classNames="fade"
                   unmountOnExit
                 >
-                  <div className="item_inner_filtering_section_grid"></div>
+                  <div className="item_inner_filtering_section_grid_identification_popup">
+                    <h1>Add identifications</h1>
+                    <h5>
+                      Search or select all wanted ID's, items will be filtered
+                      by selected options.
+                    </h5>
+                    <input placeholder="Type ID name..."></input>
+                    <br></br>
+                    <section className="item_inner_filtering_section_grid_identification_popup_items_container">
+                      {/* Earth */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5>Earth Element</h5>
+                        <CSSTransition
+                          in={filterVisibility.level}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Strength</h6>
+                            <h6>Earth Defence</h6>
+                            <h6>Earth Damage %</h6>
+                            <h6>Earth Spell Damage %</h6>
+                            <h6>Earth Spell Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>{" "}
+                      {/* Thunder */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5>Thunder Element</h5>
+                        <CSSTransition
+                          in={filterVisibility.level}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Dexterity</h6>
+                            <h6>Thunder Defence</h6>
+                            <h6>Thunder Damage %</h6>
+                            <h6>Thunder Damage Raw</h6>
+                            <h6>Thunder Spell Damage %</h6>
+                            <h6>Thunder Spell Damage Raw</h6>
+                            <h6>Thunder Main Attack Damage %</h6>
+                            <h6>Thunder Main Attack Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>{" "}
+                      {/* Water */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5>Water Element</h5>
+                        <CSSTransition
+                          in={filterVisibility.level}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div
+                            className="item_inner_filtering_section_grid_identification_popup_expanded_menu
+                          "
+                          >
+                            <h6>Intelligence</h6>
+                            <h6>Water Defence</h6>
+                            <h6>Water Damage %</h6>
+                            <h6>Water Damage Raw</h6>
+                            <h6>Water Spell Damage %</h6>
+                            <h6>Water Spell Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>{" "}
+                      {/* Fire */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5>Fire Element</h5>
+                        <CSSTransition
+                          in={filterVisibility.level}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Defence</h6>
+                            <h6>Fire Defence</h6>
+                            <h6>Fire Damage %</h6>
+                            <h6>Fire Spell Damage %</h6>
+                            <h6>Fire Spell Damage Raw</h6>
+                            <h6>Fire Main Attack Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>{" "}
+                      {/* Air */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5>Air Element</h5>
+                        <CSSTransition
+                          in={filterVisibility.level}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Agility</h6>
+                            <h6>Air Defence</h6>
+                            <h6>Air Damage %</h6>
+                            <h6>Air Spell Damage %</h6>
+                            <h6>Air Spell Damage Raw</h6>
+                            <h6>Air Main Attack Damage %</h6>
+                            <h6>Air Main Attack Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>{" "}
+                    </section>
+                  </div>
                 </CSSTransition>
               </section>
 
