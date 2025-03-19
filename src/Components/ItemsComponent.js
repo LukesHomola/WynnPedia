@@ -64,6 +64,7 @@ const skillIcons = {
 
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
+  const [fetchedMetaData, setFetchedMetaData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
   const [loading, setLoading] = useState(true);
@@ -82,6 +83,22 @@ const ItemsComponent = () => {
     crafting: false,
     gathering: false,
   });
+  const [filterVisibilityIdentifications, setFilterVisibilityIdentifications] =
+    useState({
+      earth: false,
+      thunder: false,
+      water: false,
+      fire: false,
+      air: false,
+      elementalBonuses: false,
+      mainAttDmg: false,
+      spellsAndMana: false,
+      health: false,
+      mobility: false,
+      xpLootingGathering: false,
+      majorIDs: false,
+      misc: false,
+    });
   const [filters, setFilters] = useState({
     query: searchInput || "a",
     type: [],
@@ -115,6 +132,22 @@ const ItemsComponent = () => {
       clearTimeout(handler); // Cleanup timeout on every re-render
     };
   }, [searchInput]);
+
+  /* Fetching metadata */
+  const fetchMetaData = async () => {
+    try {
+      const url = "https://api.wynncraft.com/v3/item/metadata";
+      const response = await fetch(url);
+      const data = await response.json();
+      setFetchedMetaData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMetaData();
+  }, [fetchMetaData]);
 
   /* fetching items*/
 
@@ -373,6 +406,12 @@ const ItemsComponent = () => {
   // Universal function to toggle filters
   const toggleFilter = (filterKey) => {
     setFilterVisibility((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+  const toggleFilterIdentification = (filterKey) => {
+    setFilterVisibilityIdentifications((prev) => ({
       ...prev,
       [filterKey]: !prev[filterKey],
     }));
@@ -1936,7 +1975,7 @@ const ItemsComponent = () => {
                 </CSSTransition>
               </section>
               {/* IDENTIFICATIONS FILTER */}
-              <section className="item_inner_filtering_section_container">
+              <section className="item_inner_filtering_section_container hiddenOverflowX">
                 <div
                   className="flex space-between"
                   onClick={() => toggleFilter("identifications")}
@@ -1952,7 +1991,7 @@ const ItemsComponent = () => {
                 <CSSTransition
                   in={filterVisibility.identifications}
                   timeout={300}
-                  classNames="fade"
+                  classNames="fade hiddenOverflowX"
                   unmountOnExit
                 >
                   <div className="item_inner_filtering_section_grid_identification_popup">
@@ -1961,14 +2000,22 @@ const ItemsComponent = () => {
                       Search or select all wanted ID's, items will be filtered
                       by selected options.
                     </h5>
+                    <br></br>
                     <input placeholder="Type ID name..."></input>
+                    <br></br>
                     <br></br>
                     <section className="item_inner_filtering_section_grid_identification_popup_items_container">
                       {/* Earth */}
                       <div className="item_inner_filtering_section_grid_identification_popup_item">
-                        <h5>Earth Element</h5>
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("earth");
+                          }}
+                        >
+                          Earth Element
+                        </h5>
                         <CSSTransition
-                          in={filterVisibility.level}
+                          in={filterVisibilityIdentifications.earth}
                           timeout={300}
                           classNames="fade"
                           unmountOnExit
@@ -1984,9 +2031,15 @@ const ItemsComponent = () => {
                       </div>{" "}
                       {/* Thunder */}
                       <div className="item_inner_filtering_section_grid_identification_popup_item">
-                        <h5>Thunder Element</h5>
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("thunder");
+                          }}
+                        >
+                          Thunder Element
+                        </h5>
                         <CSSTransition
-                          in={filterVisibility.level}
+                          in={filterVisibilityIdentifications.thunder}
                           timeout={300}
                           classNames="fade"
                           unmountOnExit
@@ -2005,9 +2058,15 @@ const ItemsComponent = () => {
                       </div>{" "}
                       {/* Water */}
                       <div className="item_inner_filtering_section_grid_identification_popup_item">
-                        <h5>Water Element</h5>
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("water");
+                          }}
+                        >
+                          Water Element
+                        </h5>
                         <CSSTransition
-                          in={filterVisibility.level}
+                          in={filterVisibilityIdentifications.water}
                           timeout={300}
                           classNames="fade"
                           unmountOnExit
@@ -2027,9 +2086,15 @@ const ItemsComponent = () => {
                       </div>{" "}
                       {/* Fire */}
                       <div className="item_inner_filtering_section_grid_identification_popup_item">
-                        <h5>Fire Element</h5>
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("fire");
+                          }}
+                        >
+                          Fire Element
+                        </h5>
                         <CSSTransition
-                          in={filterVisibility.level}
+                          in={filterVisibilityIdentifications.fire}
                           timeout={300}
                           classNames="fade"
                           unmountOnExit
@@ -2046,9 +2111,15 @@ const ItemsComponent = () => {
                       </div>{" "}
                       {/* Air */}
                       <div className="item_inner_filtering_section_grid_identification_popup_item">
-                        <h5>Air Element</h5>
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("air");
+                          }}
+                        >
+                          Air Element
+                        </h5>
                         <CSSTransition
-                          in={filterVisibility.level}
+                          in={filterVisibilityIdentifications.air}
                           timeout={300}
                           classNames="fade"
                           unmountOnExit
@@ -2063,7 +2134,186 @@ const ItemsComponent = () => {
                             <h6>Air Main Attack Damage Raw</h6>
                           </div>
                         </CSSTransition>
-                      </div>{" "}
+                      </div>
+                      {/* Elemental bonuses */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("elementalBonuses");
+                          }}
+                        >
+                          Elemental Bonuses
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.elementalBonuses}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Elemental Defence</h6>
+                            <h6>Elemental Damage %</h6>
+                            <h6>Elemental Damage Raw</h6>
+                            <h6>Elemental Spell Damage %</h6>
+                            <h6>Elemental Spell Damage Raw</h6>
+                            <h6>Elemental Damage Bonus Raw</h6>
+                            <h6>Elemental Main Attack Damage Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Main Att dmg */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("mainAttDmg");
+                          }}
+                        >
+                          Main Attack
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.mainAttDmg}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Main Attack Damage %</h6>
+                            <h6>Main Attack Damage Raw</h6>
+                            <h6>Attack Speed Raw</h6>
+                            <h6>Poison</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Spells and Mana */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("spellsAndMana");
+                          }}
+                        >
+                          Spells And Mana
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.spellsAndMana}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Spell Damage %</h6>
+                            <h6>Spell Damage Raw</h6>
+                            <h6>Neutral Spell Damage Raw</h6>
+                            <h6>Raw 1st Spell Cost %</h6>
+                            <h6>1st Spell Cost %</h6>
+                            <h6>Raw 2st Spell Cost %</h6>
+                            <h6>2st Spell Cost %</h6>
+                            <h6>Raw 3st Spell Cost %</h6>
+                            <h6>3st Spell Cost %</h6>
+                            <h6>Raw 4st Spell Cost %</h6>
+                            <h6>4st Spell Cost %</h6>
+                            <h6>Mana Regen</h6>
+                            <h6>Mana Steal</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Health */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("health");
+                          }}
+                        >
+                          Health
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.health}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Health</h6>
+                            <h6>Life Steal</h6>
+                            <h6>Health Regen %</h6>
+                            <h6>Health Regen Raw</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Mobility */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("mobility");
+                          }}
+                        >
+                          Mobility
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.mobility}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Walk Speed</h6>
+                            <h6>Sprint</h6>
+                            <h6>Sprint Regen</h6>
+                            <h6>Jump Height</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Xp, Looting, Gathering */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("xpLootingGathering");
+                          }}
+                        >
+                          Xp, Looting, Gathering
+                        </h5>
+                        <CSSTransition
+                          in={
+                            filterVisibilityIdentifications.xpLootingGathering
+                          }
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            <h6>Loot Bonus</h6>
+                            <h6>Loot Quality</h6>
+                            <h6>Stealing</h6>
+                            <h6>Xp Bonus</h6>
+                            <h6>Gather Xp Bonus</h6>
+                            <h6>Gather Speed</h6>
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Major IDs */}
+                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("majorIDs");
+                          }}
+                        >
+                          Major IDs
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.majorIDs}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            {fetchedMetaData?.majorIds?.map((id, index) => (
+                              <div key={index} className="item_major_id_entry">
+                                <h6>{id}</h6>
+                              </div>
+                            ))}
+                          </div>
+                        </CSSTransition>
+                      </div>
+                      {/* Misc */}
                     </section>
                   </div>
                 </CSSTransition>
