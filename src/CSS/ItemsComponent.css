@@ -284,13 +284,29 @@
   top: 13%;
   right: 1.7%;
   min-width: 62%;
-  max-height: 90svh;
-  overflow: auto;
-  padding: 1rem;
+  max-height: 85svh;
+  padding: 0 1rem;
+  background-color: var(--color-bg-800);
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.item_inner_filtering_section_grid_identification_popup_title_container {
+  border: none !important;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 0.1rem;
   background-color: var(--color-bg-800);
 }
-.hiddenOverflowX {
-  overflow-x: hidden !important;
+
+.item_inner_filtering_section_grid_identification_popup_input {
+  padding: 0.5rem;
+  border: 3px solid var(--color-bg-800);
+  font-size: var(--font-size-h6);
+  width: 95%;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .item_inner_filtering_section_grid_identification_popup_items_container {
@@ -299,12 +315,17 @@
   grid-auto-rows: auto;
   grid-row-gap: 20px;
   grid-column-gap: 20px;
-  overflow-x: hidden;
+  border: none !important;
 }
 .item_inner_filtering_section_grid_identification_popup_item {
   padding: 0.5rem;
+  border: 3px solid var(--color-bg-800);
+  border-radius: 10px;
   background-color: var(--color-bg-700);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
+
 .item_inner_filtering_section_grid_identification_popup_item h5 {
   padding-bottom: 0.5rem;
 }
@@ -322,7 +343,8 @@
   border: 3px solid var(--color-bg-800);
   background-color: var(--color-bg-800);
 }
-.item_inner_filtering_section_grid_identification_popup_expanded_menu h6:hover {
+.item_inner_filtering_section_grid_identification_popup_expanded_menu h6:hover,
+.item_inner_filtering_section_grid_identification_popup_item:hover {
   animation: borderPulse 1.5s infinite ease-in-out;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -342,12 +364,14 @@
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 }
-.items_item_database::-webkit-scrollbar {
+.items_item_database::-webkit-scrollbar,
+.item_inner_filtering_section_grid_identification_popup::-webkit-scrollbar {
   padding-left: 5rem;
   width: 10px;
   background-color: var(--color-bg-600);
 }
-.items_item_database::-webkit-scrollbar-thumb {
+.items_item_database::-webkit-scrollbar-thumb,
+.item_inner_filtering_section_grid_identification_popup::-webkit-scrollbar-thumb {
   background-color: var(--color-primary-900);
   border-radius: 10px;
 }
@@ -381,6 +405,12 @@
 
 .item_database_fit_height {
   height: fit-content !important;
+}
+
+.expanded {
+  /*   background-color: var(--color-primary-03);
+ */
+  border: 3px solid var(--color-primary) !important;
 }
 
 * {

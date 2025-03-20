@@ -677,7 +677,13 @@ const ItemsComponent = () => {
             {/* FILTERING OPTIONS */}
             <div className="item_inner_filtering_inner">
               {/* TYPE FILTER */}
-              <section className="item_inner_filtering_section_container">
+              <section
+                className={`item_inner_filtering_section_container ${
+                  filterVisibility.type
+                    ? "item_inner_filtering_section_container expanded"
+                    : ""
+                }`}
+              >
                 <div
                   className="flex space-between pB-1"
                   onClick={() => toggleFilter("type")}
@@ -1861,7 +1867,13 @@ const ItemsComponent = () => {
               </section>
 
               {/* RARITY FILTER */}
-              <section className="item_inner_filtering_section_container">
+              <section
+                className={`item_inner_filtering_section_container ${
+                  filterVisibility.rarity
+                    ? "item_inner_filtering_section_container expanded"
+                    : ""
+                }`}
+              >
                 <div
                   className="flex space-between pB-1"
                   onClick={() => toggleFilter("rarity")}
@@ -1912,7 +1924,13 @@ const ItemsComponent = () => {
               </section>
 
               {/* LEVEL FILTER */}
-              <section className="item_inner_filtering_section_container">
+              <section
+                className={`item_inner_filtering_section_container ${
+                  filterVisibility.level
+                    ? "item_inner_filtering_section_container expanded"
+                    : ""
+                }`}
+              >
                 <div
                   className="flex space-between pB-1"
                   onClick={() => toggleFilter("level")}
@@ -1975,7 +1993,13 @@ const ItemsComponent = () => {
                 </CSSTransition>
               </section>
               {/* IDENTIFICATIONS FILTER */}
-              <section className="item_inner_filtering_section_container hiddenOverflowX">
+              <section
+                className={`item_inner_filtering_section_container ${
+                  filterVisibility.identifications
+                    ? "item_inner_filtering_section_container expanded"
+                    : ""
+                }`}
+              >
                 <div
                   className="flex space-between"
                   onClick={() => toggleFilter("identifications")}
@@ -1991,17 +2015,24 @@ const ItemsComponent = () => {
                 <CSSTransition
                   in={filterVisibility.identifications}
                   timeout={300}
-                  classNames="fade hiddenOverflowX"
+                  classNames="fade"
                   unmountOnExit
                 >
                   <div className="item_inner_filtering_section_grid_identification_popup">
-                    <h1>Add identifications</h1>
-                    <h5>
-                      Search or select all wanted ID's, items will be filtered
-                      by selected options.
-                    </h5>
-                    <br></br>
-                    <input placeholder="Type ID name..."></input>
+                    <section className="item_inner_filtering_section_grid_identification_popup_title_container">
+                      {" "}
+                      <h1>Add identifications</h1>
+                      <h5>
+                        Search or select all wanted ID's, items will be filtered
+                        by selected options.
+                      </h5>
+                      <br></br>
+                      <input
+                        placeholder="Type ID name..."
+                        className="item_inner_filtering_section_grid_identification_popup_input"
+                      ></input>
+                    </section>
+
                     <br></br>
                     <br></br>
                     <section className="item_inner_filtering_section_grid_identification_popup_items_container">
