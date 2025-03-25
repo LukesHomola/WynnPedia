@@ -221,6 +221,20 @@
     rgba(0, 0, 0, 0.05) 0px 5px 10px;
   background-color: var(--color-bg-700);
 }
+.filter_btn {
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--color-bg-900);
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  background-color: var(--color-bg-500-07);
+}
+.filter_btn:hover {
+  cursor: pointer;
+  animation: borderPulse 1.5s infinite ease-in-out;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
 .item_inner_search input {
   padding: 0.5rem 0.2rem;
   width: 98%;

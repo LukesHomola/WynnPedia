@@ -3580,6 +3580,7 @@ const ItemsComponent = () => {
 
           <div className="item_inner_options">
             <button
+              className="filter_btn"
               onClick={() => {
                 /* RESETING FILTERS */
                 setFilters((prevFilters) => {
@@ -3599,7 +3600,6 @@ const ItemsComponent = () => {
             >
               RESET FILTERS
             </button>
-            <button>APPLY FILTERS</button>
           </div>
         </section>
 
