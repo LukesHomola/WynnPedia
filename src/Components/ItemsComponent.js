@@ -600,10 +600,10 @@ const ItemsComponent = () => {
   };
 
   /* HANDLE IDENTIFICATION FILTERING */
-
   const handleIdentificationFiltering = (identification) => {
     setFilters((prevFilters) => {
       const isSelected = prevFilters.identifications.includes(identification);
+
       let newIdentifications;
 
       if (isSelected) {
@@ -619,6 +619,20 @@ const ItemsComponent = () => {
       return {
         ...prevFilters,
         identifications: newIdentifications,
+      };
+    });
+  };
+  const handleIdentificationFilteringMajor = (majorId) => {
+    setFilters((prevFilters) => {
+      const isSelected = prevFilters.majorIds.includes(majorId);
+
+      const newMajorIds = isSelected
+        ? prevFilters.majorIds.filter((id) => id !== majorId)
+        : [...prevFilters.majorIds, majorId];
+
+      return {
+        ...prevFilters,
+        majorIds: newMajorIds, // ✅ update the correct key
       };
     });
   };
@@ -663,6 +677,150 @@ const ItemsComponent = () => {
         ? prev[section].filter((item) => item !== option) // Remove if already selected
         : [...prev[section], option], // Add to the selected list
     }));
+  };
+
+  /* Identification filtering */
+  const identificationMap = {
+    earth: [
+      "rawStrength",
+      "earthDefence",
+      "earthDamage",
+      "earthSpellDamage",
+      "rawEarthSpellDamage",
+    ],
+    thunder: [
+      "rawDexterity",
+      "thunderDefence",
+      "thunderDamage",
+      "rawThunderDamage",
+      "thunderSpellDamage",
+      "rawThunderSpellDamage",
+      "thunderMainAttackDamage",
+      "rawThunderMainAttackDamage",
+    ],
+    water: [
+      "rawIntelligence",
+      "waterDefence",
+      "waterDamage",
+      "rawWaterDamage",
+      "waterSpellDamage",
+      "rawWaterSpellDamage",
+    ],
+    fire: [
+      "rawDefence",
+      "fireDefence",
+      "fireDamage",
+      "fireSpellDamage",
+      "rawFireSpellDamage",
+      "rawFireMainAttackDamage",
+    ],
+    air: [
+      "rawAgility",
+      "airDefence",
+      "airDamage",
+      "airSpellDamage",
+      "rawAirSpellDamage",
+      "airMainAttackDamage",
+      "rawAirMainAttackDamage",
+    ],
+    elementalBonuses: [
+      "elementalDefence",
+      "elementalDamage",
+      "rawElementalDamage",
+      "elementalSpellDamage",
+      "rawElementalSpellDamage",
+      "elementalMainAttackDamage",
+      "rawElementalMainAttackDamage",
+    ],
+    mainAttDmg: [
+      "mainAttackDamage",
+      "rawMainAttackDamage",
+      "rawAttackSpeed",
+      "poison",
+    ],
+    spellsAndMana: [
+      "spellDamage",
+      "rawSpellDamage",
+      "rawNeutralSpellDamage",
+      "1stSpellCost",
+      "raw1stSpellCost",
+      "2ndSpellCost",
+      "raw2stSpellCost",
+      "3rdSpellCost",
+      "raw3rdSpellCost",
+      "4thSpellCost",
+      "raw4thSpellCost",
+      "manaRegen",
+      "manaSteal",
+    ],
+    health: ["rawHealth", "lifeSteal", "healthRegen", "healthRegenRaw"],
+    mobility: ["walkSpeed", "sprint", "sprintRegen", "jumpHeight"],
+    xpLootingGathering: [
+      "lootBonus",
+      "lootQuality",
+      "stealing",
+      "xpBonus",
+      "gatherXpBonus",
+      "gatherSpeed",
+    ],
+    misc: [
+      "agility",
+      "baseAirDamage",
+      "baseAirDefence",
+      "baseDamage",
+      "baseEarthDamage",
+      "baseEarthDefence",
+      "baseFireDamage",
+      "baseFireDefence",
+      "baseHealth",
+      "baseThunderDamage",
+      "baseThunderDefence",
+      "baseWaterDamage",
+      "baseWaterDefence",
+      "criticalDamageBonus",
+      "damage",
+      "damageFromMobs",
+      "defence",
+      "dexterity",
+      "earthMainAttackDamage",
+      "elementalDefence",
+      "elementalMainAttackDamage",
+      "exploding",
+      "fireMainAttackDamage",
+      "intelligence",
+      "leveledLootBonus",
+      "leveledXpBonus",
+      "mainAttackFireDamage",
+      "mainAttackRange",
+      "neutralDamage",
+      "neutralMainAttackDamage",
+      "neutralSpellDamage",
+      "rawAirDamage",
+      "rawDamage",
+      "rawEarthDamage",
+      "rawEarthMainAttackDamage",
+      "rawFireDamage",
+      "rawMaxMana",
+      "rawNeutralDamage",
+      "rawNeutralMainAttackDamage",
+      "rawWaterMainAttackDamage",
+      "reflection",
+      "slowEnemy",
+      "strength",
+      "thorns",
+      "thunderSpellDamage",
+      "weakenEnemy",
+    ],
+    majorIDs: Array.isArray(fetchedMetaData?.majorIds)
+      ? fetchedMetaData.majorIds
+      : [],
+  };
+
+  /* RegEx to split misc. naming in filtering */
+  const formatIdentificationLabel = (id) => {
+    return id
+      .replace(/([a-z])([A-Z])/g, "$1 $2") // Insert space before capital letters
+      .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
   };
 
   /*  */
@@ -2062,7 +2220,15 @@ const ItemsComponent = () => {
                     <br></br>
                     <section className="item_inner_filtering_section_grid_identification_popup_items_container">
                       {/* Earth */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["earth"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("earth");
@@ -2149,7 +2315,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>{" "}
                       {/* Thunder */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["thunder"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("thunder");
@@ -2288,7 +2462,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>{" "}
                       {/* Water */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["water"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("water");
@@ -2394,7 +2576,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>{" "}
                       {/* Fire */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["fire"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("fire");
@@ -2495,7 +2685,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>{" "}
                       {/* Air */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["air"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("air");
@@ -2612,7 +2810,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Elemental bonuses */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["elementalBonuses"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("elementalBonuses");
@@ -2741,7 +2947,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Main Att dmg */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["mainAttDmg"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("mainAttDmg");
@@ -2818,7 +3032,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Spells and Mana */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["spellsAndMana"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("spellsAndMana");
@@ -3007,7 +3229,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Health filtering */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["health"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("health");
@@ -3076,7 +3306,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Mobility filtering */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["mobility"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("mobility");
@@ -3143,7 +3381,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Xp, Looting, Gathering */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["xpLootingGathering"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("xpLootingGathering");
@@ -3238,7 +3484,15 @@ const ItemsComponent = () => {
                         </CSSTransition>
                       </div>
                       {/* Major IDs */}
-                      <div className="item_inner_filtering_section_grid_identification_popup_item">
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["majorIDs"].some((id) =>
+                            filters.majorIds.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
                         <h5
                           onClick={() => {
                             toggleFilterIdentification("majorIDs");
@@ -3255,13 +3509,66 @@ const ItemsComponent = () => {
                           <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
                             {fetchedMetaData?.majorIds?.map((id, index) => (
                               <div key={index} className="item_major_id_entry">
-                                <h6>{id}</h6>
+                                <h6
+                                  className={
+                                    filters.majorIds.includes(id)
+                                      ? "expanded"
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleIdentificationFilteringMajor(id);
+                                  }}
+                                >
+                                  {id}
+                                </h6>
                               </div>
                             ))}
                           </div>
                         </CSSTransition>
                       </div>
-                      {/* Misc */}
+                      {/* Misc filtering */}
+                      <div
+                        className={`item_inner_filtering_section_grid_identification_popup_item ${
+                          identificationMap["misc"].some((id) =>
+                            filters.identifications.includes(id)
+                          )
+                            ? "item_inner_filtering_section_container expanded"
+                            : ""
+                        }`}
+                      >
+                        <h5
+                          onClick={() => {
+                            toggleFilterIdentification("misc");
+                          }}
+                        >
+                          Misc.
+                        </h5>
+                        <CSSTransition
+                          in={filterVisibilityIdentifications.misc}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                            {identificationMap.misc.map((idName) => (
+                              <div key={idName} className="item_major_id_entry">
+                                <h6
+                                  className={
+                                    filters.identifications.includes(idName)
+                                      ? "expanded"
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleIdentificationFiltering(idName);
+                                  }}
+                                >
+                                  {formatIdentificationLabel(idName)}
+                                </h6>
+                              </div>
+                            ))}
+                          </div>
+                        </CSSTransition>
+                      </div>
                     </section>
                   </div>
                 </CSSTransition>
