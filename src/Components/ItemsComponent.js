@@ -65,7 +65,14 @@ const skillIcons = {
 const ItemsComponent = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [fetchedMetaData, setFetchedMetaData] = useState([]);
+  const [fetchedMajorIDsAndMetaData, setFetchedMajorIDsAndMetaData] = useState({
+    majorIds: [],
+    identifications: [],
+  });
+
   const [searchInput, setSearchInput] = useState("");
+  const [searchInputIdentifications, setSearchInputIdentifications] =
+    useState("");
   const [debouncedSearchInput, setDebouncedSearchInput] = useState(searchInput);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -134,20 +141,39 @@ const ItemsComponent = () => {
   }, [searchInput]);
 
   /* Fetching metadata */
-  const fetchMetaData = async () => {
-    try {
-      const url = "https://api.wynncraft.com/v3/item/metadata";
-      const response = await fetch(url);
-      const data = await response.json();
-      setFetchedMetaData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const fetchMetaData = async () => {
+      try {
+        const url = "https://api.wynncraft.com/v3/item/metadata";
+        const response = await fetch(url);
+        const data = await response.json();
+        setFetchedMetaData(data);
+        setFetchedMajorIDsAndMetaData({
+          majorIds: data.majorIds,
+          identifications: data.identifications,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchMetaData();
+  }, []);
 
   useEffect(() => {
-    fetchMetaData();
-  }, [fetchMetaData]);
+    if (fetchedMajorIDsAndMetaData) {
+      console.log("FetchedMetaData changed:", fetchedMajorIDsAndMetaData);
+    }
+  }, [fetchedMajorIDsAndMetaData]);
+
+  useEffect(() => {
+    if (searchInputIdentifications) {
+      console.log(
+        "searchInputIdentifications changed:",
+        searchInputIdentifications
+      );
+    }
+  }, [searchInputIdentifications]);
 
   /* fetching items*/
 
@@ -822,6 +848,38 @@ const ItemsComponent = () => {
       .replace(/([a-z])([A-Z])/g, "$1 $2") // Insert space before capital letters
       .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
   };
+
+  /* Filtering for identification and majorids by search field */
+  useEffect(() => {
+    if (!fetchedMajorIDsAndMetaData) return;
+
+    const search = searchInput.trim().toLowerCase();
+    if (!search) {
+      // Clear filters when there's no search input
+      setFilters((prev) => ({
+        ...prev,
+        majorIds: [],
+        identifications: [],
+      }));
+      return;
+    }
+
+    const matchedMajorIds =
+      fetchedMajorIDsAndMetaData.majorIds?.filter((id) =>
+        id.toLowerCase().includes(search)
+      ) || [];
+
+    const matchedIdentifications =
+      fetchedMajorIDsAndMetaData.identifications?.filter((id) =>
+        id.toLowerCase().includes(search)
+      ) || [];
+
+    setFilters((prev) => ({
+      ...prev,
+      majorIds: matchedMajorIds,
+      identifications: matchedIdentifications,
+    }));
+  }, [searchInput, fetchedMajorIDsAndMetaData]);
 
   /*  */
   return (
@@ -2211,6 +2269,11 @@ const ItemsComponent = () => {
                       </h5>
                       <br></br>
                       <input
+                        value={searchInputIdentifications}
+                        onChange={(event) => {
+                          setSearchInputIdentifications(event.target.value);
+                        }}
+                        type="text"
                         placeholder="Type ID name..."
                         className="item_inner_filtering_section_grid_identification_popup_input"
                       ></input>
@@ -2218,6 +2281,65 @@ const ItemsComponent = () => {
 
                     <br></br>
                     <br></br>
+                    {/* RENDERING SEARCHED DATA */}
+                    {searchInputIdentifications && (
+                      <div className="item_inner_filtering_secitem_inner_filtering_section_grid_identification_popup_items_containertion_grid_identification_popup_item_SEARCH">
+                        <h5>Search results:</h5>{" "}
+                        <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu_SEARCH">
+                          {fetchedMajorIDsAndMetaData.majorIds
+                            .filter((item) =>
+                              item
+                                .toLowerCase()
+                                .includes(
+                                  searchInputIdentifications.toLowerCase()
+                                )
+                            )
+                            .map((item) => (
+                              <div key={`major-${item}`}>
+                                <h6
+                                  className={
+                                    filters.majorIds.includes(item)
+                                      ? "expanded"
+                                      : ""
+                                  }
+                                  onClick={() =>
+                                    handleIdentificationFilteringMajor(item)
+                                  }
+                                >
+                                  {formatIdentificationLabel(item)}
+                                </h6>
+                              </div>
+                            ))}
+                        </div>
+                        <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu_SEARCH">
+                          {fetchedMajorIDsAndMetaData.identifications
+                            .filter((item) =>
+                              item
+                                .toLowerCase()
+                                .includes(
+                                  searchInputIdentifications.toLowerCase()
+                                )
+                            )
+                            .map((item) => (
+                              <div key={`ident-${item}`}>
+                                <h6
+                                  className={
+                                    filters.identifications.includes(item)
+                                      ? "expanded"
+                                      : ""
+                                  }
+                                  onClick={() =>
+                                    handleIdentificationFiltering(item)
+                                  }
+                                >
+                                  {formatIdentificationLabel(item)}
+                                </h6>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+
                     <section className="item_inner_filtering_section_grid_identification_popup_items_container">
                       {/* Earth */}
                       <div
