@@ -2284,7 +2284,9 @@ const ItemsComponent = () => {
                     {/* RENDERING SEARCHED DATA */}
                     {searchInputIdentifications && (
                       <div className="item_inner_filtering_secitem_inner_filtering_section_grid_identification_popup_items_containertion_grid_identification_popup_item_SEARCH">
-                        <h5>Search results:</h5>{" "}
+                        <h5>Search results:</h5>
+
+                        {/* Major IDs */}
                         <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu_SEARCH">
                           {fetchedMajorIDsAndMetaData.majorIds
                             .filter((item) =>
@@ -2310,7 +2312,17 @@ const ItemsComponent = () => {
                                 </h6>
                               </div>
                             ))}
+                          {/* Display message if no majorIds found */}
+                          {fetchedMajorIDsAndMetaData.majorIds.filter((item) =>
+                            item
+                              .toLowerCase()
+                              .includes(
+                                searchInputIdentifications.toLowerCase()
+                              )
+                          ).length === 0 && <p>No major IDs found</p>}
                         </div>
+
+                        {/* Identifications */}
                         <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu_SEARCH">
                           {fetchedMajorIDsAndMetaData.identifications
                             .filter((item) =>
@@ -2336,1362 +2348,1441 @@ const ItemsComponent = () => {
                                 </h6>
                               </div>
                             ))}
+                          {/* Display message if no identifications found */}
+                          {fetchedMajorIDsAndMetaData.identifications.filter(
+                            (item) =>
+                              item
+                                .toLowerCase()
+                                .includes(
+                                  searchInputIdentifications.toLowerCase()
+                                )
+                          ).length === 0 && <p>No identifications found</p>}
                         </div>
                       </div>
                     )}
 
-                    <section className="item_inner_filtering_section_grid_identification_popup_items_container">
-                      {/* Earth */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["earth"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("earth");
-                          }}
+                    <br></br>
+
+                    {!searchInputIdentifications && (
+                      <section className="item_inner_filtering_section_grid_identification_popup_items_container">
+                        {/* Earth */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["earth"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Earth Element
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.earth}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("rawStrength")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawStrength")
-                              }
-                            >
-                              Strength
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("earthDefence")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("earthDefence")
-                              }
-                            >
-                              Earth Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("earthDamage")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("earthDamage")
-                              }
-                            >
-                              Earth Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "earthSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "earthSpellDamage"
-                                )
-                              }
-                            >
-                              Earth Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawEarthSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawEarthSpellDamage"
-                                )
-                              }
-                            >
-                              Earth Spell Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>{" "}
-                      {/* Thunder */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["thunder"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("thunder");
-                          }}
-                        >
-                          Thunder Element
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.thunder}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("rawDexterity")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawDexterity")
-                              }
-                            >
-                              Dexterity
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "thunderDefence"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("thunderDefence")
-                              }
-                            >
-                              Thunder Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "thunderDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("thunderDamage")
-                              }
-                            >
-                              Thunder Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawThunderDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawThunderDamage"
-                                )
-                              }
-                            >
-                              Thunder Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "thunderSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "thunderSpellDamage"
-                                )
-                              }
-                            >
-                              Thunder Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawThunderSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawThunderSpellDamage"
-                                )
-                              }
-                            >
-                              Thunder Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "thunderMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "thunderMainAttackDamage"
-                                )
-                              }
-                            >
-                              Thunder Main Attack Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawThunderMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawThunderMainAttackDamage"
-                                )
-                              }
-                            >
-                              Thunder Main Attack Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>{" "}
-                      {/* Water */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["water"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("water");
-                          }}
-                        >
-                          Water Element
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.water}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div
-                            className="item_inner_filtering_section_grid_identification_popup_expanded_menu
-                          "
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("earth");
+                            }}
                           >
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawIntelligence"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawIntelligence")
-                              }
-                            >
-                              Intelligence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("waterDefence")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("waterDefence")
-                              }
-                            >
-                              Water Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("waterDamage")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("waterDamage")
-                              }
-                            >
-                              Water Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawWaterDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawWaterDamage")
-                              }
-                            >
-                              Water Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "waterSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "waterSpellDamage"
-                                )
-                              }
-                            >
-                              Water Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawWaterSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawWaterSpellDamage"
-                                )
-                              }
-                            >
-                              Water Spell Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>{" "}
-                      {/* Fire */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["fire"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("fire");
-                          }}
+                            Earth Element
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.earth}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawStrength"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("rawStrength")
+                                }
+                              >
+                                Strength
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "earthDefence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("earthDefence")
+                                }
+                              >
+                                Earth Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "earthDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("earthDamage")
+                                }
+                              >
+                                Earth Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "earthSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "earthSpellDamage"
+                                  )
+                                }
+                              >
+                                Earth Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawEarthSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawEarthSpellDamage"
+                                  )
+                                }
+                              >
+                                Earth Spell Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>{" "}
+                        {/* Thunder */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["thunder"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Fire Element
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.fire}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("thunder");
+                            }}
+                          >
+                            Thunder Element
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.thunder}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawDexterity"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("rawDexterity")
+                                }
+                              >
+                                Dexterity
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "thunderDefence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "thunderDefence"
+                                  )
+                                }
+                              >
+                                Thunder Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "thunderDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("thunderDamage")
+                                }
+                              >
+                                Thunder Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawThunderDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawThunderDamage"
+                                  )
+                                }
+                              >
+                                Thunder Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "thunderSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "thunderSpellDamage"
+                                  )
+                                }
+                              >
+                                Thunder Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawThunderSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawThunderSpellDamage"
+                                  )
+                                }
+                              >
+                                Thunder Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "thunderMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "thunderMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Thunder Main Attack Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawThunderMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawThunderMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Thunder Main Attack Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>{" "}
+                        {/* Water */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["water"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("rawDefence")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawDefence")
-                              }
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("water");
+                            }}
+                          >
+                            Water Element
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.water}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div
+                              className="item_inner_filtering_section_grid_identification_popup_expanded_menu
+                          "
                             >
-                              Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("fireDefence")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("fireDefence")
-                              }
-                            >
-                              Fire Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("fireDamage")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("fireDamage")
-                              }
-                            >
-                              Fire Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "fireSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("fireSpellDamage")
-                              }
-                            >
-                              Fire Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawFireSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawFireSpellDamage"
-                                )
-                              }
-                            >
-                              Fire Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawFireMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawFireMainAttackDamage"
-                                )
-                              }
-                            >
-                              Fire Main Attack Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>{" "}
-                      {/* Air */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["air"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("air");
-                          }}
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawIntelligence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawIntelligence"
+                                  )
+                                }
+                              >
+                                Intelligence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "waterDefence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("waterDefence")
+                                }
+                              >
+                                Water Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "waterDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("waterDamage")
+                                }
+                              >
+                                Water Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawWaterDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawWaterDamage"
+                                  )
+                                }
+                              >
+                                Water Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "waterSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "waterSpellDamage"
+                                  )
+                                }
+                              >
+                                Water Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawWaterSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawWaterSpellDamage"
+                                  )
+                                }
+                              >
+                                Water Spell Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>{" "}
+                        {/* Fire */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["fire"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Air Element
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.air}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("fire");
+                            }}
+                          >
+                            Fire Element
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.fire}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes("rawDefence")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("rawDefence")
+                                }
+                              >
+                                Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "fireDefence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("fireDefence")
+                                }
+                              >
+                                Fire Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("fireDamage")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("fireDamage")
+                                }
+                              >
+                                Fire Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "fireSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "fireSpellDamage"
+                                  )
+                                }
+                              >
+                                Fire Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawFireSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawFireSpellDamage"
+                                  )
+                                }
+                              >
+                                Fire Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawFireMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawFireMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Fire Main Attack Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>{" "}
+                        {/* Air */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["air"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("rawAgility")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawAgility")
-                              }
-                            >
-                              Agility
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("airDefence")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("airDefence")
-                              }
-                            >
-                              Air Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("airDamage")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("airDamage")
-                              }
-                            >
-                              Air Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "airSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("airSpellDamage")
-                              }
-                            >
-                              Air Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawAirSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawAirSpellDamage"
-                                )
-                              }
-                            >
-                              Air Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "airMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "airMainAttackDamage"
-                                )
-                              }
-                            >
-                              Air Main Attack Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawAirMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawAirMainAttackDamage"
-                                )
-                              }
-                            >
-                              Air Main Attack Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Elemental bonuses */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["elementalBonuses"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("elementalBonuses");
-                          }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("air");
+                            }}
+                          >
+                            Air Element
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.air}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes("rawAgility")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("rawAgility")
+                                }
+                              >
+                                Agility
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("airDefence")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("airDefence")
+                                }
+                              >
+                                Air Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("airDamage")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("airDamage")
+                                }
+                              >
+                                Air Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "airSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "airSpellDamage"
+                                  )
+                                }
+                              >
+                                Air Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawAirSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawAirSpellDamage"
+                                  )
+                                }
+                              >
+                                Air Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "airMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "airMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Air Main Attack Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawAirMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawAirMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Air Main Attack Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Elemental bonuses */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["elementalBonuses"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Elemental Bonuses
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.elementalBonuses}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("elementalBonuses");
+                            }}
+                          >
+                            Elemental Bonuses
+                          </h5>
+                          <CSSTransition
+                            in={
+                              filterVisibilityIdentifications.elementalBonuses
+                            }
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "elementalDefence"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "elementalDefence"
+                                  )
+                                }
+                              >
+                                Elemental Defence
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "elementalDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "elementalDamage"
+                                  )
+                                }
+                              >
+                                Elemental Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawElementalDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawElementalDamage"
+                                  )
+                                }
+                              >
+                                Elemental Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "elementalSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "elementalSpellDamage"
+                                  )
+                                }
+                              >
+                                Elemental Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawElementalSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawElementalSpellDamage"
+                                  )
+                                }
+                              >
+                                Elemental Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "elementalMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "elementalMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Elemental Main Attack Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawElementalMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawElementalMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Elemental Main Attack Damage Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Main Att dmg */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["mainAttDmg"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "elementalDefence"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "elementalDefence"
-                                )
-                              }
-                            >
-                              Elemental Defence
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "elementalDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("elementalDamage")
-                              }
-                            >
-                              Elemental Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawElementalDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawElementalDamage"
-                                )
-                              }
-                            >
-                              Elemental Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "elementalSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "elementalSpellDamage"
-                                )
-                              }
-                            >
-                              Elemental Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawElementalSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawElementalSpellDamage"
-                                )
-                              }
-                            >
-                              Elemental Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "elementalMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "elementalMainAttackDamage"
-                                )
-                              }
-                            >
-                              Elemental Main Attack Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawElementalMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawElementalMainAttackDamage"
-                                )
-                              }
-                            >
-                              Elemental Main Attack Damage Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Main Att dmg */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["mainAttDmg"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("mainAttDmg");
-                          }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("mainAttDmg");
+                            }}
+                          >
+                            Main Attack
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.mainAttDmg}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "mainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "mainAttackDamage"
+                                  )
+                                }
+                              >
+                                Main Attack Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawMainAttackDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawMainAttackDamage"
+                                  )
+                                }
+                              >
+                                Main Attack Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawAttackSpeed"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawAttackSpeed"
+                                  )
+                                }
+                              >
+                                Attack Speed Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("poison")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("poison")
+                                }
+                              >
+                                Poison
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Spells and Mana */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["spellsAndMana"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Main Attack
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.mainAttDmg}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("spellsAndMana");
+                            }}
+                          >
+                            Spells And Mana
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.spellsAndMana}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "spellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("spellDamage")
+                                }
+                              >
+                                Spell Damage %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawSpellDamage"
+                                  )
+                                }
+                              >
+                                Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "rawNeutralSpellDamage"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "rawNeutralSpellDamage"
+                                  )
+                                }
+                              >
+                                Neutral Spell Damage Raw
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "1stSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("1stSpellCost")
+                                }
+                              >
+                                1st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "raw1stSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "raw1stSpellCost"
+                                  )
+                                }
+                              >
+                                Raw 1st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "2ndSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("2ndSpellCost")
+                                }
+                              >
+                                2st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "raw2stSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "raw2stSpellCost"
+                                  )
+                                }
+                              >
+                                Raw 2st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "3rdSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("3rdSpellCost")
+                                }
+                              >
+                                3st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "raw3rdSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "raw3rdSpellCost"
+                                  )
+                                }
+                              >
+                                Raw 3st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "4thSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("4thSpellCost")
+                                }
+                              >
+                                4st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "raw4thSpellCost"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "raw4thSpellCost"
+                                  )
+                                }
+                              >
+                                Raw 4st Spell Cost %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("manaRegen")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("manaRegen")
+                                }
+                              >
+                                Mana Regen
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("manaSteal")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("manaSteal")
+                                }
+                              >
+                                Mana Steal
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Health filtering */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["health"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "mainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "mainAttackDamage"
-                                )
-                              }
-                            >
-                              Main Attack Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawMainAttackDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawMainAttackDamage"
-                                )
-                              }
-                            >
-                              Main Attack Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawAttackSpeed"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawAttackSpeed")
-                              }
-                            >
-                              Attack Speed Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("poison")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("poison")
-                              }
-                            >
-                              Poison
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Spells and Mana */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["spellsAndMana"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("spellsAndMana");
-                          }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("health");
+                            }}
+                          >
+                            Health
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.health}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes("rawHealth")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("rawHealth")
+                                }
+                              >
+                                Health
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("lifeSteal")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("lifeSteal")
+                                }
+                              >
+                                Life Steal
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "healthRegen"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("healthRegen")
+                                }
+                              >
+                                Health Regen %
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "healthRegenRaw"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering(
+                                    "healthRegenRaw"
+                                  )
+                                }
+                              >
+                                Health Regen Raw
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Mobility filtering */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["mobility"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Spells And Mana
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.spellsAndMana}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("mobility");
+                            }}
+                          >
+                            Mobility
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.mobility}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes("walkSpeed")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("walkSpeed")
+                                }
+                              >
+                                Walk Speed
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("sprint")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("sprint")
+                                }
+                              >
+                                Sprint
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "sprintRegen"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("sprintRegen")
+                                }
+                              >
+                                Sprint Regen
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("jumpHeight")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("jumpHeight")
+                                }
+                              >
+                                Jump Height
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Xp, Looting, Gathering */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["xpLootingGathering"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("spellDamage")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("spellDamage")
-                              }
-                            >
-                              Spell Damage %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawSpellDamage")
-                              }
-                            >
-                              Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "rawNeutralSpellDamage"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering(
-                                  "rawNeutralSpellDamage"
-                                )
-                              }
-                            >
-                              Neutral Spell Damage Raw
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("1stSpellCost")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("1stSpellCost")
-                              }
-                            >
-                              1st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "raw1stSpellCost"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("raw1stSpellCost")
-                              }
-                            >
-                              Raw 1st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("2ndSpellCost")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("2ndSpellCost")
-                              }
-                            >
-                              2st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "raw2stSpellCost"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("raw2stSpellCost")
-                              }
-                            >
-                              Raw 2st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("3rdSpellCost")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("3rdSpellCost")
-                              }
-                            >
-                              3st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "raw3rdSpellCost"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("raw3rdSpellCost")
-                              }
-                            >
-                              Raw 3st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("4thSpellCost")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("4thSpellCost")
-                              }
-                            >
-                              4st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "raw4thSpellCost"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("raw4thSpellCost")
-                              }
-                            >
-                              Raw 4st Spell Cost %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("manaRegen")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("manaRegen")
-                              }
-                            >
-                              Mana Regen
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("manaSteal")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("manaSteal")
-                              }
-                            >
-                              Mana Steal
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Health filtering */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["health"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("health");
-                          }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("xpLootingGathering");
+                            }}
+                          >
+                            Xp, Looting, Gathering
+                          </h5>
+                          <CSSTransition
+                            in={
+                              filterVisibilityIdentifications.xpLootingGathering
+                            }
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              <h6
+                                className={
+                                  filters.identifications.includes("lootBonus")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("lootBonus")
+                                }
+                              >
+                                Loot Bonus
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "lootQuality"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("lootQuality")
+                                }
+                              >
+                                Loot Quality
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("stealing")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("stealing")
+                                }
+                              >
+                                Stealing
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes("xpBonus")
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("xpBonus")
+                                }
+                              >
+                                Xp Bonus
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "gatherXpBonus"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("gatherXpBonus")
+                                }
+                              >
+                                Gather Xp Bonus
+                              </h6>
+                              <h6
+                                className={
+                                  filters.identifications.includes(
+                                    "gatherSpeed"
+                                  )
+                                    ? "expanded"
+                                    : ""
+                                }
+                                onClick={() =>
+                                  handleIdentificationFiltering("gatherSpeed")
+                                }
+                              >
+                                Gather Speed
+                              </h6>
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Major IDs */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["majorIDs"].some((id) =>
+                              filters.majorIds.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Health
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.health}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("rawHealth")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("rawHealth")
-                              }
-                            >
-                              Health
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("lifeSteal")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("lifeSteal")
-                              }
-                            >
-                              Life Steal
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("healthRegen")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("healthRegen")
-                              }
-                            >
-                              Health Regen %
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "healthRegenRaw"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("healthRegenRaw")
-                              }
-                            >
-                              Health Regen Raw
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Mobility filtering */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["mobility"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("mobility");
-                          }}
-                        >
-                          Mobility
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.mobility}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("walkSpeed")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("walkSpeed")
-                              }
-                            >
-                              Walk Speed
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("sprint")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("sprint")
-                              }
-                            >
-                              Sprint
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("sprintRegen")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("sprintRegen")
-                              }
-                            >
-                              Sprint Regen
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("jumpHeight")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("jumpHeight")
-                              }
-                            >
-                              Jump Height
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Xp, Looting, Gathering */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["xpLootingGathering"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("xpLootingGathering");
-                          }}
-                        >
-                          Xp, Looting, Gathering
-                        </h5>
-                        <CSSTransition
-                          in={
-                            filterVisibilityIdentifications.xpLootingGathering
-                          }
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            <h6
-                              className={
-                                filters.identifications.includes("lootBonus")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("lootBonus")
-                              }
-                            >
-                              Loot Bonus
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("lootQuality")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("lootQuality")
-                              }
-                            >
-                              Loot Quality
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("stealing")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("stealing")
-                              }
-                            >
-                              Stealing
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("xpBonus")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("xpBonus")
-                              }
-                            >
-                              Xp Bonus
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes(
-                                  "gatherXpBonus"
-                                )
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("gatherXpBonus")
-                              }
-                            >
-                              Gather Xp Bonus
-                            </h6>
-                            <h6
-                              className={
-                                filters.identifications.includes("gatherSpeed")
-                                  ? "expanded"
-                                  : ""
-                              }
-                              onClick={() =>
-                                handleIdentificationFiltering("gatherSpeed")
-                              }
-                            >
-                              Gather Speed
-                            </h6>
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Major IDs */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["majorIDs"].some((id) =>
-                            filters.majorIds.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("majorIDs");
-                          }}
-                        >
-                          Major IDs
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.majorIDs}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            {fetchedMetaData?.majorIds?.map((id, index) => (
-                              <div key={index} className="item_major_id_entry">
-                                <h6
-                                  className={
-                                    filters.majorIds.includes(id)
-                                      ? "expanded"
-                                      : ""
-                                  }
-                                  onClick={() => {
-                                    handleIdentificationFilteringMajor(id);
-                                  }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("majorIDs");
+                            }}
+                          >
+                            Major IDs
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.majorIDs}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              {fetchedMetaData?.majorIds?.map((id, index) => (
+                                <div
+                                  key={index}
+                                  className="item_major_id_entry"
                                 >
-                                  {id}
-                                </h6>
-                              </div>
-                            ))}
-                          </div>
-                        </CSSTransition>
-                      </div>
-                      {/* Misc filtering */}
-                      <div
-                        className={`item_inner_filtering_section_grid_identification_popup_item ${
-                          identificationMap["misc"].some((id) =>
-                            filters.identifications.includes(id)
-                          )
-                            ? "item_inner_filtering_section_container expanded"
-                            : ""
-                        }`}
-                      >
-                        <h5
-                          onClick={() => {
-                            toggleFilterIdentification("misc");
-                          }}
+                                  <h6
+                                    className={
+                                      filters.majorIds.includes(id)
+                                        ? "expanded"
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleIdentificationFilteringMajor(id);
+                                    }}
+                                  >
+                                    {id}
+                                  </h6>
+                                </div>
+                              ))}
+                            </div>
+                          </CSSTransition>
+                        </div>
+                        {/* Misc filtering */}
+                        <div
+                          className={`item_inner_filtering_section_grid_identification_popup_item ${
+                            identificationMap["misc"].some((id) =>
+                              filters.identifications.includes(id)
+                            )
+                              ? "item_inner_filtering_section_container expanded"
+                              : ""
+                          }`}
                         >
-                          Misc.
-                        </h5>
-                        <CSSTransition
-                          in={filterVisibilityIdentifications.misc}
-                          timeout={300}
-                          classNames="fade"
-                          unmountOnExit
-                        >
-                          <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
-                            {identificationMap.misc.map((idName) => (
-                              <div key={idName} className="item_major_id_entry">
-                                <h6
-                                  className={
-                                    filters.identifications.includes(idName)
-                                      ? "expanded"
-                                      : ""
-                                  }
-                                  onClick={() => {
-                                    handleIdentificationFiltering(idName);
-                                  }}
+                          <h5
+                            onClick={() => {
+                              toggleFilterIdentification("misc");
+                            }}
+                          >
+                            Misc.
+                          </h5>
+                          <CSSTransition
+                            in={filterVisibilityIdentifications.misc}
+                            timeout={300}
+                            classNames="fade"
+                            unmountOnExit
+                          >
+                            <div className="item_inner_filtering_section_grid_identification_popup_expanded_menu">
+                              {identificationMap.misc.map((idName) => (
+                                <div
+                                  key={idName}
+                                  className="item_major_id_entry"
                                 >
-                                  {formatIdentificationLabel(idName)}
-                                </h6>
-                              </div>
-                            ))}
-                          </div>
-                        </CSSTransition>
-                      </div>
-                    </section>
+                                  <h6
+                                    className={
+                                      filters.identifications.includes(idName)
+                                        ? "expanded"
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleIdentificationFiltering(idName);
+                                    }}
+                                  >
+                                    {formatIdentificationLabel(idName)}
+                                  </h6>
+                                </div>
+                              ))}
+                            </div>
+                          </CSSTransition>
+                        </div>
+                      </section>
+                    )}
                   </div>
                 </CSSTransition>
               </section>

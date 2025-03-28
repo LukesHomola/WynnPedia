@@ -298,7 +298,7 @@
   top: 13%;
   right: 1.7%;
   min-width: 62%;
-  max-height: 85svh;
+  height: 85svh;
   padding: 0 1rem;
   background-color: var(--color-bg-800);
   overflow: hidden;
