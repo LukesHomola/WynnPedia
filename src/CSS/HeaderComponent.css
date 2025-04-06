@@ -115,3 +115,41 @@
   color: var(--color-text) !important;
 }
 /*  */
+
+.header_expand_menu_search_results {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 0px;
+}
+.header_expand_menu_search_players,
+.header_expand_menu_search_guilds {
+  padding: 1rem;
+  background-color: var(--color-bg-700);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+.header_expand_menu_search_players ul li,
+.header_expand_menu_search_guilds ul li {
+  padding: 0.5rem;
+}
+.header_expand_menu_search_players ul li:nth-child(odd),
+.header_expand_menu_search_guilds ul li:nth-child(odd) {
+  background-color: var(--color-bg-800);
+}
+
+.pagination_buttons button:hover,
+.header_expand_menu_pagination button:hover,
+.header_expand_menu_hover:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}

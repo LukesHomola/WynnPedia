@@ -1046,6 +1046,7 @@ const LeaderboardComponent = () => {
       debouncedSearchFetch();
     }
   }, [searchInput]);
+
   return (
     <div className="leaderboard_wrapper">
       <div className="leaderboard_inner">
