@@ -40,12 +40,15 @@ const Header = () => {
     clickedGuild,
     setClickedGuild,
   } = useContext(PlayerContext);
-  const [searchInput, setSearchInput] = useState("");
+  const [playerSearchInput, setPlayerSearchInput] = useState("");
+  const [guildSearchInput, setGuildSearchInput] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [searchResults, setSearchResults] = useState("");
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [error, setError] = useState();
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [blockSearch, setBlockSearch] = useState(true);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -56,23 +59,10 @@ const Header = () => {
   const [itemsPerPagePlayers, setItemsPerPagePlayers] = useState(10); // Default to 10 items per page
   const [itemsPerPageGuilds, setItemsPerPageGuilds] = useState(10); // Default to 10 items per page
 
-  const handleSettingsClick = () => {
+  /*   const handleSettingsClick = () => {
     setIsSettingsOpen(true);
   };
-
-  // Handle custom controls
-  const handleInputChange = (e) => {
-    const newPlayerName = e.target.value;
-    setPlayerName(newPlayerName); // Update playerName in context
-    localStorage.setItem("playerName", newPlayerName); // Save to local storage
-  };
-
-  const handleInputChangeGuild = (e) => {
-    const newGuildName = e.target.value;
-    setGuildNameProfile(newGuildName); // Update playerName in context
-    localStorage.setItem("guildName", newGuildName); // Save to local storage
-  };
-
+ */
   //
   // ADVANCED SEARCH (WIP) - 06.04.2025 */
   //
@@ -90,67 +80,82 @@ const Header = () => {
   };
 
   /* SEARCH INPUT FUCNTIONS // ADVANCED (WIP) - 06.04.2025 */
-  const handleSearchFetch = async () => {
-    if (!searchInput || typeof searchInput !== "string") {
-      setError("Invalid search input. Please enter a valid query.");
-      return;
-    }
+  const handlePlayerSearchFetch = async () => {
+    if (!playerSearchInput.trim()) return;
 
-    setSearchResults({ players: [], guilds: [] }); // Reset results
-    const url = `https://api.wynncraft.com/v3/search/${searchInput}`;
+    const url = `https://api.wynncraft.com/v3/search/${playerSearchInput}`;
     try {
       const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const result = await response.json();
-      console.log("SEARCH QUERY: ", result);
 
-      // Extract player nicknames (default to empty array if players is undefined)
       const players = Object.values(result.players || {});
+      console.log("PLAYER SEARCH:", players);
 
-      // Extract guild names and prefixes (default to empty array if guilds is undefined)
-      const guilds = Object.values(result.guilds || {}).map((guild) => ({
-        name: guild.name,
-        prefix: guild.prefix,
-      }));
-
-      // Extract guild prefixes (default to empty array if guildsPrefix is undefined)
-      const guildPrefixes = Object.values(result.guildsPrefix || {}).map(
-        (guild) => ({
-          name: guild.name,
-          prefix: guild.prefix,
-        })
-      );
-
-      // Combine guilds and guildPrefixes (remove duplicates)
-      const allGuilds = [...new Set([...guilds, ...guildPrefixes])];
-
-      // Log the combined data for debugging
-      console.log("COMBINED DATA: ", { players, guilds: allGuilds });
-
-      // Set the grouped data to state
-      setSearchResults({
+      setSearchResults((prev) => ({
+        ...prev,
         players,
-        guilds: allGuilds,
-      });
-      setIsMenuVisible(true);
+      }));
     } catch (error) {
-      console.error("Search fetch error:", error);
-      setError("Failed to fetch search results. Please try again.");
+      console.error("Player search error:", error);
+      setError("Failed to fetch player results.");
     }
   };
-  const debouncedSearchFetch = debounce(handleSearchFetch, 300);
+
+  const handleGuildSearchFetch = async () => {
+    if (!guildSearchInput.trim()) return;
+
+    const url = `https://api.wynncraft.com/v3/search/${guildSearchInput}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+      const result = await response.json();
+
+      const guilds = Object.values(result.guilds || {}).map((g) => ({
+        name: g.name,
+        prefix: g.prefix,
+      }));
+      const prefixes = Object.values(result.guildsPrefix || {}).map((g) => ({
+        name: g.name,
+        prefix: g.prefix,
+      }));
+
+      const allGuilds = [
+        ...new Map(
+          [...guilds, ...prefixes].map((g) => [`${g.name}-${g.prefix}`, g])
+        ).values(),
+      ];
+
+      console.log("GUILD SEARCH:", allGuilds);
+
+      setSearchResults((prev) => ({
+        ...prev,
+        guilds: allGuilds,
+      }));
+    } catch (error) {
+      console.error("Guild search error:", error);
+      setError("Failed to fetch guild results.");
+    }
+  };
+
+  const debouncedPlayerSearch = debounce(handlePlayerSearchFetch, 300);
+  const debouncedGuildSearch = debounce(handleGuildSearchFetch, 300);
 
   useEffect(() => {
-    if (searchInput && !blockSearch) {
-      debouncedSearchFetch();
+    if ((playerSearchInput || "").trim()) {
+      debouncedPlayerSearch();
     }
-  }, [searchInput]);
+  }, [playerSearchInput]);
+
+  useEffect(() => {
+    if ((guildSearchInput || "").trim()) {
+      debouncedGuildSearch();
+    }
+  }, [guildSearchInput]);
 
   const renderSearchResults = () => {
-    if (!searchInput || !searchResults) {
-      return null; // Don't render if there's no input or no results
+    if (!playerSearchInput.trim() && !guildSearchInput.trim()) {
+      return null;
     }
 
     // Calculate pagination for players
@@ -336,33 +341,42 @@ const Header = () => {
     );
   };
 
-  /*   useEffect(() => {
-    const storedName = localStorage.getItem("playerName");
-    if (storedName) {
-      setSearchInput(storedName);
-      setDisplayName(storedName);
+  useEffect(() => {
+    const storedPlayer = localStorage.getItem("playerName");
+    const storedGuild = localStorage.getItem("guildName");
+
+    if (storedPlayer) {
+      setPlayerSearchInput(storedPlayer);
+      setDisplayName(storedPlayer);
     }
-  }, []); */
+
+    if (storedGuild) {
+      setGuildSearchInput(storedGuild);
+    }
+  }, []);
 
   /* Handeling global .guild_page_members_item click for character details*/
   /* Creating new tab for clicked player from guild apge */
 
-  /*   const handleGuildClick = (clickedGuild) => {
+  const handleGuildClick = (clickedGuild) => {
     setGuildNameProfile(clickedGuild); // Update playerName in context
     localStorage.setItem("guildName", clickedGuild); // Save to local storage
     setClickedGuild(clickedGuild);
+    setGuildSearchInput(clickedGuild);
+    setDisplayName(clickedGuild); // updates input text
     setIsMenuVisible(false);
-    navigate(`/guild`);
+    navigate(`/`);
   };
   const handleMemberClick = (clickedPlayer) => {
+    console.log("TEST", clickedPlayer);
     setClickedPlayer(clickedPlayer);
     setPlayerName(clickedPlayer);
     localStorage.setItem("playerName", clickedPlayer);
-    setSearchInput(clickedPlayer); // updates search field if needed
+    setPlayerSearchInput(clickedPlayer);
     setDisplayName(clickedPlayer); // updates input text
     setIsMenuVisible(false);
     navigate(`/`);
-  }; */
+  };
 
   return (
     <header>
@@ -393,31 +407,31 @@ const Header = () => {
             <input
               className="nav_btns_profile_search_section_input"
               type="text"
-              value={playerName}
-              onChange={handleInputChange}
-              placeholder="Playername"
-              aria-label="Search profile"
-            />
-            {/*    <input
-              className="nav_btns_profile_search_section_input"
-              type="text"
-              value={searchInput}
+              value={playerSearchInput}
               onChange={(e) => {
-                setSearchInput(e.target.value); // updates input
-                setPlayerName(e.target.value); // updates context
-                localStorage.setItem("playerName", e.target.value); // persists it
+                const value = e.target.value;
+                setIsMenuVisible(true);
+                setPlayerSearchInput(value);
+                setPlayerName(value);
+                localStorage.setItem("playerName", value);
               }}
               placeholder="Playername"
               aria-label="Search profile"
-            /> */}{" "}
+            />
           </div>
           <div className="nav_btns_profile_search_section">
             <img src={guild_icon} alt="Avatar" id="topbar_avatar" />
             <input
               className="nav_btns_profile_search_section_input"
               type="text"
-              value={guildNameProfile}
-              onChange={handleInputChangeGuild}
+              value={guildSearchInput}
+              onChange={(e) => {
+                const value = e.target.value;
+                setIsMenuVisible(true);
+                setGuildSearchInput(value);
+                setGuildNameProfile(value);
+                localStorage.setItem("guildName", value);
+              }}
               placeholder="Guild/TAG"
               aria-label="Search profile"
             />
@@ -501,8 +515,7 @@ const Header = () => {
         </div>
       </div>
       <div className="header_expand_menu_container">
-        {/*         {isMenuVisible && renderSearchResults()}
-         */}{" "}
+        {isMenuVisible && renderSearchResults()}
       </div>
     </header>
   );
