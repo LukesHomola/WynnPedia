@@ -26,6 +26,8 @@ const GuildPage = () => {
     setClickedGuildPlayer,
     clickedGuild,
     setClickedGuild,
+    isMenuVisible,
+    setIsMenuVisible,
   } = useContext(PlayerContext);
 
   const navigate = useNavigate();
@@ -197,51 +199,53 @@ const GuildPage = () => {
   return (
     <div className="stats_tabs_container">
       {" "}
-      <div className="stats_tabs_container_controls">
-        <section className="stats_tabs_main_profile_tabs">
-          {guildTabs.slice(0, 10).map((guild, index) => (
-            <div
-              key={`tab-${index}`}
-              className={`stats_tabs_main_profile_tab ${
-                activeTabIndex === index ? "activeTab" : ""
-              }`}
-              onMouseUp={(event) => {
-                // Check if the middle mouse button was clicked
-                if (event.button === 1) {
-                  handleCloseTab(index);
-                }
-              }}
-            >
-              <button onClick={() => handleTabClick(index, guild.name)}>
-                <h5>{guild?.name}</h5>
-              </button>
-              {index > 0 && (
-                <button
-                  onClick={() => {
+      {!isMenuVisible && (
+        <div className="stats_tabs_container_controls">
+          <section className="stats_tabs_main_profile_tabs">
+            {guildTabs.slice(0, 10).map((guild, index) => (
+              <div
+                key={`tab-${index}`}
+                className={`stats_tabs_main_profile_tab ${
+                  activeTabIndex === index ? "activeTab" : ""
+                }`}
+                onMouseUp={(event) => {
+                  // Check if the middle mouse button was clicked
+                  if (event.button === 1) {
                     handleCloseTab(index);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
+                  }
+                }}
+              >
+                <button onClick={() => handleTabClick(index, guild.name)}>
+                  <h5>{guild?.name}</h5>
                 </button>
-              )}
-            </div>
-          ))}
-        </section>
+                {index > 0 && (
+                  <button
+                    onClick={() => {
+                      handleCloseTab(index);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </section>
 
-        {guildTabs.length < 10 && (
-          <button
-            className="stats_tabs_add"
-            onClick={() =>
-              handleAddTab({
-                name: `Guild ${guildTabs.length + 1}`,
-                characters: [],
-              })
-            }
-          >
-            <FontAwesomeIcon icon={faPlus} />{" "}
-          </button>
-        )}
-      </div>
+          {guildTabs.length < 10 && (
+            <button
+              className="stats_tabs_add"
+              onClick={() =>
+                handleAddTab({
+                  name: `Guild ${guildTabs.length + 1}`,
+                  characters: [],
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faPlus} />{" "}
+            </button>
+          )}
+        </div>
+      )}
       {/*  */}
       <div className="stats_tabs_main_tab_container p-05 ">
         <div className="guild_page_background">
@@ -256,14 +260,19 @@ const GuildPage = () => {
                         (tab, index) =>
                           index === activeTabIndex && (
                             <div key={index}>
-                              <input
-                                className="guild_page_input"
-                                placeholder="Enter guild/tag"
-                                value={tabInputs[index] || ""}
-                                onChange={(e) =>
-                                  handleInputChange(index, e.target.value)
-                                }
-                              />
+                              {!isMenuVisible && (
+                                <input
+                                  style={{
+                                    border: "1px solid #530909",
+                                  }}
+                                  className="guild_page_input"
+                                  placeholder="Enter guild/tag"
+                                  value={tabInputs[index] || ""}
+                                  onChange={(e) =>
+                                    handleInputChange(index, e.target.value)
+                                  }
+                                />
+                              )}
                             </div>
                           )
                       )}

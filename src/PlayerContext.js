@@ -24,6 +24,9 @@ export const PlayerProvider = ({ children }) => {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  // Saved player and guild check to hide tabs temp. while search is open
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
   const openSettings = () => setIsSettingsOpen(true);
   const closeSettings = () => setIsSettingsOpen(false);
 
@@ -148,6 +151,8 @@ export const PlayerProvider = ({ children }) => {
         setIsSettingsOpen,
         openSettings,
         closeSettings,
+        isMenuVisible,
+        setIsMenuVisible,
       }}
     >
       {children}

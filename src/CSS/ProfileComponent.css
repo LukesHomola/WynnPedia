@@ -397,6 +397,12 @@ progress::-moz-progress-bar {
   background-color: var(--color-bg-600);
 }
 
+@media (max-width: 1460px) {
+  .stats_tabs_container_controls {
+    top: 7rem !important;
+  }
+}
+
 .guild_page_input_background,
 .stats_tabs_main_input_background {
   position: fixed;

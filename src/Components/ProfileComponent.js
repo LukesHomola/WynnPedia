@@ -690,6 +690,8 @@ const Profile = ({ characters, currentCharacter }) => {
     setClickedGuild,
     clickedPlayer,
     setClickedPlayer,
+    isMenuVisible,
+    setIsMenuVisible,
   } = useContext(PlayerContext); // Access playerName from context
   const debounceTimeout = useRef(null);
 
@@ -893,51 +895,53 @@ const Profile = ({ characters, currentCharacter }) => {
 
   return (
     <div className="stats_tabs_container">
-      <div className="stats_tabs_container_controls">
-        <section className="stats_tabs_main_profile_tabs">
-          {playerTabs.slice(0, 10).map((player, index) => (
-            <div
-              key={`tab-${index}`}
-              className={`stats_tabs_main_profile_tab ${
-                activeTabIndex === index ? "activeTab" : ""
-              }`}
-              onMouseUp={(event) => {
-                // Check if the middle mouse button was clicked
-                if (event.button === 1) {
-                  handleCloseTab(index);
-                }
-              }}
-            >
-              <button onClick={() => handleTabClick(index, player.username)}>
-                <h5>{player?.username}</h5>
-              </button>
-              {index > 0 && (
-                <button
-                  onClick={() => {
+      {!isMenuVisible && (
+        <div className="stats_tabs_container_controls">
+          <section className="stats_tabs_main_profile_tabs">
+            {playerTabs.slice(0, 10).map((player, index) => (
+              <div
+                key={`tab-${index}`}
+                className={`stats_tabs_main_profile_tab ${
+                  activeTabIndex === index ? "activeTab" : ""
+                }`}
+                onMouseUp={(event) => {
+                  // Check if the middle mouse button was clicked
+                  if (event.button === 1) {
                     handleCloseTab(index);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faXmark} />
+                  }
+                }}
+              >
+                <button onClick={() => handleTabClick(index, player.username)}>
+                  <h5>{player?.username}</h5>
                 </button>
-              )}
-            </div>
-          ))}
-        </section>
+                {index > 0 && (
+                  <button
+                    onClick={() => {
+                      handleCloseTab(index);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </section>
 
-        {playerTabs.length < 10 && (
-          <button
-            className="stats_tabs_add"
-            onClick={() =>
-              handleAddTab({
-                username: `Player ${playerTabs.length + 1}`,
-                characters: [],
-              })
-            }
-          >
-            <FontAwesomeIcon icon={faPlus} />{" "}
-          </button>
-        )}
-      </div>
+          {playerTabs.length < 10 && (
+            <button
+              className="stats_tabs_add"
+              onClick={() =>
+                handleAddTab({
+                  username: `Player ${playerTabs.length + 1}`,
+                  characters: [],
+                })
+              }
+            >
+              <FontAwesomeIcon icon={faPlus} />{" "}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* TABBED PLAYER RENDERS */}
       <div className="stats_tabs_main_tab_container p-05">
@@ -952,13 +956,18 @@ const Profile = ({ characters, currentCharacter }) => {
                       (tab, index) =>
                         index === activeTabIndex && (
                           <div key={index}>
-                            <input
-                              placeholder="Enter username"
-                              value={tabInputs[index] || ""}
-                              onChange={(e) =>
-                                handleInputChange(index, e.target.value)
-                              }
-                            />
+                            {!isMenuVisible && (
+                              <input
+                                style={{
+                                  border: "1px solid #530909",
+                                }}
+                                placeholder="Enter username"
+                                value={tabInputs[index] || ""}
+                                onChange={(e) =>
+                                  handleInputChange(index, e.target.value)
+                                }
+                              />
+                            )}
                           </div>
                         )
                     )}

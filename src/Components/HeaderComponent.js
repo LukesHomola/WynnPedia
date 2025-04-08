@@ -39,17 +39,19 @@ const Header = () => {
     setClickedPlayer,
     clickedGuild,
     setClickedGuild,
+    isMenuVisible,
+    setIsMenuVisible,
   } = useContext(PlayerContext);
-  const [playerSearchInput, setPlayerSearchInput] = useState("");
-  const [guildSearchInput, setGuildSearchInput] = useState("");
+  const [playerSearchInput, setPlayerSearchInput] = useState("Player");
+  const [guildSearchInput, setGuildSearchInput] = useState("GuildName");
   const [displayName, setDisplayName] = useState("");
   const [searchResults, setSearchResults] = useState("");
   const [error, setError] = useState();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [blockSearch, setBlockSearch] = useState(true);
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-
+  /*   const [isMenuVisible, setIsMenuVisible] = useState(false);
+   */
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
@@ -361,15 +363,12 @@ const Header = () => {
   const handleGuildClick = (clickedGuild) => {
     setGuildNameProfile(clickedGuild); // Update playerName in context
     localStorage.setItem("guildName", clickedGuild); // Save to local storage
-    setClickedGuild(clickedGuild);
     setGuildSearchInput(clickedGuild);
     setDisplayName(clickedGuild); // updates input text
     setIsMenuVisible(false);
-    navigate(`/`);
+    navigate(`/guild`);
   };
   const handleMemberClick = (clickedPlayer) => {
-    console.log("TEST", clickedPlayer);
-    setClickedPlayer(clickedPlayer);
     setPlayerName(clickedPlayer);
     localStorage.setItem("playerName", clickedPlayer);
     setPlayerSearchInput(clickedPlayer);
