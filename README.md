@@ -1,4 +1,4 @@
-### 🧙‍♀️ WynnPedia beta v1.0 – the desktop pocket guide
+# 🧙‍♀️ WynnPedia beta v1.0 – the desktop pocket guide
 Your personal Wynncraft desktop companion is here!
 
 WynnPedia is a standalone desktop app built for Wynncraft players and guild members. This release brings a rich, interactive experience for exploring player data, tracking guild activity, and more — all in a modern interface designed for multitasking.
@@ -35,3 +35,18 @@ Already working list of the WynnPedia's features.
 💻 Designed for Desktop
 Built with Electron.
 Perfect companion while you play.
+
+**Download and play**
+- Head to the **releases** section and download latest version.
+- https://github.com/LukesHomola/WynnPedia/releases
+
+### 
+⚠️**Disclaimer**
+- I’m releasing the project in its current state because I want to share the work publicly, even though it’s not fully finished. Due to limited time and capacity, I won’t be able to actively develop or maintain the app for now.
+
+That said:
+- 🧪 The app is stable enough for everyday use
+- 🐛 Some features are incomplete or experimental
+- 🤝 Contributions, forks, and feedback are very welcome
+
+Thank you for trying WynnPedia and supporting this community tool!
