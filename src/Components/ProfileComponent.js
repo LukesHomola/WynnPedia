@@ -186,7 +186,6 @@ const Profile = ({ characters, currentCharacter }) => {
   const handleInputChange = (index, value) => {
     setTabInputs((prevInputs) => {
       const updatedInputs = [...prevInputs];
-      console.log("LOG: ", playerTabs);
       updatedInputs[index] = value;
       return updatedInputs;
     });

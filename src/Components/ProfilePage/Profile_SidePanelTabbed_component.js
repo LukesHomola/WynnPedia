@@ -22,10 +22,6 @@ const SidePanelTabbed = ({ tabPlayerData, playerTabs }) => {
   const debounceTimeout = useRef(null);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  useEffect(() => {
-    console.log("PLAYER DATA TABBED: ", tabPlayerData);
-  }, [tabPlayerData]);
-
   const supportRank = tabPlayerData?.supportRank
     ? tabPlayerData.supportRank.toLowerCase()
     : null;

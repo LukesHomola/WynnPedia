@@ -19,10 +19,6 @@ const SidePanel = ({ playerData, playerTabs }) => {
   const { setClickedGuild } = useContext(PlayerContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("PLAYER DATA: ", playerData);
-  }, [playerData]);
-
   const supportRank = playerData?.supportRank
     ? playerData.supportRank.toLowerCase()
     : null;

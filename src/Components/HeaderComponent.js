@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { PlayerContext } from "../PlayerContext.js"; // Import PlayerContext
 import { Link, useFetcher, NavLink } from "react-router-dom";
@@ -50,54 +50,41 @@ const Header = () => {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [blockSearch, setBlockSearch] = useState(true);
-  /*   const [isMenuVisible, setIsMenuVisible] = useState(false);
-   */
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
 
   const [currentPagePlayers, setCurrentPagePlayers] = useState(1);
   const [currentPageGuilds, setCurrentPageGuilds] = useState(1);
-  const [itemsPerPagePlayers, setItemsPerPagePlayers] = useState(10); // Default to 10 items per page
-  const [itemsPerPageGuilds, setItemsPerPageGuilds] = useState(10); // Default to 10 items per page
+  const [itemsPerPagePlayers, setItemsPerPagePlayers] = useState(10);
+  const [itemsPerPageGuilds, setItemsPerPageGuilds] = useState(10);
 
-  /*   const handleSettingsClick = () => {
-    setIsSettingsOpen(true);
-  };
- */
-  //
-  // ADVANCED SEARCH (WIP) - 06.04.2025 */
-  //
-  // Debounce function
+  const [debouncedPlayerName, setDebouncedPlayerName] = useState(playerName);
+  const [debouncedGuildName, setDebouncedGuildName] =
+    useState(guildNameProfile);
+  const playerCommitTimeout = useRef(null);
+  const guildCommitTimeout = useRef(null);
+
   const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
     };
   };
+  const handlePlayerSearchFetch = async (query) => {
+    const q = (query || "").trim();
+    if (q.length < 2) return;
 
-  /* SEARCH INPUT FUCNTIONS // ADVANCED (WIP) - 06.04.2025 */
-  const handlePlayerSearchFetch = async () => {
-    if (!playerSearchInput.trim()) return;
-
-    const url = `https://api.wynncraft.com/v3/search/${playerSearchInput}`;
+    const url = `https://api.wynncraft.com/v3/search/${encodeURIComponent(q)}`;
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const result = await response.json();
 
       const players = Object.values(result.players || {});
-      console.log("PLAYER SEARCH:", players);
-
-      setSearchResults((prev) => ({
-        ...prev,
-        players,
-      }));
+      setSearchResults((prev) => ({ ...prev, players }));
     } catch (error) {
       console.error("Player search error:", error);
       setError("Failed to fetch player results.");
@@ -128,8 +115,6 @@ const Header = () => {
         ).values(),
       ];
 
-      console.log("GUILD SEARCH:", allGuilds);
-
       setSearchResults((prev) => ({
         ...prev,
         guilds: allGuilds,
@@ -140,20 +125,40 @@ const Header = () => {
     }
   };
 
-  const debouncedPlayerSearch = debounce(handlePlayerSearchFetch, 300);
-  const debouncedGuildSearch = debounce(handleGuildSearchFetch, 300);
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      setDebouncedPlayerName(playerName);
+    }, 1000);
+    return () => clearTimeout(timeOut);
+  }, [playerName]);
+
+  const debouncedPlayerSearch = useRef(
+    debounce((q) => handlePlayerSearchFetch(q), 500)
+  ).current;
+  const debouncedGuildSearch = useRef(
+    debounce((q) => handleGuildSearchFetch(q), 500)
+  ).current;
 
   useEffect(() => {
-    if ((playerSearchInput || "").trim()) {
-      debouncedPlayerSearch();
-    }
-  }, [playerSearchInput]);
+    debouncedPlayerSearch(playerSearchInput);
+  }, [playerSearchInput, debouncedPlayerSearch]);
+  useEffect(() => {
+    debouncedGuildSearch(guildSearchInput);
+  }, [guildSearchInput, debouncedGuildSearch]);
 
   useEffect(() => {
-    if ((guildSearchInput || "").trim()) {
-      debouncedGuildSearch();
-    }
-  }, [guildSearchInput]);
+    const t = setTimeout(() => {
+      setDebouncedPlayerName(playerName);
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [playerName]);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedGuildName(guildNameProfile);
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [guildNameProfile]);
 
   const renderSearchResults = () => {
     if (!playerSearchInput.trim() && !guildSearchInput.trim()) {
@@ -184,12 +189,10 @@ const Header = () => {
       searchResults.guilds.length / itemsPerPageGuilds
     );
 
-    // Function to handle page change for players
     const handlePageChangePlayers = (pageNumber) => {
       setCurrentPagePlayers(pageNumber);
     };
 
-    // Function to handle page change for guilds
     const handlePageChangeGuilds = (pageNumber) => {
       setCurrentPageGuilds(pageNumber);
     };
@@ -357,14 +360,11 @@ const Header = () => {
     }
   }, []);
 
-  /* Handeling global .guild_page_members_item click for character details*/
-  /* Creating new tab for clicked player from guild apge */
-
   const handleGuildClick = (clickedGuild) => {
-    setGuildNameProfile(clickedGuild); // Update playerName in context
-    localStorage.setItem("guildName", clickedGuild); // Save to local storage
+    setGuildNameProfile(clickedGuild);
+    localStorage.setItem("guildName", clickedGuild);
     setGuildSearchInput(clickedGuild);
-    setDisplayName(clickedGuild); // updates input text
+    setDisplayName(clickedGuild);
     setIsMenuVisible(false);
     navigate(`/guild`);
   };
@@ -372,7 +372,7 @@ const Header = () => {
     setPlayerName(clickedPlayer);
     localStorage.setItem("playerName", clickedPlayer);
     setPlayerSearchInput(clickedPlayer);
-    setDisplayName(clickedPlayer); // updates input text
+    setDisplayName(clickedPlayer);
     setIsMenuVisible(false);
     navigate(`/`);
   };
@@ -383,17 +383,7 @@ const Header = () => {
       <div className="nav">
         <div className="profile_topbar_container no-drag">
           <div className="logo_topbar_container flex flex-center pR-1-5">
-            <img
-              src={logo}
-              className="logo"
-              style={{ maxWidth: "4rem" }}
-              onClick={() => {
-                console.log("Search input: ", searchInput);
-                console.log("ClickedPlayer: ", clickedPlayer);
-                console.log("PlayerName: ", playerName);
-                console.log("Is visible: ", isMenuVisible);
-              }}
-            ></img>
+            <img src={logo} className="logo" style={{ maxWidth: "4rem" }}></img>
           </div>
           <section></section>
 
@@ -411,8 +401,14 @@ const Header = () => {
                 const value = e.target.value;
                 setIsMenuVisible(true);
                 setPlayerSearchInput(value);
-                setPlayerName(value);
-                localStorage.setItem("playerName", value);
+
+                if (playerCommitTimeout.current)
+                  clearTimeout(playerCommitTimeout.current);
+                playerCommitTimeout.current = setTimeout(() => {
+                  const v = value.trim();
+                  setPlayerName(v);
+                  localStorage.setItem("playerName", v);
+                }, 1000);
               }}
               placeholder="Playername"
               aria-label="Search profile"
@@ -428,8 +424,14 @@ const Header = () => {
                 const value = e.target.value;
                 setIsMenuVisible(true);
                 setGuildSearchInput(value);
-                setGuildNameProfile(value);
-                localStorage.setItem("guildName", value);
+
+                if (guildCommitTimeout.current)
+                  clearTimeout(guildCommitTimeout.current);
+                guildCommitTimeout.current = setTimeout(() => {
+                  const v = value.trim();
+                  setGuildNameProfile(v);
+                  localStorage.setItem("guildName", v);
+                }, 1000);
               }}
               placeholder="Guild/TAG"
               aria-label="Search profile"
@@ -482,7 +484,6 @@ const Header = () => {
               <button
                 onClick={() => {
                   handleSettingsClick();
-                  console.log(isSettingsOpen);
                 }}
               >
                 {" "}
