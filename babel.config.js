@@ -4,13 +4,13 @@ module.exports = {
       "@babel/preset-env",
       {
         targets: { node: "current" },
-        modules: "auto", // Ensures module compatibility in mixed environments
+        modules: "auto",
       },
     ],
-    "@babel/preset-react", // For React JSX/TSX support
+    "@babel/preset-react",
   ],
   plugins: [
-    "@babel/plugin-proposal-private-methods", // Support private methods
-    "@babel/plugin-transform-runtime", // Handles helpers in Node.js and Electron
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-transform-runtime",
   ],
 };

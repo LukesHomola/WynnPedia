@@ -19,42 +19,22 @@ function createWindow() {
     autoHideMenuBar: false,
     webPreferences: {
       preload: correctedPath, // Use the manually corrected path
-      nodeIntegration: false, // Disable nodeIntegration for security
-      contextIsolation: true, // Enable contextIsolation for security
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   });
 
-  // Check if preload.js is loaded by the main process
   mainWindow.webContents.on("did-finish-load", () => {
     console.log("Electron window loaded and preload.js is attached");
   });
 
   mainWindow.loadURL("http://localhost:3000");
 
-  // Handle window actions
-  /*   ipcMain.on("minimize", () => {
-    mainWindow.minimize();
-  });
-
-  ipcMain.on("maximize", () => {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
-  });
-
-  ipcMain.on("close", () => {
-    mainWindow.close();
-  }); */
-
-  // Log when minimize event is received
   ipcMain.on("minimize", () => {
     console.log("Minimize event received");
     mainWindow.minimize();
   });
 
-  // Log when maximize event is received
   ipcMain.on("maximize", () => {
     console.log("Maximize event received");
     if (mainWindow.isMaximized()) {
@@ -64,7 +44,6 @@ function createWindow() {
     }
   });
 
-  // Log when close event is received
   ipcMain.on("close", () => {
     console.log("Close event received");
     mainWindow.close();

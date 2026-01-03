@@ -1,0 +1,89 @@
+Date : 2026-01-03 14:18:07
+Directory : d:\web_projects\01_inProgress\WynnPedia
+Total : 49 files,  43808 codes, 323 comments, 724 blanks, all 44855 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          4 |     31,043 |          0 |          3 |     31,046 |
+| JavaScript |         16 |     10,652 |        214 |        484 |     11,350 |
+| PostCSS    |         13 |      1,946 |        109 |        221 |      2,276 |
+| XML        |         13 |        116 |          0 |          0 |        116 |
+| Markdown   |          1 |         39 |          0 |         14 |         53 |
+| HTML       |          1 |         11 |          0 |          1 |         12 |
+| Dotenv     |          1 |          1 |          0 |          1 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                 | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                    |         49 |     43,808 |        323 |        724 |     44,855 |
+| . (Files)                                                                                            |          9 |     31,169 |          1 |         35 |     31,205 |
+| public                                                                                               |          1 |         11 |          0 |          1 |         12 |
+| src                                                                                                  |         39 |     12,628 |        322 |        688 |     13,638 |
+| src (Files)                                                                                          |          4 |        191 |          5 |         38 |        234 |
+| src\Assests_components                                                                               |         14 |        117 |          0 |          0 |        117 |
+| src\Assests_components\Skills                                                                        |          5 |         80 |          0 |          0 |         80 |
+| src\Assests_components\ranks_tags                                                                    |          5 |         33 |          0 |          0 |         33 |
+| src\Assests_components\svg_backgrounds                                                               |          4 |          4 |          0 |          0 |          4 |
+| src\CSS                                                                                              |         12 |      1,946 |        109 |        220 |      2,275 |
+| src\Components                                                                                       |          9 |     10,374 |        208 |        430 |     11,012 |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                             | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\web_projects\01_inProgress\WynnPedia\.env                                                         | Dotenv     |          1 |          0 |          1 |          2 |
+| d:\web_projects\01_inProgress\WynnPedia\README.md                                                    | Markdown   |         39 |          0 |         14 |         53 |
+| d:\web_projects\01_inProgress\WynnPedia\app.json                                                     | JSON       |         27 |          0 |          1 |         28 |
+| d:\web_projects\01_inProgress\WynnPedia\babel.config.js                                              | JavaScript |         16 |          0 |          1 |         17 |
+| d:\web_projects\01_inProgress\WynnPedia\eslint.config.js                                             | JavaScript |          9 |          1 |          2 |         12 |
+| d:\web_projects\01_inProgress\WynnPedia\main.js                                                      | JavaScript |         48 |          0 |         12 |         60 |
+| d:\web_projects\01_inProgress\WynnPedia\package-lock.json                                            | JSON       |     30,958 |          0 |          1 |     30,959 |
+| d:\web_projects\01_inProgress\WynnPedia\package.json                                                 | JSON       |         57 |          0 |          1 |         58 |
+| d:\web_projects\01_inProgress\WynnPedia\preload.js                                                   | JavaScript |         14 |          0 |          2 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\public\index.html                                            | HTML       |         11 |          0 |          1 |         12 |
+| d:\web_projects\01_inProgress\WynnPedia\src\App.js                                                   | JavaScript |         49 |          0 |          8 |         57 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\Skills\agility.svg                    | XML        |         16 |          0 |          0 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\Skills\defense.svg                    | XML        |         16 |          0 |          0 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\Skills\dexterity.svg                  | XML        |         16 |          0 |          0 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\Skills\intelligence.svg               | XML        |         16 |          0 |          0 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\Skills\strength.svg                   | XML        |         16 |          0 |          0 |         16 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\ranks_tags\champ.svg                  | XML        |          8 |          0 |          0 |          8 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\ranks_tags\hero.svg                   | XML        |          8 |          0 |          0 |          8 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\ranks_tags\koprr.json                 | JSON       |          1 |          0 |          0 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\ranks_tags\vip.svg                    | XML        |          8 |          0 |          0 |          8 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\ranks_tags\vip_plus.svg               | XML        |          8 |          0 |          0 |          8 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\svg_backgrounds\Meteor.svg            | XML        |          1 |          0 |          0 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\svg_backgrounds\SoundWave.svg         | XML        |          1 |          0 |          0 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\svg_backgrounds\Sprinkle.svg          | XML        |          1 |          0 |          0 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Assests_components\svg_backgrounds\blob-scene-haikei.svg | XML        |          1 |          0 |          0 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\AchievementsComponent.css                            | PostCSS    |         96 |          2 |          5 |        103 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\ActivityCheckComponent.css                           | PostCSS    |         52 |          5 |          7 |         64 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\App.css                                              | PostCSS    |        232 |         23 |         42 |        297 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\Classes.css                                          | PostCSS    |        123 |          2 |         11 |        136 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\FooterComponent.css                                  | PostCSS    |          0 |          0 |          1 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\GuildPageComponent.css                               | PostCSS    |        157 |         10 |         17 |        184 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\HeaderComponent.css                                  | PostCSS    |        128 |         19 |         17 |        164 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\ItemsComponent.css                                   | PostCSS    |        399 |         17 |         42 |        458 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\LeaderboardComponent.css                             | PostCSS    |        267 |         13 |         21 |        301 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\NewsComponent.css                                    | PostCSS    |         42 |          0 |          3 |         45 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\ProfileComponent.css                                 | PostCSS    |        401 |         16 |         48 |        465 |
+| d:\web_projects\01_inProgress\WynnPedia\src\CSS\SettingsComponent.css                                | PostCSS    |         49 |          2 |          6 |         57 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\AchievementsComponent.js                      | JavaScript |        718 |          5 |         19 |        742 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\ActivityCheckComponent.js                     | JavaScript |        246 |         12 |         36 |        294 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\FooterComponent.js                            | JavaScript |          6 |          0 |          4 |         10 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\GuildProfileComponent.js                      | JavaScript |        935 |         36 |         50 |      1,021 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\HeaderComponent.js                            | JavaScript |        469 |         18 |         37 |        524 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\ItemsComponent.js                             | JavaScript |      4,439 |         66 |        138 |      4,643 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\LeaderboardComponent.js                       | JavaScript |      1,555 |         49 |         61 |      1,665 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\NewsComponent.js                              | JavaScript |         58 |          2 |          7 |         67 |
+| d:\web_projects\01_inProgress\WynnPedia\src\Components\ProfileComponent.js                           | JavaScript |      1,948 |         20 |         78 |      2,046 |
+| d:\web_projects\01_inProgress\WynnPedia\src\PlayerContext.js                                         | JavaScript |        131 |          4 |         27 |        162 |
+| d:\web_projects\01_inProgress\WynnPedia\src\index.css                                                | PostCSS    |          0 |          0 |          1 |          1 |
+| d:\web_projects\01_inProgress\WynnPedia\src\index.js                                                 | JavaScript |         11 |          1 |          2 |         14 |
+| Total                                                                                                |            |     43,808 |        323 |        724 |     44,855 |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
